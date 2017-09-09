@@ -1,0 +1,587 @@
+package br.com.emape.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Role;
+import br.com.emape.model.User;
+import br.com.emape.service.CadastroLoginService;
+import br.com.emape.service.ValidacoesService;
+
+/**
+ * 
+ * @author emerson
+ * 
+ */
+@Component
+@ManagedBean
+@ViewScoped
+public class CadastroLoginBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String userName;
+
+	private String password;
+
+	private String passwordConfirmacao;
+	
+	private String maskcnpj;
+
+	private User user;
+
+	private Role role;
+
+	private boolean error;
+
+	private static Logger logger = Logger.getLogger(CadastroLoginBean.class);
+
+	private List<String> opcUser = new ArrayList<String>();
+
+	private List<User> usuarios = new ArrayList<User>();
+
+	private static final Integer BEGIN_PASSWORD = 5;
+
+	private static final Integer END_PASSWORD = 10;
+	
+	private static final Integer MAIOR_QUE_UM = 1;
+
+	@Autowired
+	private CadastroLoginService cadastroLoginService;
+	@Autowired
+	private ValidacoesService validacoesService;
+	
+	private DataModel<User> datamodel;
+
+	public CadastroLoginBean() {
+
+		this.user = new User();
+	}
+
+	/**
+	 * pesquisa do login
+	 * 
+	 * @return
+	 */
+	public String doPesquisa() {
+
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+
+		limparComponente();
+
+		return "/cadastrologin/pesquisa";
+
+	}
+
+	/**
+	 * voltar do cadastro login edicao
+	 * 
+	 * @return
+	 */
+	public String doVoltarCadastrologinEdicao() {
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+
+		try {
+			limparComponente();
+		} catch (Exception e) {
+			logger.error("erro no metodo doVoltarCadastrologinEdicao()"
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/cadastrologin/cadastrologinedicao";
+		}
+
+		return "/cadastrologin/pesquisa";
+	}
+
+	/**
+	 * voltar da pesquisa de usuario
+	 * 
+	 * @return
+	 */
+	public String doVoltarPesquisaUsuario() {
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+
+		try {
+			limparComponente();
+		} catch (Exception e) {
+			logger.error("erro no metodo doVoltarPesquisaUsuario()"
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/cadastrologin/pesquisa";
+		}
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * pesquisa de usuario
+	 * 
+	 * @return
+	 */
+	public String pesquisar() {
+
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+
+		try {
+			
+		boolean error = validaPesquisa(getUserName(),getPassword());
+		
+		if(error){
+			return "/cadastrologin/pesquisa";
+		}
+			
+			
+			this.datamodel = new ListDataModel<User>(this.cadastroLoginService.pesquisarUsuario(getUserName(), getPassword()));
+
+	
+		} catch (Exception e) {
+			logger.error("erro no metodo pesquisar()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			return "/cadastrologin/pesquisa";
+		}
+
+		return "/cadastrologin/pesquisa";
+
+	}
+	
+	/**
+	 * valida o campo de pesquisa
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	private boolean validaPesquisa(String userName , String password ) {
+		boolean status = false;
+		
+		 if (("".equals(userName)) && ("".equals(password))) {
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"É obrigatório um item para pesquisa.");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			status = true;
+		}
+
+
+		return status;
+	}
+
+	/**
+	 * edicao do login
+	 * 
+	 * @return
+	 */
+	public String doEdicaoLogin(User user) {
+
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+
+		try {
+
+			this.setUser(user);
+			this.setPasswordConfirmacao(user.getPassword());
+
+			Role role = this.cadastroLoginService.findByIdRole(user.getId());
+			this.setRole(role);
+
+			this.opcUser.add(role.getId().toString());
+
+		} catch (Exception e) {
+			logger.error("erro no metodo doEdicaoLogin(User user)"
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			return "/cadastrologin/cadastrologinedicao";
+		}
+
+		return "/cadastrologin/cadastrologinedicao";
+	}
+
+	/**
+	 * atualiza o usuario
+	 * @return
+	 */
+	public String atualisarUsuario() {
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+		try {
+			error = validaCadastro(this.user.getUsername(), user.getPassword(),
+					getPasswordConfirmacao(), this.user.getCnpj());
+
+			if (error) {
+
+				return "/cadastrologin/cadastrologinedicao";
+
+			} else {
+				
+				role = new Role();
+				
+				role.setId(Long.valueOf(getOpcUser().get(0)));
+				
+				this.cadastroLoginService.updateUser(user, role);
+
+			}
+
+		} catch (Exception e) {
+			logger.error("erro no metodo atualisarUsuario()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			return "/cadastrologin/cadastrologinedicao";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Usuário foi alterado com Sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		return "/begin/begin";
+	}
+	
+	/**
+	 * deletar usuario
+	 * @param user
+	 * @return
+	 */
+	public String deleteUser(User user){
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+		
+		try {
+			
+			this.cadastroLoginService.deletarUsuario(user);
+
+		} catch (Exception e) {
+			logger.error("Erro ao deleteUser(User user)" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/cadastrologin/pesquisa";
+		}
+		
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Usuário foi deletado com Sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		
+		return "/begin/begin";
+		
+	}
+
+	/**
+	 * metodo cadastra o usuario no sistema
+	 */
+	public String doCadastrarUsuario() {
+
+		if (this.user == null) {
+
+			user = new User();
+			role = new Role();
+		}
+
+		try {
+			error = validaCadastro(getUserName(), getPassword(),
+					getPasswordConfirmacao(),getMaskcnpj());
+
+			if (error) {
+				return "/cadastrologin/cadastro";
+			} else {
+				
+				user.setUsername(getUserName());
+				user.setPassword(getPassword());
+				user.setCnpj(getMaskcnpj());
+				
+				cadastroLoginService
+						.cadastrarUsuario(user, getOpcUser().get(0));
+			}
+
+		} catch (Exception e) {
+			logger.error("Erro ao Cadastrar Usuario" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			return "/cadastrologin/cadastro";
+		}
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Usuário foi criado com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		limparComponente();
+
+		return "/index";
+	}
+
+	/**
+	 * 
+	 * @param userName
+	 * @param password
+	 * @param passwordConf
+	 * @return boolean
+	 */
+	public boolean validaCadastro(String userName, String password,
+			String passwordConf, String cnpj) throws Exception {
+
+		boolean status = false;
+
+		
+		
+		if (getOpcUser().size() >  MAIOR_QUE_UM) {
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Só é permitida apenas um perfil para o usuário.");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			status = true;
+		}
+
+		if (!"".equals(password) && !"".equals(passwordConf)) {
+
+			Integer numPassword = password.length();
+
+			Integer numPasswordConf = passwordConf.length();
+
+			if ((numPassword < BEGIN_PASSWORD) || (numPassword > END_PASSWORD)) {
+
+				FacesMessage facesMessage = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Campo Senha deve conter de 5 a 10 caracter.");
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+				status = true;
+			}
+
+			if ((numPasswordConf < BEGIN_PASSWORD)
+					|| (numPasswordConf > END_PASSWORD)) {
+
+				FacesMessage facesMessage = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Campo Comfirmar Senha deve conter de 5 a 10 caracter.");
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+				status = true;
+			}
+
+		}
+
+		if (!"".equals(password) && !"".equals(passwordConf)) {
+			if (!password.equals(passwordConf)) {
+				FacesMessage facesMessage = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Campo Senha e Comfirmar Senha está incorréto");
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+				status = true;
+			}
+
+		}
+		
+		
+
+		return status;
+
+	}
+
+	public String doVisualizarCadastro() {
+
+		if (this.user == null) {
+
+			user = new User();
+		}
+
+		limparComponente();
+
+		return "/cadastrologin/cadastro";
+	}
+
+	/**
+	 * retorna a pagina de login
+	 * 
+	 * @return index.xhtml
+	 */
+	public String doVoltarCadastroUsuario() {
+
+		if (this.user == null) {
+
+			user = new User();
+		}
+
+		limparComponente();
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * limpa componentes da tela
+	 */
+	public void limparComponente() {
+
+		this.user = new User();
+
+		this.setUserName("");
+
+		this.setPassword("");
+
+		this.setPasswordConfirmacao("");
+		
+		this.setMaskcnpj("");
+
+		getOpcUser().removeAll(getOpcUser());
+
+		getUsuarios().removeAll(getUsuarios());
+		
+		this.setDatamodel(null);
+
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPasswordConfirmacao() {
+		return passwordConfirmacao;
+	}
+
+	public void setPasswordConfirmacao(String passwordConfirmacao) {
+		this.passwordConfirmacao = passwordConfirmacao;
+	}
+
+	public boolean isError() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public CadastroLoginService getCadastroLoginService() {
+		return cadastroLoginService;
+	}
+
+	public void setCadastroLoginService(
+			CadastroLoginService cadastroLoginService) {
+		this.cadastroLoginService = cadastroLoginService;
+	}
+
+	public List<String> getOpcUser() {
+		return opcUser;
+	}
+
+	public void setOpcUser(List<String> opcUser) {
+		this.opcUser = opcUser;
+	}
+
+	public List<User> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<User> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public DataModel<User> getDatamodel() {
+		return datamodel;
+	}
+
+	public void setDatamodel(DataModel<User> datamodel) {
+		this.datamodel = datamodel;
+	}
+
+	public String getMaskcnpj() {
+		return maskcnpj;
+	}
+
+	public void setMaskcnpj(String maskcnpj) {
+		this.maskcnpj = maskcnpj;
+	}
+
+	public ValidacoesService getValidacoesService() {
+		return validacoesService;
+	}
+
+	public void setValidacoesService(ValidacoesService validacoesService) {
+		this.validacoesService = validacoesService;
+	}
+	
+
+}

@@ -1,0 +1,168 @@
+/********************************************************************
+
+Project: Formee - http://www.formee.org
+Last Updated: 19/04/2010
+Version: 1.1
+Authors: Bernard De Luna - http://www.bernarddeluna.com
+             Daniel Araujo - http://www.dnlaraujo.com.br
+			 Marcello Manso - http://www.marcellomanso.com.br
+			 
+********************************************************************
+Style
+********************************************************************/
+
+/*.datepicker{width:75% !important;margin-right:2px;}*/
+#ui-datepicker-div a{border-bottom:none;}
+.bg-autocomplete{background:url('../imagens/bg_autocomplete.png') no-repeat right center;}
+.ui-datepicker-calendar a:active{top:0;position: inherit;}
+
+/* Form Style */
+.form {font: normal 12px/1em arial, Verdana, "Trebuchet MS", Helvetica, sans-serif;}
+
+.form fieldset {
+	border: 1px inset #999;
+	border-top:3px inset #000;
+	border-bottom: 1px inset #ccc;
+	background:#efefef;
+	padding-bottom: 1.2em;
+	margin: 0 0 6em;
+}
+
+/* hover effect */
+.grid-1-12 input[type="text"]:hover, .grid-2-12 input[type="text"]:hover, .grid-3-12 input[type="text"]:hover, .grid-4-12 input[type="text"]:hover, .grid-5-12 input[type="text"]:hover, .grid-6-12 input[type="text"]:hover, .grid-7-12 input[type="text"]:hover, .grid-8-12 input[type="text"]:hover, .grid-9-12 input[type="text"]:hover, .grid-10-12 input[type="text"]:hover, .grid-11-12 input[type="text"]:hover, .grid-12-12 input[type="text"]:hover,
+
+.grid-1-12 input[type="radio"]:hover, .grid-2-12 input[type="radio"]:hover, .grid-3-12 input[type="radio"]:hover, .grid-4-12 input[type="radio"]:hover, .grid-5-12 input[type="radio"]:hover, .grid-6-12 input[type="radio"]:hover, .grid-7-12 input[type="radio"]:hover, .grid-8-12 input[type="radio"]:hover, .grid-9-12 input[type="radio"]:hover, .grid-10-12 input[type="radio"]:hover, .grid-11-12 input[type="radio"]:hover, .grid-12-12 input[type="radio"]:hover,
+
+.grid-1-12 input[type="password"]:hover, .grid-2-12 input[type="password"]:hover, .grid-3-12 input[type="password"]:hover, .grid-4-12 input[type="password"]:hover, .grid-5-12 input[type="password"]:hover, .grid-6-12 input[type="password"]:hover, .grid-7-12 input[type="password"]:hover, .grid-8-12 input[type="password"]:hover, .grid-9-12 input[type="password"]:hover, .grid-10-12 input[type="password"]:hover, .grid-11-12 input[type="password"]:hover, .grid-12-12 input[type="password"]:hover,
+
+.grid-1-12 input[type="file"]:hover, .grid-2-12 input[type="file"]:hover, .grid-3-12 input[type="file"]:hover, .grid-4-12 input[type="file"]:hover, .grid-5-12 input[type="file"]:hover, .grid-6-12 input[type="file"]:hover, .grid-7-12 input[type="file"]:hover, .grid-8-12 input[type="file"]:hover, .grid-9-12 input[type="file"]:hover, .grid-10-12 input[type="file"]:hover, .grid-11-12 input[type="file"]:hover, .grid-12-12 input[type="file"]:hover,
+
+.grid-1-12 input[type="checkbox"]:hover, .grid-2-12 input[type="checkbox"]:hover, .grid-3-12 input[type="checkbox"]:hover, .grid-4-12 input[type="checkbox"]:hover, .grid-5-12 input[type="checkbox"]:hover, .grid-6-12 input[type="checkbox"]:hover, .grid-7-12 input[type="checkbox"]:hover, .grid-8-12 input[type="checkbox"]:hover, .grid-9-12 input[type="checkbox"]:hover, .grid-10-12 input[type="checkbox"]:hover, .grid-11-12 input[type="checkbox"]:hover, .grid-12-12 input[type="checkbox"]:hover,
+
+.grid-1-12 select:hover, .grid-2-12 select:hover, .grid-3-12 select:hover, .grid-4-12 select:hover, .grid-5-12 select:hover, .grid-6-12 select:hover, .grid-7-12 select:hover, .grid-8-12 select:hover, .grid-9-12 select:hover, .grid-10-12 select:hover, .grid-11-12 select:hover, .grid-12-12 select:hover,
+
+.grid-1-12 textarea:hover, .grid-2-12 textarea:hover, .grid-3-12 textarea:hover, .grid-4-12 textarea:hover, .grid-5-12 textarea:hover, .grid-6-12 textarea:hover, .grid-7-12 textarea:hover, .grid-8-12 textarea:hover, .grid-9-12 textarea:hover, .grid-10-12 textarea:hover, .grid-11-12 textarea:hover, .grid-12-12 textarea:hover
+{background:#f0f0f0;}
+
+.field-button:hover {background:transparent;}
+
+
+/* Form legend and titles */
+.form legend {
+	font-size:1.7em;
+	padding: 10px 10px 15px;
+	margin-bottom: 10px;
+	background:#000;
+	margin-left:1.04%;
+	color:#fff;
+}
+
+/* form elements  */
+input[type="text"] {border:1px inset #7F9DB9;margin-top:2px;padding:1px 0 0;margin-top:0;*padding:2px 0 1px 0;}
+/*hack chrome safari*/
+input[type="text"] {[padding-top:2px;]} /* chrome e ie7 */
+/*:root input[type=text]{ background-color: red\9;}*/ /* hacck ie9 */
+input[type=text]{ padding-top/*\**/: 1px\9;} /*hack ie8 */
+input.txtdisabled, select.txtdisabled,textarea.txtdisabled{background:#fff;color:#000;border:none;overflow: visible;}
+input.txtdisabled:hover, select.txtdisabled:hover,textarea.txtdisabled:hover,
+input[disabled="disabled"]:hover,select[disabled="disabled"]:hover,textarea[disabled="disabled"]:hover,
+input[readonly]:hover,select[readonly]:hover,textarea[readonly]:hover
+{background:#fff;}
+
+.form-lbl {
+	font-size:1em;
+	font-weight: bolder;
+	line-height:1.4em;
+}
+.form-lbl-value{margin-top:2px;width: 100%;*width: 99%;font-size:1.1em;}
+.form-lbl-inline-value{width: 100%;*width: 99%;font-size:1.1em;}
+
+.form-req {
+	font-weight: bold;
+	font-style:normal;
+	color:#d10000;
+	font-size:1em;
+}
+p.form-req {margin-top:5px;}
+.form .form-txt, .form textarea, .form select {
+	border:1px inset #235485;
+	background: #fff;
+	color:#333;
+	font: normal 12px/1em arial, Verdana, "Trebuchet MS", Helvetica, sans-serif;
+}
+.form .form-txt:hover, .form textarea:hover, .form select:hover {
+	border-color:#235485;
+	background: #fafafa;
+	color:#333;
+}
+.form .form-txt:focus, .form textarea:focus, .form select:focus {
+	border-color:#103b66;
+	background: #f4fcff;
+	color:#235485;
+}
+
+
+/* form msg status  */
+.form-.form-msg-warning, .form-msg-error, .form-msg-success {
+	padding-left: 27px;
+	font-size:0.9em;
+	border-bottom: 1px inset #ccc;
+}
+.form-msg-info {
+	background: #d1ecf7 url(../imagens/form-ic-info.png) no-repeat 5px 4px;
+	border-color:#bcdfef;
+	color:#11689e;
+}
+.form-msg-warning {
+	background: #fff6bf url(../imagens/form-ic-warning.png) no-repeat 5px 4px;
+	border-color:#fceb77;
+	color:#957210;
+}
+.form-msg-error {
+	background: #C00000 url(../imagens/form-ic-error.png) no-repeat 5px 4px;
+	border-color:#f6abab;
+	color:#fff;
+}
+.form-msg-success {
+	background: #e5f8ce url(../imagens/form-ic-success.png) no-repeat 5px 4px;
+	border-color:#d0f1a6;
+	color:#62b548;
+}
+
+
+/* form buttons */
+.form-button {
+	font-size:1.2em;
+	padding: 1px 6px;
+	*padding: 0 6px;
+	background:#0a5a9d;
+	color:#fff;
+	font-weight:bold;
+}
+.form-button:hover {background:#f3f3ff;color:#0a5a9d;font-weight:bold;}/*#f4e398*/
+
+.btnLupa{width:40px;height:40px;_width:35px;_height:35px;padding-bottom: 3px;background:transparent url('../imagens/lupa_off.png') no-repeat  center center;border:1px solid #fff;;padding:0;text-indent:-99999px;color:transparent;_color:transparent;*font-size:0;*line-height:0;_font-size:0;_line-height:0;}
+.btnLupa:hover,.btnLupa:focus{background:transparent url('../imagens/lupa_on.png') no-repeat  center center;} 
+
+.btnExcluir{width:40px;height:40px;_width:35px;_height:35px;padding-bottom: 3px;background:#fff url('../imagens/icon_cancelar.gif') no-repeat  center center;border:1px solid #fff;;padding:0;text-indent:-99999px;color:transparent;_color:transparent;*font-size:0;*line-height:0;_font-size:0;_line-height:0;}
+.btnExcluir:hover,.btnExcluir:focus{width:40px;height:40px;padding-bottom: 3px;background:#fff url('../imagens/icon_cancelar.gif') no-repeat center center;border:1px solid #f4e398;padding:0;text-indent:-99999px;color:transparent;}
+
+.btnLupaGerarRelatorio{width:40px;height:40px;_width:35px;_height:35px;padding-bottom: 3px;background:#fff url('../imagens/btnLupaGerarRelatorio.png') no-repeat  center center;border:1px solid #fff;;padding:0;text-indent:-99999px;color:transparent;_color:transparent;*font-size:0;*line-height:0;_font-size:0;_line-height:0;}
+.btnLupaGerarRelatorio:hover{width:40px;height:40px;padding-bottom: 3px;background:#fff url('../imagens/btnLupaGerarRelatorio.png') no-repeat center center;border:1px solid #f4e398;padding:0;text-indent:-99999px;color:transparent;}
+
+.btnSelecionar{width:40px;height:40px;_width:35px;_height:35px;padding-bottom: 3px;background:#fff url('../imagens/icon_ok.gif') no-repeat  center center;border:1px solid #fff;;padding:0;text-indent:-99999px;color:transparent;_color:transparent;*font-size:0;*line-height:0;_font-size:0;_line-height:0;}
+
+.btnSelecionar:hover{width:40px;height:40px;padding-bottom: 3px;background:#fff url('../imagens/icon_ok.gif') no-repeat center center;border:1px solid #f4e398;padding:0;text-indent:-99999px;color:transparent;}
+
+.btnPesquisar{background:#0a5a9d url('../imagens/bg_btnPesquisar.gif') no-repeat 6px center;padding-left:25px;}
+.btnPesquisar:hover{background:#f3f3ff url('../imagens/bg_btnPesquisar_hover.gif') no-repeat 6px center;padding-left:25px;}
+
+.btnImprimir{width:40px;height:40px;_width:35px;_height:35px;padding-bottom: 3px;background:#fff url('../imagens/printer.png') no-repeat  center center;border:1px solid #fff;;padding:0;text-indent:-99999px;color:transparent;_color:transparent;*font-size:0;*line-height:0;_font-size:0;_line-height:0;}
+.btnImprimir:hover{width:40px;height:40px;padding-bottom: 3px;background:#fff url(../imagens/printer.png) no-repeat center center;border:1px solid #f4e398;padding:0;text-indent:-99999px;color:transparent;}
+
+.btnAdicionar{width:40px;height:40px;_width:35px;_height:35px;padding-bottom: 3px;background:#fff url(../imagens/adicionar.png) no-repeat  center center;border:1px solid #fff;;padding:0;text-indent:-99999px;color:transparent;_color:transparent;*font-size:0;*line-height:0;_font-size:0;_line-height:0;}
+.btnAdicionar:hover{width:40px;height:40px;padding-bottom: 3px;background:#fff url('../imagens/adicionar.png') no-repeat center center;border:1px solid #f4e398;padding:0;text-indent:-99999px;color:transparent;}
+
+.grid-subtitulo{min-height:1px;color:#0A5A9D;border-bottom:1px solid #B0C8D7;padding-bottom:0;*min-height:18px;}
+
+.grid-margin0{margin-left:-0.5%;}

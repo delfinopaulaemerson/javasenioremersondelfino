@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.prime.com.tr/ui">
+	  
+	  <script type="text/javascript">
+
+	  jQuery(document).ready(function($) {
+		  jQuery("#obs_contratoSocial").hide();
+		  jQuery("#obs_cartaoCnpj").hide();
+		  jQuery("#obs_cndPrevidencia").hide();
+		  jQuery("#obs_cndTributaria").hide();
+		  jQuery("#obs_crfFgts").hide();
+		  jQuery("#obs_cndDebitostrabalhista").hide();
+		  jQuery("#obs_folhaPagamento").hide();
+		  jQuery("#obs_cndDebitostrabalhista").hide();
+		  jQuery("#obs_folhaPagamento").hide();
+		  jQuery("#obs_plaFuncAlocContratante").hide();
+		  jQuery("#obs_guiaRecFgts").hide();
+		  jQuery("#obs_guiaPrevSoc").hide();
+		  jQuery("#obs_protConecSocial").hide();
+		  jQuery("#obs_sefipGfip").hide();
+		  jQuery("#obs_protConecSocial").hide();
+		  jQuery("#obs_notaFiscRetencaoInss").hide();
+		  jQuery("#obs_darf").hide();
+		  jQuery("#obs_notaFiscRetencaoInss").hide();
+		  jQuery("#obs_declRais").hide();
+		});
+
+		
+		function habilitarInput(obj,input){
+	
+			var valor = obj.value;
+			var id = input;
+			if(valor == "Insatisfatorio"){
+				
+				jQuery(id).show();
+				
+				}
+			if(valor == "Satisfatorio"){
+				jQuery(id).hide();
+				}
+			
+			}
+
+	  </script>	
+<div id="body">
+			<div class="grid-2-12">
+					<label for="mae" class="form-lbl">Comunicação de Desligamento<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio id="contratoSocial" value="#{gestaoBean.opcContSocial}" onclick="habilitarInput(this,'#obs_contratoSocial');" class="form-txt form-large" required="true" requiredMessage="Comunicação de Desligamento é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório"/>
+					</h:selectOneRadio>	
+			</div>
+			
+				<div class="grid-2-12" id="obs_contratoSocial">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_comunDesl}"  class="form-txt form-large" /> 
+				</div>
+			<div class="grid-2-12" id="fgts">
+					<label for="rg" class="form-lbl">Termo de Rescisão<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCartCnpj}" onclick="habilitarInput(this,'#obs_cartaoCnpj');" class="form-txt form-large" required="true" requiredMessage="Termo de Rescisão é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_cartaoCnpj">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_termRec}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12">
+					<label for="mae" class="form-lbl">Termo de Quitação da Rescisão<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndPrevi}" onclick="habilitarInput(this,'#obs_cndPrevidencia');" class="form-txt form-large" required="true" requiredMessage="Termo de Quitação da Rescisão é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_cndPrevidencia">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_termQuitRec}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12" id="gfip">
+					<label for="nome" class="form-lbl">Termo de Homologação da Rescisão<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndTrib}" onclick="habilitarInput(this,'#obs_cndTributaria');"  class="form-txt form-large" required="true" requiredMessage="Termo de Homologação da Rescisão é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_cndTributaria">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_termHomRec}"  class="form-txt form-large" /> 
+				</div>
+		
+			<div class="grid-2-12">
+					<label for="mae" class="form-lbl">Extrato do FGTS para fins Recisórios<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opCrf}" onclick="habilitarInput(this,'#obs_crfFgts');"   class="form-txt form-large" required="true" requiredMessage="Extrato do FGTS para fins Recisórios é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+				
+			</div>
+			
+				<div class="grid-2-12" id="obs_crfFgts">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_extFgts}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12" id="folhapagamento">
+					<label for="mae" class="form-lbl">GRRF(Guia Recisória do FGTS)<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndtTrab}" onclick="habilitarInput(this,'#obs_cndDebitostrabalhista');"  class="form-txt form-large" required="true" requiredMessage="GRRF(Guia Recisória do FGTS) é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_cndDebitostrabalhista">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_grrf}" class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12">
+					<label for="mae" class="form-lbl">Chave de Liberação do FGTS<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcFolPag}" onclick="habilitarInput(this,'#obs_folhaPagamento');" class="form-txt form-large" required="true" requiredMessage="Chave de Liberação do FGTS é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_folhaPagamento">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_chavLibFgts}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12" id="inss">
+					<label for="dtnasc" class="form-lbl" id="guiarecolhimento">Exame Médico Demissional<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcPlanFuncAloc}" onclick="habilitarInput(this,'#obs_plaFuncAlocContratante');"  class="form-txt form-large" required="true" requiredMessage="Exame Médico Demissional é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_plaFuncAlocContratante">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_examMedDem}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12">
+					<label for="mae" class="form-lbl">Seguro-Desemprego<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opGrf}" onclick="habilitarInput(this,'#obs_guiaRecFgts');" class="form-txt form-large" required="true" requiredMessage="Seguro-Desemprego é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_guiaRecFgts">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_segDesemp}" class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-2-12">
+					<label for="mae" class="form-lbl">Declaração do CAGED<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcGps}" onclick="habilitarInput(this,'#obs_guiaPrevSoc');" class="form-txt form-large" required="true" requiredMessage="Declaração do CAGED é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-2-12" id="obs_guiaPrevSoc">
+					<h:inputTextarea value="#{gestaoBean.rotinaDesligamento.obs_declCaged}"  class="form-txt form-large" /> 
+				</div>
+						
+</div>
+</html>

@@ -1,0 +1,249 @@
+@charset "UTF-8";
+
+/*FOLHA DE ESTILIZAO DE FORMULRIOS*/
+
+form table td, form table th{padding:1px;}
+fieldset{}
+.fieldset{border:solid 1px #b0c8d7;padding: 5px;margin-bottom:5px;}
+fieldset legend{margin-top:5px;}
+
+/*apenas para testes*/
+/*form p{border:1px solid red}
+form label{background:yellow}*/
+
+.bold{font-weight:bold;}
+.right{text-align:right;}
+.left{text-align:left;}
+.center{text-align:center;}
+
+.esq{float:left;}
+.dir{float:right;}
+.clear{clear:both;}
+
+.overflowxauto{overflow-x:auto;*overflow-y:hidden;}
+
+
+
+/* GRIDS DIVS */
+
+div.div_grid{display:inline;float:left;margin-right:1%;*margin-right:0.8%;}
+
+.div5_100{width:4%}
+.div10_100{width:9%}
+.div15_100{width:14%}
+.div20_100{width:19%}
+.div25_100{width:24%}
+.div30_100{width:29%}
+.div33_100{width:32%}
+.div35_100{width:34%}
+.div40_100{width:39%}
+.div45_100{width:44%}
+.div50_100{width:49%}
+.div55_100{width:54%}
+.div60_100{width:59%}
+.div65_100{width:64%}
+.div70_100{width:69%}
+.div75_100{width:74%}
+.div80_100{width:79%}
+.div85_100{width:84%}
+.div90_100{width:89%}
+.div95_100{width:94%}
+.div100_100{width:100%;margin-right:0;}
+
+
+.divscrolltable{max-height:110px;overflow-y:scroll;overflow-x:hidden;}
+
+/*ESTILOS DE ELEMENTOS DE FORMULRIO*/
+
+/*
+classes css da tag input:
+- .txt -> text, password, file
+- .btn -> submit, button, reset
+*/
+input, button, select, textarea, legend{font-family:Arial, Helvetica, sans-serif;}
+select[multiple="multiple"]{height:63px;}
+input.txt, select, textarea{border:1px inset #7f9db9;font-size:13px;font-weight:normal;padding:2px;margin-top:0;}
+select{padding:0;margin-top:1px;}
+.upper{text-transform:uppercase;}
+input.btn{ font-family:Arial,Helvetica; font-weight:bold; font-size:12px;cursor:pointer;}
+input.btndisabled{background-color:#FFF;cursor:auto;border:1px solid #BBB;color:#BBB;padding:2px 3px;padding:3px 4px\9;*padding:1px 3px;}
+input.btndisabled:hover{background-color:#FFF;cursor:auto;border:1px solid #BBB;color:#BBB;padding:2px 3px;padding:3px 4px\9;*padding:1px 3px;}
+input.esq, a.esq{margin-left:10px;float:left;}
+input.dir, a.dir{margin-right:10px;float:right;}
+input.esqpdir{vertical-align:top;padding:3px 18px;*padding:3px 13px;border:solid 1px #25304a;}
+input.dirpesq{vertical-align:bottom;margin-top:19px;padding:3px 18px;*padding:3px 13px;border:solid 1px #25304a;}
+
+a.btn{font-weight:bold;font-size:12px;line-height:24px;}
+a.btn:hover{background-color:#dcdcdc;}
+
+a.btnverde{border:1px solid #286A53;background:#589480 url('../imagens/btn_bg.gif') repeat-x;padding:0px 6px;
+color:#fff;font-weight:bold;font-size:12px;line-height:22px;}
+a.btnverde:hover{border:1px solid #10271F;background:#589480 url('../imagens/btn_bg_h.gif') repeat-x;}
+
+input.txtdisabled, select.txtdisabled,textarea.txtdisabled{background:#fff;color:#000;border:none;overflow: auto;}
+input.readonly{border:none;}
+input.contador{background:none;border:0;font-size:11px;color:#25304a;}
+.displaynone{display:none;}
+#form_box label.displaynone{display:none;}
+
+/*form select{padding:1px;}
+form select{*margin:1px 0;}*//*bug ie6 e ie7*/
+
+/*TAMANHOS PADRONIZADOS DE PARGRAFOS E ELEMENTOS DE FORMULRIO.*/
+
+/*tamanho(width) dos pargrafos*/
+form p,form .p{margin-bottom:8px;}
+form .tp1{width:30px;float:left;}
+form .tp2{width:40px;float:left;}
+form .tp3{width:60px;float:left;}
+form .tp4{width:90px;float:left;}
+form .tp5{width:120px;float:left;}
+form .tp6{width:150px;float:left;}
+form .tp6a{width:160px;float:left;}
+form .tp7{width:180px;float:left;}
+form .tp7a{width:194px;float:left;}
+form .tp8{width:210px;float:left;}
+form .tp9{width:240px;float:left;}
+form .tp9a{width:245px;float:left;}
+form .tp10{width:270px;float:left;}
+form .tp11{width:300px;float:left;}
+form .tp12{width:330px;float:left;}
+form .tp13{width:360px;float:left;}
+form .tp14{width:390px;float:left;}
+form .tp15{width:420px;float:left;}
+form .tp16{width:450px;float:left;}
+form .tp17{width:480px;float:left;}
+form .tp18{width:510px;float:left;}
+form .tp19{width:540px;float:left;}
+form .tp20{width:570px;float:left;}
+form .tp21{width:600px;float:left;}
+form .tp50{width:49%;float:left;}
+form .tp80{width:79%;float:left;}
+form .tp90{width:89%;float:left;}
+form .tp{clear:left;} /*pargrafo linha inteira*/
+
+/*altura do pargrafo quando s tem label, ou seja, sem o input embaixo.*/
+form .label{height:42px;font-weight:bold;}
+form .lblchkbox{font-weight:bold;margin-right:20px;}
+form p.label label{font-weight:bold;}
+form .label{*height:44px;}
+form .label2{height:20px;}
+form .label2{*height:22px;}
+form .label3{height:26px;}
+
+/*pargrafos especiais*/
+form p.button{padding:18px 0 0 0;}
+form p.button{*padding:19px 0 0 0;}
+form p.multi input.txt, form p.multi select{margin-bottom:3px;} /*para vezes q mltiplos campos para um nico pargrafo*/
+form p.tpbranco{line-height:1%;font-size:1%;height:1px;clear:left;margin:0;padding:0;}
+form p.subtitulo{border-bottom:1px solid #b0b8cf;padding-top:14px;}
+form p.btndiresq{width:86px;float:left;text-align:center;padding:21px 0px 0px 0px;}
+
+/*estilizao dos labels das pginas internas*/
+#form_box label{text-align:left;display:block;}
+#form_box label.right{text-align:right;padding-right:5px;}
+#form_box label.left{text-align:left;}
+#form_box label span{font-weight:normal;}
+#form_box label img{vertical-align:text-bottom}
+#form_box label span.inativo{color:#F14A28;}
+#form_box label span.ativo{color:#329832;}
+#form_box label.radio{display:inline;line-height:22px;}
+#form_box label.radio input{*margin:2px 0;}
+#form_box span.vermelho{color:Red;}
+
+form label input.radio{margin:0;}
+
+#form_box fieldset legend label{display:inline;line-height:0.8em;}
+
+/*tamanho(width) dos elementos*/
+form .te1{width:10px;} /*1 caracter*/
+form .te2a{width:17px;} /*2 caracteres*/
+form .te2{width:20px;} /*2 caracteres*/
+form .te3{width:30px;} /*5 caracteres*/
+form .te4{width:60px;}
+form .te4a{width:80px;}
+form .te5{width:90px;}
+form .te5a{width:110px;}
+form .te6{width:120px;}
+form .te7{width:164px;}
+form .te7a{width:180px;}
+form .te7b{width:200px;}
+form .te8{width:210px;}
+form .te8a{width:230px;}
+form .te9{width:250px;}
+form .te10{width:280px;}
+form .te11{width:300px;}
+form .te12{width:360px;}
+form .te13{width:410px;}
+form .te14{width:440px;}
+form .te15{width:500px;max-width:500px;}
+form .te15ddl{width:507px;max-width:507px;}
+form .te16{width:579px;max-width:579px;}
+form .te100{width:694px;max-width:694px;}
+form select.te100{width:700px;max-width:700px;}
+
+/*altura dos elementos (principalmente textarea)*/
+form .a0{height:55px;}
+form .a1{height:114px;}
+form .a1a{height:150px;}
+form .a1b{height:180px;}
+form .a2{height:214px;}
+form .a3{height:314px;}
+form .a3a{height:380px;}
+form .a4{height:414px;}
+
+/*TABELAS*/
+
+/*
+Diminui a altura da tabela gerando uma barra de rolagem dentro do contedo.
+tipos:
+- xpeq1, xpeq2, xpeq3 -> definem a largura da div que envolve a tabela
+- ypeq, ynormal -> definem a altura da div que envolve a da tabela
+Valor padro: ynormal.
+*/
+.ypeq1, .ypeq2, .xpeq1, .xpeq2, .xpeq3, .ynormal{clear:left;margin-top:10px;}
+div.ypeq1{overflow:auto;height:252px;padding:1px 0 1px 1px;overflow-x:hidden;}
+div.ypeq1 table.azul1{*width:98%}
+div.ypeq2{overflow:auto;height:190px;padding:1px 0 1px 1px;overflow-x:hidden;}
+div.ypeq2 table.azul1{*width:98%}
+
+div.xpeq1{width:500px;}
+div.xpeq1 table.azul1{*width:483px;}
+div.xpeq2{width:400px;}
+div.xpeq2 table.azul1{*width:383px;}
+div.xpeq3{width:250px;}
+div.xpeq3 table.azul1{*width:233px;}
+
+/*FORM BOX*/
+#form_box{position:relative;overflow:hidden;
+background:#fff;margin:12px;/*padding:0px 30px 30px 30px;*/border:none;;min-height:150px;
+}
+#form_box fieldset{padding:15px;}
+#form_box fieldset.fieldset{padding:15px 10px 10px;-moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;}
+#form_box fieldset legend{padding:5px 15px; background:url(../imagens/bg_legend.png) repeat-x center top; border-bottom:1px solid #B0C8D7;font-weight:bold;margin-bottom:5px\9;}
+#form_box fieldset.padBot0{padding-bottom:0;}
+#form_box h2{/*background:url(../imagens/form_box_h2_lbot.jpg) no-repeat left bottom;*/
+line-height:45px;color:#0a5a9d;font-size:2em;margin-bottom:10px;font-weight:normal;}
+
+#form_box textarea,#form_box select{overflow: auto;}
+/*estilo da div onde ficam os botes da parte inferior*/
+#form_box div.botoes{margin:8px 0 0 0;padding:10px 0 0 0;border-top:1px solid #B0C8D7;clear:both;}
+#msg-warn div.botoes{margin:0 0 0 0;padding:0 0 0 0;border-top:none;clear:both;}
+
+
+
+.sigla{width: 75px;}
+.contatexto{color:Red; font-size:0.9em; margin-top: -5px;}
+
+.overflowx{overflow-x:auto;}
+.overflowy{overflow-y:auto;}
+
+#ifrmMenuSipen, #ifrmConfereComFoto{z-index:1;width:100%;height:520px;}
+
+.divImg{margin:0;padding:0;background:Transparent url(../imagens/loadinfo.gif) no-repeat center center;width:100%;min-height:160px;}
+/* Div das imagens na página frmPresosConsultarSinais do dcau 0110-01*/
+.divoidentificacoes{_width:99%;}
+
+.btnLado{margin-top:-4px;*margin-top:-1px;}
+
+fieldset legend{padding:5px 15px; background:url(../imagens/bg_legend.png) repeat-x center top; border-bottom:1px solid #B0C8D7;font-weight:bold;margin-bottom:5px\9;}

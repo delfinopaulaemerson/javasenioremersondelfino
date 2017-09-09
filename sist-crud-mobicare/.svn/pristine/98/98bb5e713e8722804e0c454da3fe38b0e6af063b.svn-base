@@ -1,0 +1,203 @@
+package br.com.emape.dao;
+
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.emape.model.Role;
+import br.com.emape.model.User;
+
+@Component("CadastroLoginDAO")
+public class CadastroLoginDAO {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	private static final Integer PRIMEIRO = 1;
+	private static final Integer SEGUNDO = 2;
+	private static final Integer TERCEIRO = 3;
+	private static final Integer QUARTO = 4;
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void cadastrarUsuario(User u, String role) throws Exception {
+
+		User user = new User();
+		
+		BigInteger id = idIncrement();
+		user.setUsername(u.getUsername());
+		user.setPassword(u.getPassword());
+		user.setCnpj(u.getCnpj());
+		
+
+		// cadastra o usuario
+		// entityManager.merge(user);
+		entityManager.createNativeQuery("INSERT INTO usuario values (?,?,?,?)")
+				.setParameter(PRIMEIRO, id)
+				.setParameter(SEGUNDO, user.getPassword())
+				.setParameter(TERCEIRO, user.getUsername())
+				.setParameter(QUARTO, user.getCnpj()).executeUpdate();
+		
+		entityManager.flush();
+
+		Integer perfil = Integer.valueOf(role);
+
+		// a seta o id do usuario e o id da role
+		entityManager
+				.createNativeQuery("INSERT INTO usuario_role values (?, ?)")
+				.setParameter(PRIMEIRO, id)
+				.setParameter(SEGUNDO, perfil).executeUpdate();
+		entityManager.flush();
+		entityManager.clear();
+
+	}
+
+	/**
+	 * pesquisa de usuarios
+	 * 
+	 * @param nome
+	 * @param senha
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<User> pesquisarUsuario(String nome, String senha)
+			throws Exception {
+
+		Query query = null;
+
+		if ((!"".equals(nome)) && (!"".equals(senha))) {
+
+			query = entityManager
+					.createQuery(" from User where username like '%" + nome
+							+ "%' and password like '%" + senha + "%' ");
+
+		} else if (!"".equals(nome)) {
+
+			query = entityManager
+					.createQuery(" from User where username like '%" + nome
+							+ "%' ");
+
+		} else if (!"".equals(senha)) {
+
+			query = entityManager
+					.createQuery(" from User where password like '%" + senha
+							+ "%' ");
+		}
+
+		return query.getResultList();
+
+	}
+
+	/**
+	 * retorna a role do usuario pelo id
+	 * 
+	 * @param idUser
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public Role findByIdRole(Long idUser) throws Exception {
+
+		Role role = null;
+
+		Object idRole = entityManager
+				.createNativeQuery(
+						" Select roles_id from usuario_role where usuario_id=:id ")
+				.setParameter("id", idUser).getSingleResult();
+
+		if (idRole != null) {
+			role = this.entityManager.find(Role.class,
+					Long.valueOf(idRole.toString()));
+		}
+
+		return role;
+	}
+
+	/**
+	 * atualiza o usuario
+	 * 
+	 * @param user
+	 * @param role
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void updateUser(User user, Role role) {
+
+		User u = this.entityManager.find(User.class, user.getId());
+
+		u.setUsername(user.getUsername());
+		u.setPassword(user.getPassword());
+		u.setCnpj(user.getCnpj());
+		
+		this.entityManager.merge(u);
+		
+		// a seta o id do usuario e o id da role
+		entityManager
+				.createNativeQuery(
+						"UPDATE usuario_role SET roles_id=? where usuario_id=? ")
+				.setParameter(PRIMEIRO, role.getId())
+				.setParameter(SEGUNDO, u.getId()).executeUpdate();
+		entityManager.flush();
+		entityManager.clear();
+
+	}
+
+	/**
+	 * deletar o usuario
+	 * 
+	 * @param user
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void deletarUsuario(User user) throws Exception{
+
+		User u = this.entityManager.find(User.class, user.getId());
+
+		entityManager
+				.createNativeQuery(
+						"DELETE from usuario_role where usuario_id=? ")
+				.setParameter(PRIMEIRO, u.getId()).executeUpdate();
+		
+		this.entityManager.remove(u);
+		
+		entityManager.flush();
+		entityManager.clear();
+
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<User> findAll() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+		query.select(query.from(User.class));
+
+		return entityManager.createQuery(query).getResultList();
+	}
+
+	/**
+	 * autoincremanta o id do usurio
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public BigInteger idIncrement() throws Exception {
+		
+		Query query = this.entityManager.createNativeQuery(" SELECT MAX(id) FROM usuario ");
+		
+		BigInteger max =  (BigInteger) query.getSingleResult();
+		
+		BigInteger one = new BigInteger("1");
+
+		return max.add(one);
+	}
+
+}

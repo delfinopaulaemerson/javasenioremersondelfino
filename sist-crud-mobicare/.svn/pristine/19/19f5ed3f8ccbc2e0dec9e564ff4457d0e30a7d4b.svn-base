@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+      
+<ui:include src="/template/head.xhtml"/>
+<body>
+<h:form acceptcharset="ISO-8859-1" >
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<h1><h:outputText value="#{msg['label.emape']}" /></h1>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratadaBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{prestadorBean.doVoltarEditarPrestador}" immediate="true" /> &raquo; <label style="color:blue;">Prestador &raquo; Cadastro</label></h2>
+				 <div id="mensagem" style="margin-top: 20px;">
+   	            	<ul>
+   	            		<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+		</div>
+		<br/>
+		<br/>
+		<div id="fildset">
+			<fieldset class="fieldset">
+					<legend>Cadastro de Funcionário</legend>
+						<fieldset class="fieldset">
+								<legend>Funcionário</legend>
+								<div class="grid-6-12">
+									<label for="id" class="form-lbl">Nome<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{prestadorBean.prestador.nome}" required="true" requiredMessage="Nome é obrigatório." maxlength="55" onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();" title="Nome" />
+								</div>
+								<div class="grid-6-12">
+									<label for="dtdemissao" class="form-lbl">Local de Trabalho<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText value="#{prestadorBean.prestador.locTarbalho}" required="true" requiredMessage="Local de Trabalho é obrigatório."  styleClass="form-txt form-large" size="15" onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();" title="Local de trabalho" />
+								</div>
+								<div class="grid-6-12">
+									<label for="dtnasc" class="form-lbl">Função<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{prestadorBean.prestador.funcao}" required="true" requiredMessage="Função é obrigatório."  maxlength="25" onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();"  title="Função" />
+								</div>
+								<div class="grid-2-12">
+									<label for="rg" class="form-lbl">CPF<em class="form-req" title="Obrigatório">*</em></label>
+									<p:inputMask  mask="999.999.999-99" styleClass="form-txt form-large" value="#{prestadorBean.maskcpf}" required="true" requiredMessage="CPF é obrigatório." size="15" />
+								</div>
+								
+								<div class="grid-2-12">
+									<label for="dtnasc" class="form-lbl">Data Alocação<em class="form-req" title="Obrigatório">*</em></label>
+									<p:inputMask  mask="99/99/9999" value="#{prestadorBean.maskalocacao}" required="true" requiredMessage="Data Alocação é obrigatório." styleClass="form-txt form-large"  size="15" title="Data Alocação" />
+								</div>
+								<div class="grid-2-12">
+									<label for="dtdemissao" class="form-lbl">Data Desalocação<em class="form-req" title="Obrigatório">*</em></label>
+									<p:inputMask  mask="99/99/9999" value="#{prestadorBean.maskDesalocacao}" required="true" requiredMessage="Data Desalocação é obrigatório." styleClass="form-txt form-large"  size="15" title="Data Desalocação" />
+								</div>
+								<div class="grid-2-12">
+									<label for="dtdemissao" class="form-lbl">Pis<em class="form-req" title="Obrigatório">*</em></label>
+									<p:inputMask  mask="999.99999.99-9" value="#{prestadorBean.maskpis}" required="true" requiredMessage="Pis Desalocação é obrigatório." styleClass="form-txt form-large"  size="15" title="Pis" />
+								</div>
+								<div class="grid-2-12">
+									<label for="dtdemissao" class="form-lbl">Salário<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText value="#{prestadorBean.prestador.salario}" required="true" requiredMessage="Salário Desalocação é obrigatório." styleClass="form-txt form-large"  si="16" title="Salário" onkeypress="return formatar_moeda(this,'.',',',event);" />
+								</div>
+						</fieldset>
+						<fieldset class="fieldset">
+								<legend>Associe o Funcionário</legend>
+								<div class="grid-6-12">
+								<label for="dtdemissao" class="form-lbl">Contratante<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{prestadorBean.contratSelec}" required="true" requiredMessage="Contratante Desalocação é obrigatório."  class="form-txt form-large" >
+										<f:selectItem itemLabel="Selecione a Contratante" />
+	   									<f:selectItems value="#{prestadorBean.comboContratante}" var="c" itemLabel="#{c.id} - #{c.razaoSocial}"	 itemValue="#{c.id}" />
+	   								</h:selectOneMenu>
+								</div>
+								<div class="grid-6-12">
+								<label for="dtdemissao" class="form-lbl">Contratada<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{prestadorBean.contSelec}"  required="true" requiredMessage="Contratada Desalocação é obrigatório."  class="form-txt form-large" >
+										<f:selectItem itemLabel="Selecione a Contratada" />
+	   									<f:selectItems value="#{prestadorBean.comboCadastrada()}" var="c" itemLabel="#{c.id} - #{c.razaoSocial}"	 itemValue="#{c.id}" />
+	   								</h:selectOneMenu>
+								</div>
+						</fieldset>			
+			</fieldset>
+			<p class="form-req">* Campos obrigatórios </p>		
+		</div>	
+			<div class="botoes" style="margin-top: 25px;margin-bottom: 25px;">
+				<h:commandButton action="#{prestadorBean.editarPrestador()}" id="btnCadstrar" type="submit" class="form-button dir"  accesskey="p" title="Salvar" value="Salvar" />
+			</div>
+	<div id="rodape" style="margin-top:310px;">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+	</div>
+</div>
+</h:form>			
+</body> 
+</html>

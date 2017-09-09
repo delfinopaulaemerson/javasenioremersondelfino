@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/template/head.xhtml"/>
+<body>
+ <h:form acceptcharset="ISO-8859-1">	
+    <div id="wrapper" class="hasLayout">
+		<div id="header">
+			<div id="headerinterna">
+				<div  id="emape" style="margin-left: 630px;">
+					<h1>EMAPE</h1><br />	
+				</div>
+				<div  id="gestao" style="margin-left: 489px;">
+					<h1>Sistema de Validação e Gestão Documental</h1>
+				</div>
+				<div id="infologin">
+					<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ui:include src="/template/menu.xhtml"/>
+    	<div id="content" class="contlogin">
+			<!--<div class="contentbg">&nbsp;</div>-->
+			<div id="login_box">
+				<h2>&raquo; <h:commandLink value="Voltar" action="#{cadastroLoginBean.doVoltarCadastroUsuario()}" immediate="true" /><label style="color:blue;"> &raquo; <h:outputText value="#{msg['label.cadastrousuario']}" /> &raquo; Cadastro</label></h2>
+   	           
+   	            <div id="mensagem">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+				<div class="ynormal">
+					<fieldset class="fieldset">
+						<p class="tp6">
+							<label for="txtUsuario"><h:outputText value="#{msg['label.usuario']}" />: <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<h:inputText value="#{cadastroLoginBean.userName}" required="true" requiredMessage="Campo Usuário é obrigatório."  class="txt te5"  onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase()" title="Nome do usu&aacute;rio" >
+							<f:validateLength maximum="10"></f:validateLength>
+							</h:inputText>
+						</p>
+						<p class="tp6">
+							<label for="txtConfirmarSenha">CNPJ Empresa : <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<p:inputMask  mask="99.999.999/9999-99" styleClass="txt te5" value="#{cadastroLoginBean.maskcnpj}" size="20"   requiredMessage="Campo Confirmar CNPJ é obrigatório." required="true" />
+						</p>   
+						<p class="tp6">
+							<label for="txtSenha">Senha: <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<h:inputSecret value="#{cadastroLoginBean.password}" required="true" requiredMessage="Campo Senha é obrigatório."  class="txt te5" alt="9999999999" tabindex="2" size="10" accesskey="s" title="Digite a senha" >
+							<f:validateLength maximum="10"></f:validateLength>
+							</h:inputSecret>
+						</p>
+						<p class="tp6">
+							<label for="txtConfirmarSenha">Confirmar Senha: <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<h:inputSecret value="#{cadastroLoginBean.passwordConfirmacao}"  required="true" requiredMessage="Campo Confirmar Senha é obrigatório." class="txt te5"  alt="9999999999" tabindex="3" accesskey="c" title="Digite a confirma&ccedil;&atilde;o da senha" >
+							<f:validateLength maximum="10"></f:validateLength>
+							</h:inputSecret>
+						</p>
+						<p class="tp6">
+							<label for="txtperfil">Perfil :<em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p >	
+							<h:selectManyCheckbox  value="#{cadastroLoginBean.opcUser}"  class="form-txt form-large" required="true" requiredMessage="Escolha o perfil do usuário.">
+   								<f:selectItem itemValue="1" itemLabel="Administrador" />
+   								<f:selectItem itemValue="2" itemLabel="Contratante" />
+   								<f:selectItem itemValue="3" itemLabel="Contratada" />
+							</h:selectManyCheckbox>
+						</p>
+						<p class="form-req">* Campos obrigatórios </p>					
+					</fieldset>
+					<br />
+					<div class="botoes">
+						<h:commandButton type="submit" action="#{cadastroLoginBean.doCadastrarUsuario()}" id="btnSalvar" class="form-button dir" title="Salvar" value="Salvar"  accesskey="s" tabindex="5" />
+					</div>
+				</div>
+              
+			</div>
+		</div>
+		<div id="rodape" style="padding-top: 0px;margin-top: 300px;">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+		</div>
+		<!-- fim #rodape -->
+	</div>
+</h:form>
+</body>
+</html>

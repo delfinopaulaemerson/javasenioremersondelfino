@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui">
+      
+
+<ui:include src="/template/head.xhtml"/>
+<body>
+ <h:form acceptcharset="ISO-8859-1" >	
+    <div id="wrapper" class="hasLayout">
+		<div id="header">
+			<div id="headerinterna">
+				<h1><h:outputText value="#{msg['label.emape']}" /></h1>
+				<div id="infologin">
+					<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ui:include src="/template/menu.xhtml"/>	
+    	<div id="content" class="contlogin">
+			<!--<div class="contentbg">&nbsp;</div>-->
+			<div id="login_box">
+				<h2>&raquo; <h:commandLink value="Voltar" action="#{cadastroLoginBean.doVoltarCadastrologinEdicao()}" immediate="true" /><label style="color:blue;"> &raquo; <h:outputText value="#{msg['label.cadastrousuario']}" /> &raquo; Edição</label></h2>
+   	           
+   	            <div id="mensagem">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+				<div class="ynormal">
+					<fieldset class="fieldset">
+						<p class="tp6">
+							<label for="txtUsuario"><h:outputText value="#{msg['label.usuario']}" />: <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<h:inputText value="#{cadastroLoginBean.user.username}"  class="txt te5" tabindex="1" required="true" requiredMessage="Campo Usuário é obrigatório." title="Usuário" >
+							<f:validateLength maximum="10"></f:validateLength>
+							</h:inputText>
+						</p>
+						<p class="tp6">
+							<label for="txtConfirmarSenha">CNPJ Empresa : <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<p:inputMask  mask="99.999.999/9999-99" styleClass="txt te5" value="#{cadastroLoginBean.user.cnpj}" size="20"   requiredMessage="Campo Confirmar CNPJ é obrigatório." required="true" />
+						</p>      
+						<p class="tp6">
+							<label for="txtSenha">Senha: <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<h:inputText value="#{cadastroLoginBean.user.password}" class="txt te5" alt="9999999999" tabindex="2" size="10" accesskey="s" title="Senha" required="true" requiredMessage="Campo Senha é obrigatório." >
+							<f:validateLength maximum="10"></f:validateLength>
+							</h:inputText>
+						</p>
+						<p class="tp6">
+							<label for="txtConfirmarSenha">Confirmar Senha: <em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p>
+							<h:inputText value="#{cadastroLoginBean.passwordConfirmacao}" required="true" requiredMessage="Campo Confirmar Senha é obrigatório." class="txt te5"  alt="9999999999" tabindex="3" accesskey="c" title="Confirmar Senha" >
+							<f:validateLength maximum="10"></f:validateLength>
+							</h:inputText>
+						</p>
+						<p class="tp6">
+							<label for="txtperfil">Perfil :<em class="form-req" title="Obrigatório">*</em></label>
+						</p>
+						<p  >	
+							<h:selectManyCheckbox  value="#{cadastroLoginBean.opcUser}"  class="form-txt form-large" required="true" requiredMessage="Escolha o perfil do usuário.">
+   								<f:selectItem itemValue="1" itemLabel="Administrador" />
+   								<f:selectItem itemValue="2" itemLabel="Contratante" />
+   								<f:selectItem itemValue="3" itemLabel="Contratada" />
+							</h:selectManyCheckbox>
+						</p>
+						<p class="form-req">* Campos obrigatórios </p>					
+					</fieldset>
+					<br />
+					<div class="botoes">
+						<h:commandButton type="submit" action="#{cadastroLoginBean.atualisarUsuario()}" id="btnSalvar" class="form-button dir" title="Atualizar" value="Atualizar"  accesskey="s" tabindex="5" />
+						<h:inputHidden value="#{cadastroLoginBean.user.id}" />
+						<h:inputHidden value="#{cadastroLoginBean.role.id}" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="rodape" style="padding-top: 0px;margin-top: 300px;">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+		</div>
+		<!-- fim #rodape -->
+	</div>
+</h:form>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/template/head.xhtml"/>
+<body>
+	<h:form acceptcharset="ISO-8859-1">
+		<div id="wrapper" class="hasLayout">
+			<div id="header">
+			<div id="headerinterna">
+				<div  id="emape" style="margin-left: 630px;">
+					<h1>MOBICARE</h1><br />	
+				</div>
+				<div  id="gestao" style="margin-left: 86px;">
+					<h1 style="margin-left: 493px;">Sistema CRUD Básico</h1>
+				</div>
+				<div id="infologin">
+					<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{departamentoBean.sair()}" value="SAIR" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{departamentoBean.doVoltar()}" /> &raquo; <label style="color:blue;">Departamento &raquo; Edição</label></h2>
+			 <div id="mensagem" style="margin-top: 20px;">
+            	<ul>
+            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+            	</ul>
+             </div>	
+		</div>
+			<div class="div100_100">
+			  <fieldset class="fieldset">
+			  		<legend>Departamento(s)</legend>
+			  		
+			  		 <p:dataTable id="tabela" var="e" value="#{departamentoBean.datamodel}" 
+		                                 emptyMessage="Não há Departamento cadastrados" 
+		                                 paginator="true" rows="5" resizableColumns="true"  lazy="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{currentPage} de {totalPages}"  
+                                         rowsPerPageTemplate="5,10,15"
+                                         paginatorPosition="bottom">
+		               <p:column style="width: 220px;">  
+		            		<f:facet name="header">  
+		                		<h:outputText value="Código do Departamento" />  
+		            		</f:facet>  
+		            		<h:outputText value="#{e.codigoDoDepartamento}" /> 
+		        		</p:column>
+		                <p:column >
+	                         <f:facet name="header">
+	                             <h:outputText value="Nome do Departamento"/>
+	                         </f:facet>
+	                        <h:outputText value="#{e.nomeDepartamento}" /> 
+	                     </p:column>
+		        		 <p:column  headerText="EDITAR"  style="width: 50px;" >  
+						     <h:commandLink style="border:none;" action="#{departamentoBean.edicao(e)}" ajax="false" >
+							 <img title="Clique p/ editar" style="border:none;padding-left: 20px;" alt="Clique p/ editar" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_editar.gif" />
+						     </h:commandLink>
+						</p:column>
+		        		<p:column  headerText="EXCLUIR"  style="width: 50px;" >  
+						     <h:commandLink style="border:none;" action="#{departamentoBean.deletar(e)}"  ajax="false" onclick="alert('O departamento será excluido.');">
+							   <img title="Clique p/ editar" style="padding-left: 20px;" alt="Clique p/ deletar" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_cancelar.gif" />
+						     </h:commandLink>
+						</p:column>
+			  	</p:dataTable>
+			  	</fieldset>
+			</div>
+		<ui:include src="/template/footer.xhtml"/>
+	</div>
+	</h:form>
+</body>      
+</html>

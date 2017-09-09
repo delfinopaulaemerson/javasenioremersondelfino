@@ -1,0 +1,215 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="jornadaTrabalho")
+public class JornadaTrabalho implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="normColCat")
+	private String normColCat;
+	
+	@Column(name="obs_normColCat")
+	private String obs_normColCat;
+	
+	@Column(name="acordProrrHoras")
+	private String acordProrrHoras;
+	
+	@Column(name="obs_acordProrrHoras")
+	private String obs_acordProrrHoras;
+	
+	@Column(name="autMte")
+	private String autMte;
+	
+	@Column(name="obs_autMte")
+	private String obs_autMte;
+	
+	@Column(name="acordCompHoras")
+	private String acordCompHoras;
+	
+	@Column(name="obs_acordCompHoras")
+	private String obs_acordCompHoras;
+	
+	@Column(name="bancHoras")
+	private String bancHoras;
+	
+	@Column(name="obs_bancHoras")
+	private String obs_bancHoras;
+	
+	@Column(name="folPonto")
+	private String folPonto;
+	
+	@Column(name="obs_folPonto")
+	private String obs_folPonto;
+
+	@Column(name="certRelPonto")
+	private String certRelPonto;
+	
+	@Column(name="obs_certRelPonto")
+	private String obs_certRelPonto;
+	
+	@Column(name="escRevez")
+	private String escRevez;
+	
+	@Column(name="obs_escRevez")
+	private String obs_escRevez;
+	
+	public JornadaTrabalho(){
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNormColCat() {
+		return normColCat;
+	}
+
+	public void setNormColCat(String normColCat) {
+		this.normColCat = normColCat;
+	}
+
+	public String getObs_normColCat() {
+		return obs_normColCat;
+	}
+
+	public void setObs_normColCat(String obs_normColCat) {
+		this.obs_normColCat = obs_normColCat;
+	}
+
+	public String getAcordProrrHoras() {
+		return acordProrrHoras;
+	}
+
+	public void setAcordProrrHoras(String acordProrrHoras) {
+		this.acordProrrHoras = acordProrrHoras;
+	}
+
+	public String getObs_acordProrrHoras() {
+		return obs_acordProrrHoras;
+	}
+
+	public void setObs_acordProrrHoras(String obs_acordProrrHoras) {
+		this.obs_acordProrrHoras = obs_acordProrrHoras;
+	}
+
+	public String getAutMte() {
+		return autMte;
+	}
+
+	public void setAutMte(String autMte) {
+		this.autMte = autMte;
+	}
+
+	public String getObs_autMte() {
+		return obs_autMte;
+	}
+
+	public void setObs_autMte(String obs_autMte) {
+		this.obs_autMte = obs_autMte;
+	}
+
+	public String getAcordCompHoras() {
+		return acordCompHoras;
+	}
+
+	public void setAcordCompHoras(String acordCompHoras) {
+		this.acordCompHoras = acordCompHoras;
+	}
+
+	public String getObs_acordCompHoras() {
+		return obs_acordCompHoras;
+	}
+
+	public void setObs_acordCompHoras(String obs_acordCompHoras) {
+		this.obs_acordCompHoras = obs_acordCompHoras;
+	}
+
+	public String getBancHoras() {
+		return bancHoras;
+	}
+
+	public void setBancHoras(String bancHoras) {
+		this.bancHoras = bancHoras;
+	}
+
+	public String getObs_bancHoras() {
+		return obs_bancHoras;
+	}
+
+	public void setObs_bancHoras(String obs_bancHoras) {
+		this.obs_bancHoras = obs_bancHoras;
+	}
+
+	public String getFolPonto() {
+		return folPonto;
+	}
+
+	public void setFolPonto(String folPonto) {
+		this.folPonto = folPonto;
+	}
+
+	public String getObs_folPonto() {
+		return obs_folPonto;
+	}
+
+	public void setObs_folPonto(String obs_folPonto) {
+		this.obs_folPonto = obs_folPonto;
+	}
+
+	public String getCertRelPonto() {
+		return certRelPonto;
+	}
+
+	public void setCertRelPonto(String certRelPonto) {
+		this.certRelPonto = certRelPonto;
+	}
+
+	public String getObs_certRelPonto() {
+		return obs_certRelPonto;
+	}
+
+	public void setObs_certRelPonto(String obs_certRelPonto) {
+		this.obs_certRelPonto = obs_certRelPonto;
+	}
+
+	public String getEscRevez() {
+		return escRevez;
+	}
+
+	public void setEscRevez(String escRevez) {
+		this.escRevez = escRevez;
+	}
+
+	public String getObs_escRevez() {
+		return obs_escRevez;
+	}
+
+	public void setObs_escRevez(String obs_escRevez) {
+		this.obs_escRevez = obs_escRevez;
+	}
+
+}

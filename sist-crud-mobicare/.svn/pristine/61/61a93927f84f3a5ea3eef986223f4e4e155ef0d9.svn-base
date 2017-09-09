@@ -1,0 +1,15 @@
+package br.com.emape.util;
+
+import java.util.Comparator;
+
+import br.com.emape.model.Prestador;
+
+public class FuncionarioComparator implements Comparator<Prestador>{
+
+	@Override
+	public int compare(Prestador o1, Prestador o2) {
+		
+		return o1.getNome().compareTo(o2.getNome());
+	}
+
+}

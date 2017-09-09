@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"  
+      xmlns:p="http://primefaces.org/ui">
+      
+<ui:include src="/template/head.xhtml"/>
+<body>
+<h:form acceptcharset="ISO-8859-1">
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<div  id="emape" style="margin-left: 630px;">
+						<h1>EMAPE</h1><br />	
+					</div>
+					<div  id="gestao" style="margin-left: 489px;">
+						<h1>Sistema de Validação e Gestão Documental</h1>
+					</div>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{relatorioAdminBean.doRelatorioAdmin()}" /> &raquo; <label style="color:blue;">Relatório Consolidado</label></h2>
+				 <div id="mensagem" style="margin-top: 20px;">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+		</div>
+		<br/>
+		<br/>
+			
+					<h:commandLink action="#{relatorioAdminBean.gerarRelatorioConsolidado()}" ajax="false" style="border: none;">
+            			<img title="Clique p/ Imprimir" style="padding-left: 20px;"  src="#{facesContext.externalContext.request.contextPath}/imagens/printer.png" />
+            		</h:commandLink>
+            	<div style="height: 842px; width: 595px; margin-left: auto; margin-right: auto;">	
+		            	<img src="#{facesContext.externalContext.request.contextPath}/imagens/emape.jpg" />	
+            			<img style="padding-left: 400px;" src="#{facesContext.externalContext.request.contextPath}/imagens/sa_interface.jpg" />
+            			<label style="padding-left: 475px;">Advogados</label>
+						<h4 style="padding-left: 200px;">Relatório Consolidado</h4>
+							<h4 style="padding-left: 500px;">#{relatorioAdminBean.dataHj}</h4>
+								<table>
+									<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+									</tr>
+									<p:dataList value="#{relatorioAdminBean.relatorioAdmins}" var="c" type="definition">
+										<tr>
+										  <td>#{c.numContratante}</td>	
+										  <td>#{c.cnpjContratante}</td>
+										  <td>#{c.razaoSocialContratante}</td>
+										</tr>
+										<tr>
+										  <td style="padding-left: 8px;">#{c.numContratada}</td>
+										  <td style="padding-left: 8px;">#{c.cnpjContratada}</td>
+										  <td style="padding-left: 8px;">#{c.razaoSocialContratada}</td>
+										</tr>
+										<tr>
+										  <td style="padding-left: 20px;">#{c.numFuncionario}</td>
+										  <td style="padding-left: 20px;">#{c.pisFuncionario}</td>
+										  <td style="padding-left: 20px;">#{c.nomeFuncionario}</td>
+										</tr>
+										<tr>
+										  <td>#{c.qtdContratante}</td>
+										</tr>
+										<tr>
+										  <td>#{c.qtdContratada}</td>
+										</tr>
+										<tr>  
+										  <td>#{c.qtdFuncionario}</td>
+										</tr>
+									</p:dataList>    
+								</table>
+								<br />
+								<br />
+						<h4>Estrada Marechal Miguel Salazar Mendes de Moraes, 128 - Sala 304, Taquara, Rio de Janeiro/RJ CEP: 22770-331</h4>
+						<h4 style="padding-left: 130px;">Contatos: (21) 3579-5537 / 3591-5537 / 7862-5537 / 7851-0681</h4>
+						<h4 style="padding-left: 190px;">contato@emape-assessoria.com</h4>
+						</div>		
+				    <h:commandLink action="#{relatorioAdminBean.gerarRelatorioConsolidado()}" ajax="false" style="border: none;">
+            			<img title="Clique p/ Imprimir" style="padding-left: 20px;"  src="#{facesContext.externalContext.request.contextPath}/imagens/printer.png" />
+            		</h:commandLink>  
+		
+	</div>
+</h:form>			
+</body>
+</html>

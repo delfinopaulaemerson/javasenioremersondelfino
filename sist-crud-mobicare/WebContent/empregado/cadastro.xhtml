@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+<ui:include src="/template/head.xhtml"/>
+<body>
+<h:form acceptcharset="ISO-8859-1">
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+			<div id="headerinterna">
+				<div  id="emape" style="margin-left: 630px;">
+					<h1>MOBICARE</h1><br />	
+				</div>
+				<div  id="gestao" style="margin-left: 86px;">
+					<h1 style="margin-left: 493px;">Sistema CRUD Básico</h1>
+				</div>
+				<div id="infologin">
+					<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{empregradoBean.sair()}" immediate="true" value="SAIR" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{empregradoBean.doVoltar()}" immediate="true" /> &raquo; <label style="color:blue;">Empregado &raquo; Cadastro</label></h2>
+				 <div id="mensagem" style="margin-top: 20px;">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+		</div>
+		<br/>
+		<br/>
+		<div id="fildset">
+			<fieldset class="fieldset">
+					<fieldset class="fieldset">
+						<legend>Empregado</legend>
+					</fieldset>
+						<fieldset class="fieldset">
+								<div class="grid-3-12">
+									<label for="id" class="form-lbl">Nome<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{empregradoBean.empregado.nome}" required="true" requiredMessage="Nome é obrigatório."  onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();" maxlength="50" title="Nome" />
+								</div>
+								<div class="grid-3-12">
+									<label for="rg" class="form-lbl">Sobre Nome<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{empregradoBean.empregado.sobreNome}" required="true" requiredMessage="Sobre Nome é obrigatório."  onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();" maxlength="50" title="Sobre Nome" />
+								</div>
+								<div class="grid-3-12">
+									<label for="rg" class="form-lbl">Idade<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{empregradoBean.empregado.idade}" required="true" requiredMessage="Idade é obrigatório."  onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();" maxlength="50" title="Idade" />
+								</div>	
+								<div class="grid-3-12">
+									<label for="rg" class="form-lbl">Matrícula<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{empregradoBean.empregado.matricula}" required="true" requiredMessage="Matrícula é obrigatório."  onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();" maxlength="50" title="Matrícula" />
+								</div>						
+						</fieldset>
+						<fieldset class="fieldset">
+								<legend>Departamento(s)</legend>
+							<div class="grid-4-12">
+								<h:selectOneMenu value="#{empregradoBean.opcDepartamento}"  class="form-txt form-large" >
+									<f:selectItem itemLabel="Selecione o Departamento" />
+									<f:selectItems value="#{empregradoBean.departamentos}" var="c" itemLabel="#{c.nomeDepartamento}" itemValue="#{c.id}" />
+	   							</h:selectOneMenu>
+							</div>
+							<div class="grid-4-12">
+							</div>
+							<div class="grid-4-12">
+							</div>	
+						</fieldset>					
+			</fieldset>
+			<p class="form-req">* Campos obrigatórios </p>		
+		</div>
+		    <h:inputHidden value="#{empregradoBean.empregado.id}"/>	
+			<div class="botoes" style="margin-top: 25px;margin-bottom: 25px;">
+				<h:commandButton action="#{empregradoBean.cadastrarEmpregado}" id="submit" type="submit" class="form-button dir btnPesquisar"  accesskey="p" title="Salvar" value="Salvar" />
+			</div>
+		<ui:include src="/template/footer.xhtml"/>
+</div>
+</h:form>			
+</body> 
+</html>

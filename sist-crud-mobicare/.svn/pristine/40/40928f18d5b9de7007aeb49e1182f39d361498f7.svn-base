@@ -1,0 +1,183 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="contratada")
+public class Contratada implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	@Column(name="id")
+	private Long id;
+	
+	
+	@Column(name="razaosocial")
+	private String razaoSocial;
+	
+	
+	@Column(name="cnpj")
+	private String cnpj;
+	
+	
+	@Column(name="cnae")
+	private String cnae;
+	
+	
+	@Column(name="fpas")
+	private String fpas;
+	
+	
+	@Column(name="outrasunidades")
+	private String outrasunidades;
+	
+	
+	@Column(name="rat")
+	private String rat;
+	
+	
+	@Column(name="optsimpnacional")
+	private String optSimpNacional;
+	
+	@Column(name="codigosap")
+	private String codigoSap;     
+	
+	@Column(name="valorcontrato")
+	private String valorContrato;
+	
+	@Column(name="dscatividade")
+	private String dscatividade;
+	
+	@Column(name="dtVigenciaCont")
+	private String dtVigenciaCont;
+	
+	@Column(name="statusContratada")
+	private String statusContratada;
+	
+	
+	public Contratada(){
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getRazaoSocial() {
+		return razaoSocial;
+	}
+
+	public void setRazaoSocial(String razaoSocial) {
+		this.razaoSocial = razaoSocial;
+	}
+
+	public String getCnae() {
+		return cnae;
+	}
+
+	public void setCnae(String cnae) {
+		this.cnae = cnae;
+	}
+
+	public String getFpas() {
+		return fpas;
+	}
+
+	public void setFpas(String fpas) {
+		this.fpas = fpas;
+	}
+
+	public String getOutrasunidades() {
+		return outrasunidades;
+	}
+
+	public void setOutrasunidades(String outrasunidades) {
+		this.outrasunidades = outrasunidades;
+	}
+
+	public String getRat() {
+		return rat;
+	}
+
+	public void setRat(String rat) {
+		this.rat = rat;
+	}
+
+	public String getCodigoSap() {
+		return codigoSap;
+	}
+
+	public void setCodigoSap(String codigoSap) {
+		this.codigoSap = codigoSap;
+	}
+
+	public String getCnpj() {
+		return cnpj;
+	}
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+
+	public String getValorContrato() {
+		return valorContrato;
+	}
+	
+	public void setValorContrato(String valorContrato) {
+		this.valorContrato = valorContrato;
+	}
+
+
+	public String getOptSimpNacional() {
+		return optSimpNacional;
+	}
+
+	public void setOptSimpNacional(String optSimpNacional) {
+		this.optSimpNacional = optSimpNacional;
+	}
+
+	public String getDscatividade() {
+		return dscatividade;
+	}
+
+	public void setDscatividade(String dscatividade) {
+		this.dscatividade = dscatividade;
+	}
+
+	public String getDtVigenciaCont() {
+		return dtVigenciaCont;
+	}
+
+	public void setDtVigenciaCont(String dtVigenciaCont) {
+		this.dtVigenciaCont = dtVigenciaCont;
+	}
+
+	public String getStatusContratada() {
+		return statusContratada;
+	}
+
+	public void setStatusContratada(String statusContratada) {
+		this.statusContratada = statusContratada;
+	}
+	
+}

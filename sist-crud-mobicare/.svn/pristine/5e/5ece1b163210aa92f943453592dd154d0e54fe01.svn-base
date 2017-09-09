@@ -1,0 +1,880 @@
+package br.com.emape.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.faces.view.ViewScoped;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Ano;
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Gestao;
+import br.com.emape.model.Mes;
+import br.com.emape.model.RelatorioGerencial;
+import br.com.emape.model.User;
+import br.com.emape.service.ContratadaService;
+import br.com.emape.service.ContratanteService;
+import br.com.emape.service.GestaoService;
+import br.com.emape.service.RelatorioGerencialService;
+import br.com.emape.service.RelatorioService;
+import br.com.emape.service.UserService;
+
+@ManagedBean
+@ViewScoped
+@RequestScoped
+@Component("relatorioGerencialBean")
+public class RelatorioGerencialBean implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(RelatorioGerencialBean.class);
+	
+	private static final Long ZERO = new Long(0);
+	
+	private RelatorioGerencial relatorioGerencial;
+			@Autowired
+	private RelatorioGerencialService relatorioGerencialService;
+			@Autowired
+	private UserService userService;
+			@Autowired
+	private ContratanteService contratanteService;
+			@Autowired
+	private ContratadaService contratadaService;
+			@Autowired
+	private GestaoService gestaoService;
+			@Autowired
+	private RelatorioService relatorioService;		
+			
+	private Contratante	contratante;
+	
+	private Contratada contratada;
+	
+	private User user;
+	
+	private List<RelatorioGerencial> relatorioGerencials = new ArrayList<RelatorioGerencial>();
+			
+	private List<String> opcTodos = new ArrayList<String>();
+	
+	private List<Contratante> contratantes = new ArrayList<Contratante>();
+	
+	private List<Contratada> contratadas = new ArrayList<Contratada>();
+	
+	private List<Ano> anos = new ArrayList<Ano>();
+	
+	private List<Mes> meses = new ArrayList<Mes>();
+	
+	private DataModel<Gestao> datamodel;
+	
+	private Long opcContratada;
+	
+	private Long opcContratante;
+	
+	private String opcAno;
+	
+	private String opcMes;
+	
+	private boolean admin;
+	
+	private boolean open;
+	
+	private Gestao gestao;
+	
+	
+	/**
+	 * construtor
+	 */
+	public RelatorioGerencialBean(){
+		
+		this.relatorioGerencial = new RelatorioGerencial();
+		this.user = new User();
+		this.contratante = new Contratante();
+		this.gestao = new Gestao();
+		
+	}
+	
+	
+	
+	
+	/**
+	 * direciona para a tela de pesquisa de relatório.
+	 * @return
+	 */
+	public String doRelatorioGerencial(){
+		
+		if(this.relatorioGerencial == null){
+			this.setRelatorioGerencial(new RelatorioGerencial());
+		}
+		
+		if(this.contratante == null){
+			this.setContratante(new Contratante());
+		}
+		
+		if(this.user == null){
+			this.setUser(new User());
+		}
+		
+		try {
+			
+			limpacomponentes();
+			
+			this.user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+			
+			List<GrantedAuthority> roles = (List<GrantedAuthority>) this.user.getAuthorities();
+			
+			if(roles.get(0).equals("ADMIN")){
+				
+				this.admin = true;
+				this.open  = false;
+				
+				this.contratantes.addAll(this.contratanteService.find());
+				
+				this.anos.addAll(this.gestaoService.listaAno());
+				
+				this.meses.addAll(this.gestaoService.listaMes());
+				
+			}else if(roles.get(0).equals("CONTRATANTE")){
+				
+				this.admin = false;
+				this.open  = false;
+				
+				this.setContratante(this.contratanteService.findByCnpj(this.user.getCnpj()));
+				
+				if(this.getContratante() == null){
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Usuário está associado a uma contratante inexistente.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					
+					return "/begin/begin";
+				}
+				
+				this.contratadas.addAll(this.contratadaService.findContratadasByIdContratante(this.contratante.getId()));
+				
+				this.anos.addAll(this.gestaoService.listaAno());
+				
+				this.meses.addAll(this.gestaoService.listaMes());
+				
+				
+			}else if(roles.get(0).equals("CONTRATADA")){
+				
+				this.admin = true;
+				this.open  = true;
+				
+				this.setContratada(this.contratadaService.findByCnpj(this.user.getCnpj()));
+				
+				if(this.getContratada() == null){
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Usuário está associado a uma contratada inexistente.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					
+					return "/begin/begin";
+				}
+				
+				this.contratantes.addAll(this.contratanteService.findByContratada(this.contratada.getId()));
+				
+				this.anos.addAll(this.gestaoService.listaAno());
+				
+				this.meses.addAll(this.gestaoService.listaMes());
+				
+			}
+			
+		} catch (Exception e) {
+			logger.error(" doRelatorioGerencial() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/relatorio/relatoriogerencial";
+		}
+		
+		return "/relatorio/relatoriogerencial";
+	}
+	
+	/**
+	 * preenche a combo contrada.
+	 * @return List<Contratada>
+	 * @throws Exception
+	 */
+	public List<Contratada> comboContratada() throws Exception {
+
+		this.contratadas.removeAll(this.contratadas);
+		this.contratadas.addAll(this.contratadaService
+				.findContratadasByIdContratante(this.opcContratante));
+		return this.contratadas;
+	}
+	
+	/**
+	 * pesquisa de validacoes
+	 * @return
+	 */
+	public String doPesquisar(){
+		
+		boolean ok = true;
+		
+		if(this.relatorioGerencial == null){
+			this.setRelatorioGerencial(new RelatorioGerencial());
+		}
+		
+		if(this.contratante == null){
+			this.setContratante(new Contratante());
+		}
+		
+		if(this.user == null){
+			this.setUser(new User());
+		}
+		
+		if(this.contratada == null){
+			this.setContratada(new Contratada());
+		}
+		
+		try{
+			
+			this.user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+			
+            List<GrantedAuthority> roles = (List<GrantedAuthority>) this.user.getAuthorities();
+			
+			if((!this.opcTodos.isEmpty()) && (roles.get(0).equals("CONTRATANTE"))){
+				
+				this.setContratante(this.contratanteService.findByCnpj(this.user.getCnpj()));
+				
+				this.datamodel =  new ListDataModel<Gestao>(this.gestaoService.findAllGestaoByContratante(this.contratante.getId(), this.opcContratada));
+				
+			}else if((!this.opcTodos.isEmpty()) && (roles.get(0).equals("ADMIN"))){
+				
+				this.datamodel = new ListDataModel<Gestao>(this.gestaoService.findAllGestaoByContratante(this.opcContratante, this.opcContratada));
+				
+			}else if((!this.opcTodos.isEmpty()) && (roles.get(0).equals("CONTRATADA"))){
+				
+				this.setContratada(this.contratadaService.findByCnpj(this.user.getCnpj()));
+				
+				this.datamodel = new ListDataModel<Gestao>(this.gestaoService.findAllGestaoByContratante(this.opcContratante, this.contratada.getId()));
+				
+			}else{
+				if(roles.get(0).equals("ADMIN")){
+					this.contratante = new Contratante();
+					this.contratante.setId(this.opcContratante);
+					this.contratada = new Contratada();
+					this.contratada.setId(this.opcContratada);
+					
+				}else if(roles.get(0).equals("CONTRATANTE")){
+					this.contratada = new Contratada();
+					this.contratada.setId(this.opcContratada);
+					
+				}else if(roles.get(0).equals("CONTRATADA")){
+					this.contratante = new Contratante();
+					this.contratante.setId(this.opcContratante);
+				}
+				
+				ok = validaPesquisaGestao(this.contratante.getId(),this.contratada.getId(), this.opcMes, this.opcAno);
+				
+				if(!ok){
+					
+					return "/relatorio/relatoriogerencial";
+				}
+				
+				this.datamodel =  new ListDataModel<Gestao>(this.gestaoService.findAllGestao(this.contratante.getId(), this.contratada.getId(), this.opcMes, this.opcAno));
+			}
+			
+		}catch(Exception e){
+			logger.error(" doPesquisar() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/relatorio/relatoriogerencial";
+		}
+		
+		return "/relatorio/relatoriogerencial";
+	}
+	
+	/**
+	 * valida a pesquisa de gestoes.
+	 * @param opcContratada
+	 * @param opcMes
+	 * @param opcAno
+	 * @return boolean
+	 */
+	private boolean validaPesquisaGestao(Long opcContratante,Long opcContratada,String opcMes, String opcAno) {
+		
+		boolean status = true;
+		
+		if(opcContratante == 0){
+			
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Contratante é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			status = false;
+		}
+		
+		if(opcContratada == 0){
+			
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Contratada é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			status = false;
+		}
+		
+		if(opcMes.equals("")){
+			
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Mês é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			status = false;
+		}
+		
+		if(opcAno.equals("")){
+			
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Ano é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			status = false;
+		}
+		
+		return status;
+	}
+	
+	public String vusualizarGestao(){
+		if(this.gestao == null){
+			
+			this.setGestao(new Gestao());
+		}
+		
+		this.gestao = (datamodel.getRowData());
+		
+		return "/relatorio/relatoriogerencial";
+		
+	}
+	
+	
+	/**
+	 * gera o relatorio selecionado.
+	 * @return String
+	 */
+	public String selectReports(Gestao g){
+		
+		try {
+			
+			this.user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+			
+            List<GrantedAuthority> roles = (List<GrantedAuthority>) this.user.getAuthorities();
+			
+			this.relatorioGerencial = new RelatorioGerencial();
+			
+			this.relatorioGerencial.setRazaoSocialContratante(g.getContratante().getRazaoSocial());
+			
+			this.relatorioGerencial.setRazaoSocialContratada(g.getContratada().getRazaoSocial());
+			
+			this.relatorioGerencial.setMes(g.getMes());
+			
+			this.relatorioGerencial.setAno(g.getAno());
+			
+			this.relatorioGerencial.setTipoEscopo(g.getDescricao());
+			
+			this.relatorioGerencial.setStatus(g.getSituacao());
+			
+			/**
+			 * dados do escopo parte fiscal
+			 */
+			
+			this.relatorioGerencial.setContratoSocial(g.getParteFiscal().getContratoSocial());
+			
+			if(g.getParteFiscal().getObs_contratoSocial().equals("")){
+				this.relatorioGerencial.setObs_contratoSocial("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_contratoSocial(g.getParteFiscal().getObs_contratoSocial());
+			}
+			
+			this.relatorioGerencial.setGuiaRecFgts(g.getParteFiscal().getGuiaRecFgts());
+			
+			if(g.getParteFiscal().getObs_guiaRecFgts().equals("")){
+				this.relatorioGerencial.setObs_guiaRecFgts("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_guiaRecFgts(g.getParteFiscal().getObs_guiaRecFgts());
+			}
+			
+			this.relatorioGerencial.setCartaoCnpj(g.getParteFiscal().getCartaoCnpj());
+			
+			if(g.getParteFiscal().getObs_cartaoCnpj().equals("")){
+				this.relatorioGerencial.setObs_cartaoCnpj("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_cartaoCnpj(g.getParteFiscal().getObs_cartaoCnpj());
+			}
+			
+			this.relatorioGerencial.setCndPrevidencia(g.getParteFiscal().getCndPrevidencia());
+			
+			if(g.getParteFiscal().getObs_cndPrevidencia().equals("")){
+				this.relatorioGerencial.setObs_cndPrevidencia("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_cndPrevidencia(g.getParteFiscal().getObs_cndPrevidencia());
+			}
+		
+			this.relatorioGerencial.setCndTributaria(g.getParteFiscal().getCndTributaria());
+			
+			if(g.getParteFiscal().getObs_cndTributaria().equals("")){
+				this.relatorioGerencial.setObs_cndTributaria("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_cndTributaria(g.getParteFiscal().getObs_cndTributaria());
+			}
+			
+			this.relatorioGerencial.setCrfFgts(g.getParteFiscal().getCrfFgts());
+			
+			if(g.getParteFiscal().getObs_crfFgts().equals("")){
+				this.relatorioGerencial.setObs_crfFgts("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_crfFgts(g.getParteFiscal().getObs_crfFgts());
+			}
+			
+			this.relatorioGerencial.setCndDebitostrabalhista(g.getParteFiscal().getCndDebitostrabalhista());
+			
+			if(g.getParteFiscal().getObs_cndDebitostrabalhista().equals("")){
+				this.relatorioGerencial.setObs_cndDebitostrabalhista("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_cndDebitostrabalhista(g.getParteFiscal().getObs_cndDebitostrabalhista());
+			}
+			
+			this.relatorioGerencial.setFolhaPagamento(g.getParteFiscal().getFolhaPagamento());
+			
+			if(g.getParteFiscal().getObs_folhaPagamento().equals("")){
+				this.relatorioGerencial.setObs_folhaPagamento("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_folhaPagamento(g.getParteFiscal().getObs_folhaPagamento());
+			}
+			
+			this.relatorioGerencial.setPlaFuncAlocContratante(g.getParteFiscal().getPlaFuncAlocContratante());
+			
+			if(g.getParteFiscal().getObs_plaFuncAlocContratante().equals("")){
+				this.relatorioGerencial.setObs_plaFuncAlocContratante("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_plaFuncAlocContratante(g.getParteFiscal().getObs_plaFuncAlocContratante());
+			}
+			
+			
+			this.relatorioGerencial.setGuiaPrevSoc(g.getParteFiscal().getGuiaPrevSoc());
+			
+			if(g.getParteFiscal().getObs_protConecSocial().equals("")){
+				this.relatorioGerencial.setObs_guiaPrevSoc("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_guiaPrevSoc(g.getParteFiscal().getObs_protConecSocial());
+			}
+			
+			this.relatorioGerencial.setDarf(g.getParteFiscal().getDarf());
+			
+			if(g.getParteFiscal().getObs_darf().equals("")){
+				this.relatorioGerencial.setObs_darf("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_darf(g.getParteFiscal().getObs_darf());
+			}
+		
+			this.relatorioGerencial.setSefipGfip(g.getParteFiscal().getSefipGfip());
+			
+			if(g.getParteFiscal().getObs_sefipGfip().equals("")){
+				this.relatorioGerencial.setObs_sefipGfip("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_sefipGfip(g.getParteFiscal().getObs_sefipGfip());
+			}
+			
+			this.relatorioGerencial.setProtConecSocial(g.getParteFiscal().getProtConecSocial());
+			
+			if(g.getParteFiscal().getObs_protConecSocial().equals("")){
+				this.relatorioGerencial.setObs_protConecSocial("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_protConecSocial(g.getParteFiscal().getObs_protConecSocial());
+			}
+			
+			this.relatorioGerencial.setNotaFiscRetencaoInss(g.getParteFiscal().getNotaFiscRetencaoInss());
+			
+			if(g.getParteFiscal().getObs_notaFiscRetencaoInss().equals("")){
+				this.relatorioGerencial.setObs_notaFiscRetencaoInss("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_notaFiscRetencaoInss(g.getParteFiscal().getObs_notaFiscRetencaoInss());
+			}
+		
+			this.relatorioGerencial.setDeclRais(g.getParteFiscal().getDeclRais());
+			
+			if(g.getParteFiscal().getObs_declRais().equals("")){
+				this.relatorioGerencial.setObs_declRais("Satisfatorio");
+			}else{
+				this.relatorioGerencial.setObs_declRais(g.getParteFiscal().getObs_declRais());
+			}
+			
+			
+			this.relatorioGerencials.removeAll(getRelatorioGerencials());
+			
+			this.relatorioGerencials.add(this.relatorioGerencial);
+			
+			if(roles.get(0).equals("ADMIN") || roles.get(0).equals("CONTRATANTE")){
+				
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_gest_contratante.jasper");
+				
+				String filePdf = "Gestão_Mensal_Seleção";
+				
+				this.relatorioService.gerarPdf(reportPath, this.relatorioGerencials, filePdf);
+				
+			}else if(roles.get(0).equals("CONTRATADA")){
+				
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_gest_contratada.jasper");
+				
+				String filePdf = "Gestão_Mensal_Seleção";
+				
+				this.relatorioService.gerarPdf(reportPath, this.relatorioGerencials, filePdf);
+			
+			}
+			
+		} catch (Exception e) {
+			logger.error(" selectReports(Gestao g) " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/relatorio/relatoriogerencial";
+		}
+		
+		
+		return "/relatorio/relatoriogerencial";
+	}
+	
+	
+	/**
+	 * gera o relatorio com a gestão de todas as contratadas.
+	 * @param g
+	 * @return String
+	 */
+	public String reportsAll(){
+		
+		try {
+			
+			this.user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+			
+			List<GrantedAuthority> roles = (List<GrantedAuthority>) this.user.getAuthorities();
+			
+			this.relatorioGerencials.removeAll(getRelatorioGerencials());
+			
+			if(roles.get(0).equals("ADMIN")){
+				
+				if(this.opcContratante.equals(ZERO)){
+					
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Selecione a Contratante.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					
+					return "/relatorio/relatoriogerencial";
+					
+				}
+				
+				if(this.opcContratada.equals(ZERO)){
+					
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Selecione a Contratada.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					
+					return "/relatorio/relatoriogerencial";
+					
+				}
+			
+				this.relatorioGerencials = this.relatorioGerencialService.findAllGestaoByContratante(this.opcContratante, this.opcContratada);
+				
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_gest_contratante_all.jasper");
+				
+				String filePdf = "Gestão_Mensal_Total";
+				
+				this.relatorioService.gerarPdf(reportPath, this.relatorioGerencials, filePdf);
+				
+				
+			}else if(roles.get(0).equals("CONTRATANTE")){
+			
+				this.setContratante(this.contratanteService.findByCnpj(this.user.getCnpj()));
+				
+				if(this.opcContratada.equals(ZERO)){
+					
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Selecione a Contratada.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					
+					return "/relatorio/relatoriogerencial";
+					
+				}
+			
+				this.relatorioGerencials = this.relatorioGerencialService.findAllGestaoByContratante(getContratante().getId(), this.opcContratada);
+			
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_gest_contratante_all.jasper");
+			
+				String filePdf = "Gestão_Mensal_Total";
+			
+				this.relatorioService.gerarPdf(reportPath, this.relatorioGerencials, filePdf);
+			
+			}else if(roles.get(0).equals("CONTRATADA")){
+				
+				this.setContratada(this.contratadaService.findByCnpj(this.user.getCnpj()));
+				
+				if(getOpcContratante().equals(ZERO) ){
+					
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Selecione a Contratante.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					
+					return "/relatorio/relatoriogerencial";
+					
+				}
+				
+				this.relatorioGerencials = this.relatorioGerencialService.findAllGestaoByContratante(this.opcContratante, getContratada().getId());
+				
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_gest_contratada_all.jasper");
+				
+				String filePdf = "Gestão_Mensal_Total";
+				
+				this.relatorioService.gerarPdf(reportPath, this.relatorioGerencials, filePdf);
+				
+			}
+			
+		} catch (Exception e) {
+			logger.error(" reportsAll() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/relatorio/relatoriogerencial";
+		}
+		
+		
+		return "/relatorio/relatoriogerencial";
+	}
+
+
+
+
+	private void limpacomponentes() {
+		
+		this.contratante = new Contratante();
+		this.contratada = new Contratada();
+		this.anos.removeAll(getAnos());
+		this.contratadas.removeAll(getContratadas());
+		this.contratantes.removeAll(getContratantes());
+		this.setContratante(new Contratante());
+		this.setDatamodel(null);
+		this.meses.removeAll(getMeses());
+		this.meses.removeAll(getMeses());
+		this.setOpcAno("");
+		this.setOpcContratada(null);
+		this.setOpcMes("");
+		this.opcTodos.removeAll(getOpcTodos());
+		this.setUser(new User());
+		this.relatorioGerencials.removeAll(getRelatorioGerencials());
+		
+	}
+
+
+	public RelatorioGerencial getRelatorioGerencial() {
+		return relatorioGerencial;
+	}
+
+	public void setRelatorioGerencial(RelatorioGerencial relatorioGerencial) {
+		this.relatorioGerencial = relatorioGerencial;
+	}
+
+	public RelatorioGerencialService getRelatorioGerencialService() {
+		return relatorioGerencialService;
+	}
+
+	public List<String> getOpcTodos() {
+		return opcTodos;
+	}
+
+	public void setOpcTodos(List<String> opcTodos) {
+		this.opcTodos = opcTodos;
+	}
+
+	public void setRelatorioGerencialService(
+			RelatorioGerencialService relatorioGerencialService) {
+		this.relatorioGerencialService = relatorioGerencialService;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+	public Contratante getContratante() {
+		return contratante;
+	}
+
+	public void setContratante(Contratante contratante) {
+		this.contratante = contratante;
+	}
+
+	public List<Contratada> getContratadas() {
+		return contratadas;
+	}
+
+	public void setContratadas(List<Contratada> contratadas) {
+		this.contratadas = contratadas;
+	}
+
+	public ContratadaService getContratadaService() {
+		return contratadaService;
+	}
+
+	public void setContratadaService(ContratadaService contratadaService) {
+		this.contratadaService = contratadaService;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public List<Ano> getAnos() {
+		return anos;
+	}
+
+	public void setAnos(List<Ano> anos) {
+		this.anos = anos;
+	}
+
+	public List<Mes> getMeses() {
+		return meses;
+	}
+
+
+	public void setMeses(List<Mes> meses) {
+		this.meses = meses;
+	}
+
+	public GestaoService getGestaoService() {
+		return gestaoService;
+	}
+	public void setGestaoService(GestaoService gestaoService) {
+		this.gestaoService = gestaoService;
+	}
+
+	public Long getOpcContratada() {
+		return opcContratada;
+	}
+
+	public void setOpcContratada(Long opcContratada) {
+		this.opcContratada = opcContratada;
+	}
+
+	public String getOpcAno() {
+		return opcAno;
+	}
+
+	public void setOpcAno(String opcAno) {
+		this.opcAno = opcAno;
+	}
+
+	public DataModel<Gestao> getDatamodel() {
+		return datamodel;
+	}
+
+	public void setDatamodel(DataModel<Gestao> datamodel) {
+		this.datamodel = datamodel;
+	}
+
+	public String getOpcMes() {
+		return opcMes;
+	}
+
+	public void setOpcMes(String opcMes) {
+		this.opcMes = opcMes;
+	}
+
+	public List<Contratante> getContratantes() {
+		return contratantes;
+	}
+
+	public void setContratantes(List<Contratante> contratantes) {
+		this.contratantes = contratantes;
+	}
+	public boolean isAdmin() {
+		return admin;
+	}
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+	public Long getOpcContratante() {
+		return opcContratante;
+	}
+	public void setOpcContratante(Long opcContratante) {
+		this.opcContratante = opcContratante;
+	}
+
+	public List<RelatorioGerencial> getRelatorioGerencials() {
+		return relatorioGerencials;
+	}
+	public void setRelatorioGerencials(List<RelatorioGerencial> relatorioGerencials) {
+		this.relatorioGerencials = relatorioGerencials;
+	}
+	public RelatorioService getRelatorioService() {
+		return relatorioService;
+	}
+	public void setRelatorioService(RelatorioService relatorioService) {
+		this.relatorioService = relatorioService;
+	}
+
+	public Contratada getContratada() {
+		return contratada;
+	}
+
+	public void setContratada(Contratada contratada) {
+		this.contratada = contratada;
+	}
+	public boolean isOpen() {
+		return open;
+	}
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
+	public Gestao getGestao() {
+		return gestao;
+	}
+
+	public void setGestao(Gestao gestao) {
+		this.gestao = gestao;
+	}
+	
+}

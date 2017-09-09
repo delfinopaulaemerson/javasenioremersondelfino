@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_contratante" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="091fc411-8d5d-4601-9724-76031247bf01">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logoA" class="java.lang.String"/>
+	<parameter name="logoB" class="java.lang.String"/>
+	<field name="cnpjContratante" class="java.lang.String"/>
+	<field name="razaoSocialContratante" class="java.lang.String"/>
+	<variable name="SomaQtde" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="117" splitType="Stretch">
+			<image>
+				<reportElement uuid="a58e5130-6115-4bd3-998d-d9810ce9bbc9" x="1" y="1" width="100" height="50"/>
+				<imageExpression><![CDATA[new File($P{logoA})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="7d183f02-8ba3-470a-a35f-66cd2b19c948" x="454" y="2" width="100" height="50"/>
+				<imageExpression><![CDATA[new File($P{logoB})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="1f00699a-c451-42cf-afbd-9872db1b2fdb" x="454" y="52" width="100" height="17"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Advogados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f0258c06-51a2-46ea-84d9-04bfef0ad6cf" x="197" y="36" width="144" height="15"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Contratantes]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="6a094793-f4f2-4075-8722-74c3cc44645b" x="454" y="83" width="100" height="16"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="798cd95f-2065-4be9-940d-786d0b151abb" x="434" y="83" width="20" height="16"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Rio,]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="a4d699ac-1e02-430a-9c0c-ddd56ce14b97" x="1" y="74" width="553" height="2"/>
+			</line>
+			<staticText>
+				<reportElement uuid="d7da2774-0335-4824-8877-9a973d7e5524" x="63" y="99" width="41" height="18"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[CNPJ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26cd218d-905d-4506-bcb8-74e4800e4a0c" x="250" y="99" width="91" height="18"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Razão Social]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement uuid="73422fcd-0b75-4472-99a4-3319744e7fb0" x="2" y="0" width="61" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a7c8896e-c168-4adb-bd72-38538d800c00" x="63" y="0" width="187" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cnpjContratante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e7f0ceae-5f6c-4a31-bc8d-aa64a3442cca" x="250" y="1" width="304" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{razaoSocialContratante}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="88" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2532fd2e-ba85-4453-9756-2b3bda2dcb63" x="454" y="67" width="100" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="aa60cb48-5e8d-49ca-8291-642f2f9803c2" x="1" y="28" width="554" height="20"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Estrada Marechal Miguel Salazar Mendes de Moraes, 128 - Sala 304, Taquara, Rio de Janeiro/RJ CEP: 22770-331]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="99d4b187-849a-4040-af2c-34a1d8eef8a4" x="1" y="48" width="553" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Contatos: (21) 3579-5537 / 3591-5537 / 7862-5537 / 7851-0681]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c4b9032a-1893-4e84-8500-4dd205740353" x="153" y="68" width="257" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[contato@emape-assessoria.com]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="a8d97054-de58-4e18-a888-3e8f2d36b328" x="1" y="24" width="554" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="56ee6ba5-8970-41a8-95cd-374bd427dfd0" x="0" y="2" width="40" height="22"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="73422fcd-0b75-4472-99a4-3319744e7fb0" x="41" y="1" width="61" height="22"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

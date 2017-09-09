@@ -1,0 +1,333 @@
+package br.com.emape.dao;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante_Contratada;
+import br.com.emape.model.Dados;
+import br.com.emape.model.Endereco;
+/**
+ * 
+ * @author emerson
+ *
+ */
+@Component("contratadaDAO")
+public class ContratadaDAO {
+	
+			@PersistenceContext
+	private EntityManager entityManager;
+			
+	private static final Integer PRIMEIRO = 1;
+	
+	private static final Integer SEGUNDO = 2;
+			
+			/***
+			 * cadastra o pretador de servico
+			 * @param contratada
+			 * @param endereco
+			 * @param dados
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public void cadastrarContratada(Contratada c,Endereco e, Dados d, Long idContratante) throws Exception{
+				
+				
+				Contratada contratada = new Contratada();
+				contratada.setCnae(c.getCnae());
+				contratada.setCnpj(c.getCnpj());
+				contratada.setCodigoSap(c.getCodigoSap());
+				contratada.setDscatividade(c.getDscatividade());
+				contratada.setFpas(c.getFpas());
+				contratada.setOptSimpNacional(c.getOptSimpNacional());
+				contratada.setOutrasunidades(c.getOutrasunidades());
+				contratada.setRat(c.getRat());
+				contratada.setRazaoSocial(c.getRazaoSocial());
+				contratada.setValorContrato(c.getValorContrato());
+				contratada.setDtVigenciaCont(c.getDtVigenciaCont());
+				contratada.setStatusContratada(c.getStatusContratada());
+				
+				entityManager.persist(contratada);
+				entityManager.flush();
+				
+				Endereco endereco = new Endereco();
+				endereco.setBairro(e.getBairro());
+				endereco.setCep(e.getCep());
+				endereco.setCidade(e.getCidade());
+				endereco.setContratada(contratada);
+				endereco.setComplemento(e.getComplemento());
+				endereco.setEstado(e.getEstado());
+				endereco.setNumero(e.getNumero());
+				endereco.setRua(e.getRua());
+				entityManager.persist(endereco);
+				
+				Dados dados = new Dados();
+				dados.setEmail(d.getEmail());
+				dados.setNome(d.getNome());
+				dados.setTelefone(d.getTelefone());
+				dados.setContratada(contratada);
+				entityManager.persist(dados);
+				
+				Contratante_Contratada c_c = new Contratante_Contratada();
+				
+				c_c.setContratadas_id(contratada.getId());
+				c_c.setContratante_id(idContratante);
+				
+				this.entityManager.persist(c_c);
+				
+				
+				entityManager.flush();
+				entityManager.clear();
+				
+			}
+			
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public List<Contratante_Contratada> findAllContContrat() throws Exception{
+				
+				Query query = this.entityManager.createQuery(" FROM Contratante_Contratada c order by c.contratante_id ");
+				
+				
+				return query.getResultList();
+			}
+			
+			/**
+			 * metodo atualiza o objeto contratada
+			 * @param c
+			 * @param e
+			 * @param d
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public void updateContratada(Contratada c,Endereco e,Dados d, Long idContratante)throws Exception{
+				
+				Contratada contratada = this.entityManager.find(Contratada.class, c.getId());
+
+				contratada.setCnae(c.getCnae());
+				contratada.setCnpj(c.getCnpj());
+				contratada.setCodigoSap(c.getCodigoSap());
+				contratada.setDscatividade(c.getDscatividade());
+				contratada.setFpas(c.getFpas());
+				contratada.setOptSimpNacional(c.getOptSimpNacional());
+				contratada.setOutrasunidades(c.getOutrasunidades());
+				contratada.setRat(c.getRat());
+				contratada.setRazaoSocial(c.getRazaoSocial());
+				contratada.setValorContrato(c.getValorContrato());
+				contratada.setDtVigenciaCont(c.getDtVigenciaCont());
+				contratada.setStatusContratada(c.getStatusContratada());
+				
+				this.entityManager.merge(contratada);
+				this.entityManager.flush();
+				
+				Dados dados = this.entityManager.find(Dados.class, d.getId());
+				dados.setEmail(d.getEmail());
+				dados.setNome(d.getNome());
+				dados.setTelefone(d.getTelefone());
+				dados.setContratada(contratada);
+				
+				this.entityManager.merge(dados);
+				
+				Endereco endereco = this.entityManager.find(Endereco.class, e.getId());
+				endereco.setBairro(e.getBairro());
+				endereco.setCep(e.getCep());
+				endereco.setCidade(e.getCidade());
+				endereco.setComplemento(e.getComplemento());
+				endereco.setContratada(contratada);
+				endereco.setEstado(e.getEstado());
+				endereco.setNumero(e.getNumero());
+				endereco.setRua(e.getRua());
+				
+				// a seta o id do usuario e o id da role
+				this.entityManager
+						.createNativeQuery("UPDATE contratante_contratada SET contratante_id=? where contratadas_id=? ")
+						.setParameter(PRIMEIRO, idContratante)
+						.setParameter(SEGUNDO, contratada.getId()).executeUpdate();
+				
+				this.entityManager.merge(endereco);
+				this.entityManager.flush();
+				this.entityManager.clear();
+				
+			}
+			
+			/**
+			 * metodo deleta o objeto contratada
+			 * @param c
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public void deleteContratada(Contratada c)throws Exception{
+				
+				Contratada contratada = this.entityManager.find(Contratada.class, c.getId());
+				
+				Endereco endereco = (Endereco) this.entityManager.createQuery(" select e from Endereco e where contratada.id=:id ").setParameter("id", contratada.getId()).getSingleResult();
+				
+				Dados dados = (Dados) this.entityManager.createQuery(" select d from Dados d where contratada.id=:id ").setParameter("id", contratada.getId()).getSingleResult();
+				
+				this.entityManager.remove(endereco);
+				
+				this.entityManager.remove(dados);
+				
+				this.entityManager.remove(contratada);
+				
+				this.entityManager.createNativeQuery(" DELETE FROM contratante_contratada c where contratadas_id=?  ").setParameter(PRIMEIRO, contratada.getId()).executeUpdate();
+				
+				
+				this.entityManager.flush();
+				
+				this.entityManager.clear();
+				
+			}
+			
+			/**
+			 * metodo executa pesquisa de contratada
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public List<Contratada> Find(Contratada contratada) throws Exception{
+				
+				 Query query = null;
+				
+				
+				if((!"".equals(contratada.getCnpj())) && (!"".equals(contratada.getRazaoSocial()))){
+				
+					query =	entityManager.createQuery(" from Contratada  where cnpj like '%"+ contratada.getCnpj() +"%' and razaosocial like '%"+ contratada.getRazaoSocial() + "%' ");
+					 
+				}else if(!"".equals(contratada.getCnpj())){
+					
+					query =	entityManager.createQuery("from Contratada c where c.cnpj like '%"+ contratada.getCnpj() +"%' ");
+					
+				}else if(!"".equals(contratada.getRazaoSocial())){
+					
+					query =  entityManager.createQuery("from Contratada where razaosocial like '%"+ contratada.getRazaoSocial() +"%' "); 
+				}
+						
+				
+				return query.getResultList();
+			}
+			
+			
+			/**
+			 * retorna um objeto contratada
+			 * @param id
+			 * @return Contratada
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public Contratada findById(Long id){
+				
+				return this.entityManager.find(Contratada.class, id);
+			}
+			
+			/**
+			 * metodo retorna uma lista de empresas
+			 * @return List<Contratada>
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public List<Contratada> getListaCadastrada() throws Exception{
+				
+				Query query = this.entityManager.createQuery(" From Contratada c order by c.id ");
+				
+				return query.getResultList(); 
+
+			}
+			
+			/**
+			 * seleciona a contratada pelo cnpj
+			 * @param cnpj
+			 * @return
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public Contratada findByCnpj(String cnpj) throws Exception{
+				
+				Contratada contratada;
+				
+				Query query = this.entityManager.createQuery(" SELECT c FROM Contratada c where c.cnpj=? ");
+				
+				query.setParameter(PRIMEIRO, cnpj);
+				
+				try {
+					 contratada = (Contratada) query.getSingleResult();
+					 
+				} catch (Exception e) {
+					
+					return null;
+				}
+				
+				return contratada;
+			}
+			
+			
+			/**
+			 * retorna a lista de contratadas vinculadas a contratantes.
+			 * @return
+			 * @throws Exception
+			 */
+			public List<Contratada> findContratadasByIdContratante(Long id) throws Exception{
+				
+				List<Contratante_Contratada> ccs = new ArrayList<Contratante_Contratada>();
+				
+				List<Contratada> lista = new ArrayList<Contratada>();
+				
+				if(id != null){
+					
+					Query query = this.entityManager.createQuery(" From Contratante_Contratada where contratante_id =:id ").setParameter("id", id);
+					
+					ccs.addAll(query.getResultList());
+					
+					if(ccs != null || !ccs.isEmpty()){
+						
+						for(Contratante_Contratada  cc : ccs){
+							
+							lista.add(this.findById(cc.getContratadas_id()));
+						}
+					}
+					
+					
+					
+				}
+				
+				
+				return lista;
+				
+			}
+			
+			/**
+			 * metodo retorna o id da contratante vinculada
+			 * @param idContratada
+			 * @return
+			 * @throws Exception
+			 */
+			public BigInteger getContratanteVinculado(Long idContratada) throws Exception{
+				BigInteger idContratante = null;
+				
+				// a seta o id do usuario e o id da role
+				 idContratante =  (BigInteger) entityManager.createNativeQuery(" SELECT contratante_id from contratante_contratada where contratadas_id=? ")
+						.setParameter(PRIMEIRO, idContratada).getSingleResult();
+						
+				return idContratante;
+			}
+			
+			
+
+			public EntityManager getEntityManager() {
+				return entityManager;
+			}
+
+			public void setEntityManager(EntityManager entityManager) {
+				this.entityManager = entityManager;
+			}
+			
+			
+
+}

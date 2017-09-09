@@ -1,0 +1,2047 @@
+package br.com.emape.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Ano;
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.FolhaPagamento;
+import br.com.emape.model.Gestao;
+import br.com.emape.model.JornadaTrabalho;
+import br.com.emape.model.Mes;
+import br.com.emape.model.ParteFiscal;
+import br.com.emape.model.RotinaAdmissao;
+import br.com.emape.model.RotinaDesligamento;
+import br.com.emape.model.SegurancaMedicinaTrabalho;
+import br.com.emape.service.ContratadaService;
+import br.com.emape.service.ContratanteService;
+import br.com.emape.service.GestaoService;
+
+@Component("gestaoBean")
+@ManagedBean(name = "gestaoBean")
+@ViewScoped
+public class GestaoBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(GestaoBean.class);
+
+	private static final String PARTE_FISCAL = "PARTE FISCAL";
+	private static final String FOLHA_PAGAMENTO = "FOLHA DE PAGAMENTO";
+	private static final String ROTINA_ADMISSAO = "ROTINA DE ADMISSAO";
+	private static final String ROTINA_DESLIGAMENTO = "ROTINA DE DESLIGAMENTO";
+	private static final String JORNADA_TRABALHO = "JORNADA DE TRABALHO";
+	private static final String SEGURANCA_MEDICINA_TRABALHO = "SEGURANCA E MEDICINA DO TRABALHO";
+	private static final String INSATISFATORIO = "Insatisfatorio";
+	private static final String SATISFATORIO = "Satisfatorio";
+
+	private Contratada contratada;
+
+	private Contratante contratante;
+
+	private ParteFiscal parteFiscal;
+
+	private FolhaPagamento folhaPagamento;
+
+	private RotinaAdmissao rotinaAdmissao;
+
+	private RotinaDesligamento rotinaDesligamento;
+
+	private JornadaTrabalho jornadaTrabalho;
+
+	private SegurancaMedicinaTrabalho trabalho;
+
+	private Gestao gestao;
+
+	private List<Contratante> contratantes = new ArrayList<Contratante>();
+
+	private List<Contratada> contratadas = new ArrayList<Contratada>();
+
+	private List<Mes> meses = new ArrayList<Mes>();
+
+	private List<Ano> anos = new ArrayList<Ano>();
+	
+	private List<Gestao> gestoes = new ArrayList<Gestao>();
+
+	@Autowired
+	private GestaoService gestaoService;
+	@Autowired
+	private ContratadaService contratadaService;
+	@Autowired
+	private ContratanteService contratanteService;
+	
+	private DataModel<Gestao> datamodel;
+
+	private Long opcContratante;
+
+	private Long opcContratada;
+
+	private String opcMes;
+
+	private String opcAno;
+
+	/**
+	 * opcoes para a parte fiscais
+	 */
+	private String opcContSocial;
+
+	private String opCrf;
+
+	private String opGrf;
+
+	private String opcProtConec;
+
+	private String opcCartCnpj;
+
+	private String opcCndtTrab;
+
+	private String opcGps;
+
+	private String opcNotFiscRet;
+
+	private String opcCndPrevi;
+
+	private String opcFolPag;
+
+	private String opcDarf;
+
+	private String opcDeclRais;
+
+	private String opcCndTrib;
+
+	private String opcPlanFuncAloc;
+
+	private String opcGfip;
+	
+
+	public GestaoBean() {
+
+		this.parteFiscal = new ParteFiscal();
+
+		this.gestao = new Gestao();
+
+		this.folhaPagamento = new FolhaPagamento();
+
+		this.rotinaAdmissao = new RotinaAdmissao();
+
+		this.rotinaDesligamento = new RotinaDesligamento();
+
+		this.trabalho = new SegurancaMedicinaTrabalho();
+		
+		this.jornadaTrabalho = new JornadaTrabalho();
+	}
+	
+	/**
+	 * volta ta interface de validacao
+	 * @return
+	 */
+	public String doVoltarCadastroEscopo(){
+		
+		if(this.parteFiscal == null){
+			
+			this.parteFiscal = new ParteFiscal();
+		}
+		
+		if(this.gestao == null){
+			this.gestao = new Gestao();
+		}
+		
+		if(this.folhaPagamento == null){
+			this.folhaPagamento = new FolhaPagamento();
+		}
+		
+		if(this.rotinaAdmissao == null){
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+		if(this.rotinaDesligamento == null){
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+		if(this.trabalho == null){
+			this.trabalho = new SegurancaMedicinaTrabalho();
+		}
+		
+		
+		return "/begin/begin?faces-redirect=true";
+	}
+	
+	/**
+	 * direciona para a interface de pesquisa
+	 * @return
+	 */
+	public String doPesquisarGestao(){
+		
+		if(this.parteFiscal == null){
+			
+			this.parteFiscal = new ParteFiscal();
+		}
+		
+		if(this.gestao == null){
+			this.gestao = new Gestao();
+		}
+		
+		if(this.folhaPagamento == null){
+			this.folhaPagamento = new FolhaPagamento();
+		}
+		
+		if(this.rotinaAdmissao == null){
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+		if(this.rotinaDesligamento == null){
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+		if(this.trabalho == null){
+			this.trabalho = new SegurancaMedicinaTrabalho();
+		}
+		
+		try{
+			
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+			
+		}catch(Exception e){
+			logger.error(" doPesquisarGestao() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/escopo/pesquisa";
+		}
+		
+		return "/escopo/pesquisa";
+	}
+	
+	/**
+	 * metodo de pesquisa  de gestoes
+	 * @return
+	 */
+	public String pesquisarGestoes(){
+		
+		boolean ok = true;
+		
+		if(this.parteFiscal == null){
+			
+			this.parteFiscal = new ParteFiscal();
+		}
+		
+		if(this.gestao == null){
+			this.gestao = new Gestao();
+		}
+		
+		if(this.folhaPagamento == null){
+			this.folhaPagamento = new FolhaPagamento();
+		}
+		
+		if(this.rotinaAdmissao == null){
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+		if(this.rotinaDesligamento == null){
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+		if(this.trabalho == null){
+			this.trabalho = new SegurancaMedicinaTrabalho();
+		}
+		try {
+			
+			if (this.opcContratante == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratante é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (this.opcContratada == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratada é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcMes)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Mês é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcAno)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Ano é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+			
+			if(!ok){
+				return "/escopo/pesquisa";
+			}
+			this.gestoes.removeAll(getGestoes());
+			
+			this.datamodel = new ListDataModel<Gestao>(this.gestaoService.findAllGestao(getOpcContratante(), getOpcContratada(), getOpcMes(), getOpcAno()));
+			
+			if(!this.datamodel.isRowAvailable()){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Escopo de Validação Inexistente.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				
+				return "/escopo/pesquisa";
+			}
+			
+		} catch (Exception e) {
+			
+			logger.error(" pesquisarGestoes() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/escopo/pesquisa";
+		}
+		
+		
+		return "/escopo/pesquisa";
+	}
+	
+	/**
+	 * exibe o escopo de validação para atualizacao
+	 * @return
+	 */
+	public String exibirGestao(Gestao gestao){
+		
+		if(this.parteFiscal == null){
+			
+			this.parteFiscal = new ParteFiscal();
+		}
+		
+		if(this.gestao == null){
+			this.gestao = new Gestao();
+		}
+		
+		if(this.folhaPagamento == null){
+			this.folhaPagamento = new FolhaPagamento();
+		}
+		
+		if(this.rotinaAdmissao == null){
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+		if(this.rotinaDesligamento == null){
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+		if(this.trabalho == null){
+			this.trabalho = new SegurancaMedicinaTrabalho();
+		}
+		if(this.jornadaTrabalho == null){
+			this.jornadaTrabalho = new JornadaTrabalho();
+		}
+		
+		try {
+			
+			this.gestao = this.gestaoService.findById(gestao.getId()); 
+			
+			if(this.gestao.getDescricao().equals(FOLHA_PAGAMENTO)){
+				
+				this.setOpcContSocial(this.gestao.getFolhaPagamento().getNormaColCat());
+				this.folhaPagamento.setObs_normaColCat(this.gestao.getFolhaPagamento().getObs_normaColCat());
+				this.setOpcCartCnpj(this.gestao.getFolhaPagamento().getFolhaPagamento());
+				this.folhaPagamento.setObs_folhaPagamento(this.gestao.getFolhaPagamento().getObs_folhaPagamento());
+				this.setOpcCndPrevi(this.gestao.getFolhaPagamento().getRecPagSalario());
+				this.folhaPagamento.setObs_recPagSalario(this.gestao.getFolhaPagamento().getObs_recPagSalario());
+				this.setOpcCndTrib(this.gestao.getFolhaPagamento().getPlaCargSal());
+				this.folhaPagamento.setObs_plaCargSal(this.gestao.getFolhaPagamento().getObs_plaCargSal());
+				this.setOpCrf(this.gestao.getFolhaPagamento().getAvisFerias());
+				this.folhaPagamento.setObs_avisFerias(this.gestao.getFolhaPagamento().getObs_avisFerias());
+				this.setOpcCndtTrab(this.gestao.getFolhaPagamento().getAbPecFeria());
+				this.folhaPagamento.setObs_abPecFeria(this.gestao.getFolhaPagamento().getObs_abPecFeria());
+				this.setOpcFolPag(this.gestao.getFolhaPagamento().getAbonPec());
+				this.folhaPagamento.setObs_abonPec(this.gestao.getFolhaPagamento().getObs_abonPec());
+				
+				this.folhaPagamento.setObs_recPagSalario(this.gestao.getFolhaPagamento().getObs_recPagSalario());
+				this.setOpcPlanFuncAloc(this.gestao.getFolhaPagamento().getGps());
+				this.folhaPagamento.setObs_gps(this.gestao.getFolhaPagamento().getObs_gps());
+				this.setOpGrf(this.gestao.getFolhaPagamento().getDarf());
+				this.folhaPagamento.setObs_darf(this.gestao.getFolhaPagamento().getObs_darf());
+				this.setOpcGps(this.gestao.getFolhaPagamento().getGrf());
+				this.folhaPagamento.setObs_grf(this.gestao.getFolhaPagamento().getObs_grf());
+				this.setOpcDarf(this.gestao.getFolhaPagamento().getCompPagVt());
+				this.folhaPagamento.setObs_compPagVt(this.gestao.getFolhaPagamento().getObs_compPagVt());
+				this.setOpcGfip(this.gestao.getFolhaPagamento().getCompInscPat());
+				this.folhaPagamento.setObs_compInscPat(this.gestao.getFolhaPagamento().getObs_compInscPat());
+				this.setOpcContratante(this.gestao.getContratante().getId());
+				this.setOpcContratada(this.gestao.getContratada().getId());
+				this.setOpcMes(this.gestao.getMes());
+				this.setOpcAno(this.gestao.getAno());
+				
+				this.contratantes.addAll(this.comboContratante());
+				this.meses.addAll(this.comboMes());
+				this.anos.addAll(this.comboAno());
+				
+				return "/escopo/folhapagamentoedit";
+			}
+			
+			if(this.gestao.getDescricao().equals(PARTE_FISCAL)){
+
+				this.setOpcContSocial(this.gestao.getParteFiscal().getContratoSocial());
+				this.parteFiscal.setObs_contratoSocial(this.gestao.getParteFiscal().getObs_contratoSocial());
+				this.setOpcCartCnpj(this.gestao.getParteFiscal().getCartaoCnpj());	
+				this.parteFiscal.setObs_cartaoCnpj(this.gestao.getParteFiscal().getObs_cartaoCnpj());
+				this.setOpcCndtTrab(this.gestao.getParteFiscal().getCndDebitostrabalhista());
+				this.parteFiscal.setObs_cndDebitostrabalhista(this.gestao.getParteFiscal().getObs_cndDebitostrabalhista());
+				this.setOpcCndPrevi(this.gestao.getParteFiscal().getCndPrevidencia());
+				this.parteFiscal.setObs_cndPrevidencia(this.gestao.getParteFiscal().getObs_cndPrevidencia());
+				this.setOpcCndTrib(this.gestao.getParteFiscal().getCndTributaria());
+				this.parteFiscal.setObs_cndTributaria(this.gestao.getParteFiscal().getObs_cndTributaria());
+				this.setOpCrf(this.gestao.getParteFiscal().getCrfFgts());
+				this.parteFiscal.setObs_crfFgts(this.gestao.getParteFiscal().getObs_crfFgts());
+				this.setOpcDarf(this.gestao.getParteFiscal().getDarf());
+				this.parteFiscal.setObs_darf(this.gestao.getParteFiscal().getObs_darf());
+				this.setOpcDeclRais(this.gestao.getParteFiscal().getDeclRais());
+				this.parteFiscal.setObs_declRais(this.gestao.getParteFiscal().getObs_declRais());
+				setOpcFolPag(this.gestao.getParteFiscal().getFolhaPagamento());
+				this.parteFiscal.setObs_folhaPagamento(this.gestao.getParteFiscal().getObs_folhaPagamento());
+				this.setOpcGps(this.gestao.getParteFiscal().getGuiaPrevSoc());
+				this.parteFiscal.setObs_guiaPrevSoc(this.gestao.getParteFiscal().getObs_guiaPrevSoc());
+				this.setOpGrf(this.gestao.getParteFiscal().getGuiaRecFgts());
+				this.parteFiscal.setObs_guiaRecFgts(this.gestao.getParteFiscal().getObs_guiaRecFgts());
+				this.setOpcNotFiscRet(this.gestao.getParteFiscal().getNotaFiscRetencaoInss());
+				this.parteFiscal.setObs_notaFiscRetencaoInss(this.gestao.getParteFiscal().getObs_notaFiscRetencaoInss());
+				this.setOpcPlanFuncAloc(this.gestao.getParteFiscal().getPlaFuncAlocContratante());
+				this.parteFiscal.setObs_plaFuncAlocContratante(this.gestao.getParteFiscal().getObs_plaFuncAlocContratante());
+				this.setOpcProtConec(this.gestao.getParteFiscal().getProtConecSocial());
+				this.parteFiscal.setObs_protConecSocial(this.gestao.getParteFiscal().getObs_protConecSocial());
+				this.setOpcGfip(this.gestao.getParteFiscal().getSefipGfip());
+				this.parteFiscal.setObs_sefipGfip(this.gestao.getParteFiscal().getObs_sefipGfip());
+				this.setOpcContratante(this.gestao.getContratante().getId());
+				this.setOpcContratada(this.gestao.getContratada().getId());
+				this.setOpcMes(this.gestao.getMes());
+				this.setOpcAno(this.gestao.getAno());
+				
+				this.contratantes.addAll(this.comboContratante());
+				this.meses.addAll(this.comboMes());
+				this.anos.addAll(this.comboAno());
+				
+				return "/escopo/partefiscaledit";
+			}
+			
+			if(this.gestao.getDescricao().equals(JORNADA_TRABALHO)){
+				
+				this.setOpcContSocial(this.gestao.getJornadaTrabalho().getNormColCat());
+				this.jornadaTrabalho.setObs_normColCat(this.gestao.getJornadaTrabalho().getObs_normColCat());
+				this.setOpcCartCnpj(this.gestao.getJornadaTrabalho().getAcordProrrHoras());
+				this.jornadaTrabalho.setObs_acordProrrHoras(this.gestao.getJornadaTrabalho().getObs_acordCompHoras());
+				this.setOpcCndPrevi(this.gestao.getJornadaTrabalho().getAutMte());
+				this.jornadaTrabalho.setObs_autMte(this.gestao.getJornadaTrabalho().getObs_autMte());
+				this.setOpcCndTrib(this.gestao.getJornadaTrabalho().getAcordCompHoras());
+				this.jornadaTrabalho.setObs_acordCompHoras(this.gestao.getJornadaTrabalho().getObs_acordCompHoras());
+				this.setOpCrf(this.gestao.getJornadaTrabalho().getBancHoras());
+				this.jornadaTrabalho.setObs_bancHoras(this.gestao.getJornadaTrabalho().getObs_bancHoras());
+				this.setOpcCndtTrab(this.gestao.getJornadaTrabalho().getFolPonto());
+				this.jornadaTrabalho.setObs_folPonto(this.gestao.getJornadaTrabalho().getObs_folPonto());
+				setOpcFolPag(this.gestao.getJornadaTrabalho().getCertRelPonto());
+				this.jornadaTrabalho.setObs_certRelPonto(this.gestao.getJornadaTrabalho().getObs_certRelPonto());
+				this.setOpcPlanFuncAloc(this.gestao.getJornadaTrabalho().getEscRevez());
+				this.jornadaTrabalho.setObs_escRevez(this.gestao.getJornadaTrabalho().getObs_escRevez());
+				
+				this.setOpcContratante(this.gestao.getContratante().getId());
+				this.setOpcContratada(this.gestao.getContratada().getId());
+				this.setOpcMes(this.gestao.getMes());
+				this.setOpcAno(this.gestao.getAno());
+				
+				this.contratantes.addAll(this.comboContratante());
+				this.meses.addAll(this.comboMes());
+				this.anos.addAll(this.comboAno());
+				
+				return "/escopo/jornadatrabalhoedit";
+			}
+			
+			if(this.gestao.getDescricao().equals(ROTINA_ADMISSAO)){
+				
+				this.setOpcContSocial(this.gestao.getRotinaAdmissao().getRegEmpregado());
+				this.rotinaAdmissao.setObs_regEmpregado(this.gestao.getRotinaAdmissao().getObs_regEmpregado());
+				this.setOpcCartCnpj(this.gestao.getRotinaAdmissao().getContTrab());
+				this.rotinaAdmissao.setObs_contTrab(this.gestao.getRotinaAdmissao().getObs_contTrab());
+				this.setOpcCndPrevi(this.gestao.getRotinaAdmissao().getFichSalFam());
+				this.rotinaAdmissao.setObs_fichSalFam(this.gestao.getRotinaAdmissao().getObs_fichSalFam());
+				this.setOpcCndTrib(this.gestao.getRotinaAdmissao().getDeclDependIrrf());
+				this.rotinaAdmissao.setObs_declDependIrrf(this.gestao.getRotinaAdmissao().getObs_declDependIrrf());
+				this.setOpCrf(this.gestao.getRotinaAdmissao().getDeclMultVenc());
+				this.rotinaAdmissao.setObs_declMultVenc(this.gestao.getRotinaAdmissao().getObs_declMultVenc());
+				this.setOpcCndtTrab(this.gestao.getRotinaAdmissao().getExaMedAdmi());
+				this.rotinaAdmissao.setObs_exaMedAdmi(this.gestao.getRotinaAdmissao().getObs_exaMedAdmi());
+				setOpcFolPag(this.gestao.getRotinaAdmissao().getDeclCaged());
+				this.rotinaAdmissao.setObs_declCaged(this.gestao.getRotinaAdmissao().getObs_declCaged());
+				this.setOpcPlanFuncAloc(this.gestao.getRotinaAdmissao().getDescContSind());
+				this.rotinaAdmissao.setObs_descContSind(this.gestao.getRotinaAdmissao().getObs_descContSind());
+				this.setOpGrf(this.gestao.getRotinaAdmissao().getInclVt());
+				this.rotinaAdmissao.setObs_inclVt(this.gestao.getRotinaAdmissao().getObs_inclVt());
+				this.setOpcContratante(this.gestao.getContratante().getId());
+				this.setOpcContratada(this.gestao.getContratada().getId());
+				this.setOpcMes(this.gestao.getMes());
+				this.setOpcAno(this.gestao.getAno());
+				
+				this.contratantes.addAll(this.comboContratante());
+				this.meses.addAll(this.comboMes());
+				this.anos.addAll(this.comboAno());
+				
+				return "/escopo/rotinaadmissaoedit";
+			}
+			
+			if(this.gestao.getDescricao().equals(ROTINA_DESLIGAMENTO)){
+				
+				this.setOpcContSocial(this.gestao.getRotinaDesligamento().getComunDesl());
+				this.rotinaDesligamento.setObs_comunDesl(this.gestao.getRotinaDesligamento().getObs_comunDesl());
+				this.setOpcCartCnpj(this.gestao.getRotinaDesligamento().getTermRec());
+				this.rotinaDesligamento.setObs_termHomRec(this.gestao.getRotinaDesligamento().getObs_termHomRec());
+				this.setOpcCndPrevi(this.gestao.getRotinaDesligamento().getTermQuitRec());
+				this.rotinaDesligamento.setObs_termQuitRec(this.gestao.getRotinaDesligamento().getObs_termQuitRec());
+				this.setOpcCndTrib(this.gestao.getRotinaDesligamento().getTermHomRec());
+				this.rotinaDesligamento.setObs_termHomRec(this.gestao.getRotinaDesligamento().getObs_termHomRec());
+				this.setOpCrf(this.gestao.getRotinaDesligamento().getExtFgts());
+				this.rotinaDesligamento.setObs_extFgts(this.gestao.getRotinaDesligamento().getObs_extFgts());
+				this.setOpcCndtTrab(this.gestao.getRotinaDesligamento().getGrrf());
+				this.rotinaDesligamento.setObs_grrf(this.gestao.getRotinaDesligamento().getObs_grrf());
+				setOpcFolPag(this.gestao.getRotinaDesligamento().getChavLibFgts());
+				this.rotinaDesligamento.setObs_chavLibFgts(this.gestao.getRotinaDesligamento().getObs_chavLibFgts());
+				this.setOpcPlanFuncAloc(this.gestao.getRotinaDesligamento().getExamMedDem());
+				this.rotinaDesligamento.setObs_examMedDem(this.gestao.getRotinaDesligamento().getObs_examMedDem());
+				this.setOpGrf(this.gestao.getRotinaDesligamento().getSegDesemp());
+				this.rotinaDesligamento.setObs_segDesemp(this.gestao.getRotinaDesligamento().getObs_segDesemp());
+				this.setOpcGps(this.gestao.getRotinaDesligamento().getDeclCaged());
+				this.rotinaDesligamento.setObs_declCaged(this.gestao.getRotinaDesligamento().getObs_declCaged());
+				this.setOpcContratante(this.gestao.getContratante().getId());
+				this.setOpcContratada(this.gestao.getContratada().getId());
+				this.setOpcMes(this.gestao.getMes());
+				this.setOpcAno(this.gestao.getAno());
+				
+				this.contratantes.addAll(this.comboContratante());
+				this.meses.addAll(this.comboMes());
+				this.anos.addAll(this.comboAno());
+				
+				return "/escopo/rotinadesligamentoedit";
+			}
+			
+			if(this.gestao.getDescricao().equals(SEGURANCA_MEDICINA_TRABALHO)){
+				
+				this.setOpcContSocial(this.gestao.getSegurancaMedicinaTrabalho().getSesmt());
+				this.trabalho.setObs_sesmt(this.gestao.getSegurancaMedicinaTrabalho().getObs_sesmt());
+				this.setOpcCartCnpj(this.gestao.getSegurancaMedicinaTrabalho().getCipa());
+				this.trabalho.setObs_cipa(this.gestao.getSegurancaMedicinaTrabalho().getObs_cipa());
+				this.setOpcCndPrevi(this.gestao.getSegurancaMedicinaTrabalho().getEpi());
+				this.trabalho.setObs_epi(this.gestao.getSegurancaMedicinaTrabalho().getObs_epi());
+				this.setOpcCndTrib(this.gestao.getSegurancaMedicinaTrabalho().getPcmso());
+				this.trabalho.setObs_pcmso(this.gestao.getSegurancaMedicinaTrabalho().getObs_pcmso());
+				this.setOpCrf(this.gestao.getSegurancaMedicinaTrabalho().getPpra());
+				this.trabalho.setObs_ppra(this.gestao.getSegurancaMedicinaTrabalho().getObs_ppra());
+				this.setOpcCndtTrab(this.gestao.getSegurancaMedicinaTrabalho().getPcmat());
+				this.trabalho.setObs_pcmat(this.gestao.getSegurancaMedicinaTrabalho().getObs_pcmat());
+				setOpcFolPag(this.gestao.getSegurancaMedicinaTrabalho().getRat());
+				this.trabalho.setObs_rat(this.gestao.getSegurancaMedicinaTrabalho().getObs_rat());
+				this.setOpcPlanFuncAloc(this.gestao.getSegurancaMedicinaTrabalho().getExMed());
+				this.trabalho.setObs_exMed(this.gestao.getSegurancaMedicinaTrabalho().getObs_exMed());
+				this.setOpGrf(this.gestao.getSegurancaMedicinaTrabalho().getCat());
+				this.trabalho.setObs_cat(this.gestao.getSegurancaMedicinaTrabalho().getObs_cat());
+				this.setOpcContratante(this.gestao.getContratante().getId());
+				this.setOpcContratada(this.gestao.getContratada().getId());
+				this.setOpcMes(this.gestao.getMes());
+				this.setOpcAno(this.gestao.getAno());
+				
+				this.contratantes.addAll(this.comboContratante());
+				this.meses.addAll(this.comboMes());
+				this.anos.addAll(this.comboAno());
+
+				return "/escopo/segurancamedicinatrabalhoedit";    
+			}
+			
+			
+		} catch (Exception e) {
+			
+			logger.error(" exibirGestao() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/escopo/pesquisa";
+		}
+		
+		
+		return null;
+	}
+	
+	/**
+	 * deleta o o escopo de gestão selecionado
+	 * @param id
+	 * @return
+	 */
+	public String deletarGestao(Gestao gestao){
+		
+		if(this.parteFiscal == null){
+			
+			this.parteFiscal = new ParteFiscal();
+		}
+		
+		if(this.gestao == null){
+			this.gestao = new Gestao();
+		}
+		
+		if(this.folhaPagamento == null){
+			this.folhaPagamento = new FolhaPagamento();
+		}
+		
+		if(this.rotinaAdmissao == null){
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+		if(this.rotinaDesligamento == null){
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+		if(this.trabalho == null){
+			this.trabalho = new SegurancaMedicinaTrabalho();
+		}
+		try {
+			
+			this.gestaoService.deleteGestao(gestao.getId());
+		} catch (Exception e) {
+			logger.error(" deletarGestao(Long id) " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/escopo/pesquisa";
+		}
+		
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Validação foi excluida com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * direciona para o escopo de seguranca e medicina do trabalho
+	 * 
+	 * @return
+	 */
+	public String doSegurancaMedicinaTrabalho() {
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		if (this.trabalho == null) {
+
+			this.trabalho = new SegurancaMedicinaTrabalho();
+
+		}
+
+		try {
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+		} catch (Exception e) {
+			logger.error(" doSegurancaMedicinaTrabalho() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/segurancamedicinatrabalho";
+		}
+
+		return "/escopo/segurancamedicinatrabalho";
+	}
+
+	/**
+	 * salva o escopo de medicina e seguranca do trabalho
+	 * 
+	 * @return
+	 */
+	public String saveSegurancaMedicinaTrabalho() {
+
+		boolean ok = true;
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		if (this.trabalho == null) {
+
+			this.trabalho = new SegurancaMedicinaTrabalho();
+
+		}
+		try {
+
+			
+				this.trabalho.setSesmt(this.opcContSocial);
+			
+				this.trabalho.setCipa(this.opcCartCnpj);
+			
+		
+				this.trabalho.setEpi(this.opcCndPrevi);
+			
+		
+				this.trabalho.setPcmso(this.opcCndTrib);
+			
+		
+				this.trabalho.setPpra(this.opCrf);
+		
+		
+				this.trabalho.setPcmat(this.opcCndtTrab);
+			
+			
+				this.trabalho.setRat(this.opcFolPag);
+			
+		
+				this.trabalho.setExMed(this.opcPlanFuncAloc);
+			
+		
+				this.trabalho.setCat(this.opGrf);
+				
+			if (this.opcContratante == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratante é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (this.opcContratada == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratada é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcMes)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Mês é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcAno)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Ano é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+			
+			if(!ok){
+				return "/escopo/segurancamedicinatrabalho";
+			}
+			
+
+			this.gestao
+					.setContratante(this.contratante = this.contratanteService
+							.findById(getOpcContratante()));
+			this.gestao.setContratada(this.contratada = this.contratadaService
+					.findById(getOpcContratada()));
+			this.gestao.setMes(getOpcMes());
+			this.gestao.setAno(getOpcAno());
+			
+			
+			
+			if(this.opcContSocial.equals("Insatisfatorio")||(this.opcCartCnpj.equals("Insatisfatorio"))
+					||(this.opcCndPrevi.equals("Insatisfatorio"))||(this.opcCndTrib.equals("Insatisfatorio"))
+					||(this.opCrf.equals("Insatisfatorio"))||(this.opcCndtTrab.equals("Insatisfatorio"))
+					||(this.opcFolPag.equals("Insatisfatorio"))||(this.opcPlanFuncAloc.equals("Insatisfatorio"))
+					||(this.opGrf.equals("Insatisfatorio"))){
+				
+				this.gestao.setSituacao(INSATISFATORIO);
+			}else{
+				this.gestao.setSituacao(SATISFATORIO);
+			}
+
+			this.gestaoService.saveMedSegTrabalho(this.trabalho, this.gestao);
+
+		} catch (Exception e) {
+			logger.error(" saveSegurancaMedicinaTrabalho() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/segurancamedicinatrabalho";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O escopo de Segurança e Medicina do Trabalho foi Salvo com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	
+
+	/**
+	 * direciona para a interface de escopo de jornada de trabalho
+	 * 
+	 * @return
+	 */
+	public String doJornadaTrabalho() {
+
+		if (this.jornadaTrabalho == null) {
+
+			this.jornadaTrabalho = new JornadaTrabalho();
+		}
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		try {
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+		} catch (Exception e) {
+			logger.error(" doJornadaTrabalho() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/jornadatrabalho";
+		}
+
+		return "/escopo/jornadatrabalho?faces-redirect=true";
+	}
+
+	/**
+	 * metodo que salva o escopo de jornada de trabalho
+	 * 
+	 * @return
+	 */
+	public String saveJornadaTrabalho() {
+
+		boolean ok = true;
+
+		if (this.jornadaTrabalho == null) {
+
+			this.jornadaTrabalho = new JornadaTrabalho();
+		}
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		try {
+
+			
+				this.jornadaTrabalho.setNormColCat(this.opcContSocial);
+			
+				this.jornadaTrabalho
+						.setAcordProrrHoras(this.opcCartCnpj);
+			
+		
+				this.jornadaTrabalho.setAutMte(this.opcCndPrevi);
+			
+			
+				this.jornadaTrabalho.setAcordCompHoras(this.opcCndTrib);
+		
+		
+				this.jornadaTrabalho.setBancHoras(this.opCrf);
+			
+			
+				this.jornadaTrabalho.setFolPonto(this.opcCndtTrab);
+			
+		
+				this.jornadaTrabalho.setCertRelPonto(this.opcFolPag);
+			
+			
+				this.jornadaTrabalho.setEscRevez(this.opcPlanFuncAloc);
+				
+
+			if (this.opcContratante == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratante é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (this.opcContratada == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratada é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcMes)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Mês é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcAno)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Ano é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+			
+			if(!ok){
+				return "/escopo/jornadatrabalho";
+			}
+			
+			
+			this.gestao
+					.setContratante(this.contratante = this.contratanteService
+							.findById(getOpcContratante()));
+			this.gestao.setContratada(this.contratada = this.contratadaService
+					.findById(getOpcContratada()));
+			this.gestao.setMes(getOpcMes());
+			this.gestao.setAno(getOpcAno());
+			
+			if(this.opcContSocial.equals("Insatisfatorio")||(this.opcCartCnpj.equals("Insatisfatorio"))
+					||(this.opcCndPrevi.equals("Insatisfatorio"))||(this.opcCndTrib.equals("Insatisfatorio"))
+					||(this.opCrf.equals("Insatisfatorio"))||(this.opcCndtTrab.equals("Insatisfatorio"))
+					||(this.opcFolPag.equals("Insatisfatorio"))||(this.opcPlanFuncAloc.equals("Insatisfatorio"))){
+				
+				this.gestao.setSituacao(INSATISFATORIO);
+			}else{
+				this.gestao.setSituacao(SATISFATORIO);
+			}
+
+			this.gestaoService.saveJornadaTrabalho(this.jornadaTrabalho,
+					this.gestao);
+
+		} catch (Exception e) {
+
+			logger.error(" saveRotinaDesligamento() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/jornadatrabalho";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O escopo de Jornada de Trabalho foi Salvo com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	
+
+	/**
+	 * direciona para interface partefiscal
+	 * 
+	 * @return
+	 */
+	public String doParteFiscal() {
+
+		if (this.parteFiscal == null) {
+			this.parteFiscal = new ParteFiscal();
+
+		}
+
+		if (this.gestao == null) {
+			this.gestao = new Gestao();
+		}
+
+		try {
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+		} catch (Exception e) {
+			logger.error(" doParteFiscal() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			return "/escopo/partefiscal";
+		}
+
+		return "/escopo/partefiscal?faces-redirect=true";
+	}
+
+	/**
+	 * direciona para interface de folha de pagamento
+	 * 
+	 * @return
+	 */
+	public String doFolhaPagamento() {
+
+		if (this.parteFiscal == null) {
+			this.parteFiscal = new ParteFiscal();
+		}
+
+		if (this.gestao == null) {
+			this.gestao = new Gestao();
+		}
+
+		if (this.folhaPagamento == null) {
+			this.folhaPagamento = new FolhaPagamento();
+		}
+
+		try {
+
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+
+		} catch (Exception e) {
+			logger.error(" doFolhaPagamento() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/folhapagamento";
+		}
+
+		return "/escopo/folhapagamento?faces-redirect=true";
+	}
+
+	public String doRotinaAdmissao() {
+
+		if (this.parteFiscal == null) {
+
+			this.parteFiscal = new ParteFiscal();
+		}
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		if (this.folhaPagamento == null) {
+
+			this.folhaPagamento = new FolhaPagamento();
+		}
+
+		if (this.rotinaAdmissao == null) {
+
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+
+		try {
+
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+
+		} catch (Exception e) {
+
+			logger.error(" doRotinaAdmissao() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/rotinaadmissao";
+		}
+
+		return "/escopo/rotinaadmissao";
+	}
+
+	/**
+	 * dereciona para a interface de rotina de desligamento
+	 * 
+	 * @return
+	 */
+	public String doRetinaDesligamento() {
+		if (this.parteFiscal == null) {
+
+			this.parteFiscal = new ParteFiscal();
+		}
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		if (this.folhaPagamento == null) {
+
+			this.folhaPagamento = new FolhaPagamento();
+		}
+
+		if (this.rotinaAdmissao == null) {
+
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+
+		if (this.rotinaDesligamento == null) {
+
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+		try {
+
+			limpaComponentes();
+			this.contratantes.addAll(this.comboContratante());
+			this.meses.addAll(this.comboMes());
+			this.anos.addAll(this.comboAno());
+
+		} catch (Exception e) {
+			logger.error(" doRotinaAdmissao() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/rotinadesligamento";
+		}
+		return "/escopo/rotinadesligamento?faces-redirect=true";
+	}
+
+	/**
+	 * salva o escopo de rotina de desligamento.
+	 * 
+	 * @return
+	 */
+	public String saveRotinaDesligamento() {
+
+		boolean ok = true;
+
+		if (this.parteFiscal == null) {
+
+			this.parteFiscal = new ParteFiscal();
+		}
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		if (this.folhaPagamento == null) {
+
+			this.folhaPagamento = new FolhaPagamento();
+		}
+
+		if (this.rotinaAdmissao == null) {
+
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+
+		if (this.rotinaDesligamento == null) {
+
+			this.rotinaDesligamento = new RotinaDesligamento();
+		}
+
+		try {
+
+				this.rotinaDesligamento.setComunDesl(this.opcContSocial);
+				this.rotinaDesligamento.setTermRec(this.opcCartCnpj);
+				this.rotinaDesligamento.setTermQuitRec(this.opcCndPrevi);
+				this.rotinaDesligamento.setTermHomRec(this.opcCndTrib);
+				this.rotinaDesligamento.setExtFgts(this.opCrf);
+				this.rotinaDesligamento.setGrrf(this.opcCndtTrab);
+				this.rotinaDesligamento.setChavLibFgts(this.opcFolPag);
+				this.rotinaDesligamento.setExamMedDem(this.opcPlanFuncAloc);
+				this.rotinaDesligamento.setSegDesemp(this.opGrf);
+				this.rotinaDesligamento.setDeclCaged(this.opcGps);
+
+			if (this.opcContratante == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratante é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (this.opcContratada == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratada é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcMes)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Mês é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcAno)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Ano é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (!ok) {
+
+				return "/escopo/rotinadesligamento";
+			}
+			
+
+			this.gestao
+					.setContratante(this.contratante = this.contratanteService
+							.findById(getOpcContratante()));
+			this.gestao.setContratada(this.contratada = this.contratadaService
+					.findById(getOpcContratada()));
+			this.gestao.setMes(getOpcMes());
+			this.gestao.setAno(getOpcAno());
+			
+			if((this.opcContSocial.equals("Insatisfatorio"))||(this.opcCartCnpj.equals("Insatisfatorio"))
+					||(this.opcCndPrevi.equals("Insatisfatorio"))||(this.opcCndTrib.equals("Insatisfatorio"))
+					||(this.opCrf.equals("Insatisfatorio"))||(this.opcCndtTrab.equals("Insatisfatorio"))
+					||(this.opcFolPag.equals("Insatisfatorio"))||(this.opcPlanFuncAloc.equals("Insatisfatorio"))
+					||(this.opGrf.equals("Insatisfatorio"))||(this.opcGps.equals("Insatisfatorio"))){
+				
+				this.gestao.setSituacao(INSATISFATORIO);
+			}else{
+				this.gestao.setSituacao(SATISFATORIO);
+			}
+
+			this.gestaoService.salvarRotinaDesligamento(
+					this.rotinaDesligamento, this.gestao);
+
+		} catch (Exception e) {
+
+			logger.error(" saveRotinaDesligamento() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/rotinadesligamento";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O escopo de Rotina de Desligamento foi Salvo com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	
+
+	/**
+	 * salva o escopo de competencia do tipo rotina de admissao
+	 * 
+	 * @return
+	 */
+	public String saveRotinaAdmissao() {
+
+		boolean ok = false;
+
+		if (this.parteFiscal == null) {
+			this.parteFiscal = new ParteFiscal();
+		}
+
+		if (this.gestao == null) {
+
+			this.gestao = new Gestao();
+		}
+
+		if (this.folhaPagamento == null) {
+
+			this.folhaPagamento = new FolhaPagamento();
+		}
+
+		if (this.rotinaAdmissao == null) {
+
+			this.rotinaAdmissao = new RotinaAdmissao();
+		}
+		try {
+
+		
+				this.rotinaAdmissao.setRegEmpregado(this.opcContSocial);
+				this.rotinaAdmissao.setContTrab(this.opcCartCnpj);
+				this.rotinaAdmissao.setFichSalFam(this.opcCndPrevi);
+				this.rotinaAdmissao.setDeclDependIrrf(this.opcCndTrib);
+				this.rotinaAdmissao.setDeclMultVenc(this.opCrf);
+				this.rotinaAdmissao.setExaMedAdmi(this.opcCndtTrab);
+				this.rotinaAdmissao.setDeclCaged(this.opcFolPag);
+				this.rotinaAdmissao.setDescContSind(this.opcPlanFuncAloc);
+				this.rotinaAdmissao.setInclVt(this.opGrf);
+				
+				
+
+			if (this.opcContratante == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratante é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (this.opcContratada == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratada é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcMes)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Mês é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcAno)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Ano é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (!ok) {
+
+				return "/escopo/rotinaadmissao";
+			}
+			
+
+
+			this.gestao
+					.setContratante(this.contratante = this.contratanteService
+							.findById(getOpcContratante()));
+			this.gestao.setContratada(this.contratada = this.contratadaService
+					.findById(getOpcContratada()));
+			this.gestao.setMes(getOpcMes());
+			this.gestao.setAno(getOpcAno());
+			
+			if((this.opcContSocial.equals("Insatisfatorio"))||(this.opcCartCnpj.equals("Insatisfatorio"))
+					||(this.opcCndPrevi.equals("Insatisfatorio"))||(this.opcCndTrib.equals("Insatisfatorio"))
+					||(this.opCrf.equals("Insatisfatorio"))||(this.opcCndtTrab.equals("Insatisfatorio"))
+					||(this.opcFolPag.equals("Insatisfatorio"))||(this.opcPlanFuncAloc.equals("Insatisfatorio"))
+					||(this.opGrf.equals("Insatisfatorio"))){
+				
+				this.gestao.setSituacao(INSATISFATORIO);
+				
+			}else{
+				this.gestao.setSituacao(SATISFATORIO);
+			}
+
+			this.gestaoService.saveRotinaAdmissao(this.rotinaAdmissao,
+					this.gestao);
+
+		} catch (Exception e) {
+			logger.error(" saveRotinaAdmissoa() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/rotinaadmissao";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O escopo de Rotina de Admissão foi Salvo com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	
+	/**
+	 * salva o escopo de competencia do tipo folha de pagamento
+	 * 
+	 * @return
+	 */
+	public String saveFolhaPagamento() {
+
+		boolean ok = true;
+
+		if (this.parteFiscal == null) {
+			this.parteFiscal = new ParteFiscal();
+		}
+
+		if (this.gestao == null) {
+			this.gestao = new Gestao();
+		}
+
+		if (this.folhaPagamento == null) {
+			this.folhaPagamento = new FolhaPagamento();
+		}
+		
+		try {
+
+		
+			this.folhaPagamento.setNormaColCat(this.opcContSocial);
+			this.folhaPagamento.setFolhaPagamento(this.opcCartCnpj);
+			this.folhaPagamento.setRecPagSalario(this.opcCndPrevi);
+			this.folhaPagamento.setPlaCargSal(this.opcCndTrib);
+			this.folhaPagamento.setAvisFerias(this.opCrf);
+			this.folhaPagamento.setAbPecFeria(this.opcCndtTrab);
+			this.folhaPagamento.setAbonPec(this.opcFolPag);
+			this.folhaPagamento.setRecPagSalario(this.opcCndPrevi);
+			this.folhaPagamento.setGps(this.opcPlanFuncAloc);
+			this.folhaPagamento.setDarf(this.opGrf);
+			this.folhaPagamento.setGrf(this.opcGps);
+			this.folhaPagamento.setCompPagVt(this.opcDarf);
+			this.folhaPagamento.setCompInscPat(this.opcGfip);
+
+		if (this.opcContratante == 0) {
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"O campo Contratante é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			ok = false;
+		}
+
+		if (this.opcContratada == 0) {
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"O campo Contratada é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			ok = false;
+		}
+
+		if ("".equals(this.opcMes)) {
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"O campo Mês é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			ok = false;
+		}
+
+		if ("".equals(this.opcAno)) {
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"O campo Ano é obrigatório.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			ok = false;
+		}
+
+		if (!ok) {
+			return "/escopo/folhapagamento";
+		}
+		
+
+			this.gestao
+					.setContratante(this.contratante = this.contratanteService
+							.findById(getOpcContratante()));
+			this.gestao.setContratada(this.contratada = this.contratadaService
+					.findById(getOpcContratada()));
+			this.gestao.setMes(getOpcMes());
+			this.gestao.setAno(getOpcAno());
+			
+			if((this.opcContSocial.equals("Insatisfatorio"))||(this.opcCartCnpj.equals("Insatisfatorio"))
+					||(this.opcCndPrevi.equals("Insatisfatorio"))||(this.opcCndTrib.equals("Insatisfatorio"))
+					||(this.opCrf.equals("Insatisfatorio"))||(this.opcCndtTrab.equals("Insatisfatorio"))
+					||(this.opcFolPag.equals("Insatisfatorio"))||(this.opcCndPrevi.equals("Insatisfatorio"))
+					||(this.opcPlanFuncAloc.equals("Insatisfatorio"))||(this.opGrf.equals("Insatisfatorio"))
+					||(this.opcGps.equals("Insatisfatorio"))||(this.opcDarf.equals("Insatisfatorio"))
+					||(this.opcGfip.equals("Insatisfatorio"))){
+				
+				this.gestao.setSituacao(INSATISFATORIO);
+				
+			}else{
+				this.gestao.setSituacao(SATISFATORIO);
+			}
+
+			this.gestaoService.saveFolhaPagamento(this.folhaPagamento,
+					this.gestao);
+
+		} catch (Exception e) {
+			logger.error(" saveFolhaPagamento() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/folhapagamento";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O escopo de Folha de Pagamento foi Salvo com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+	
+
+	/**
+	 * limpa os componentes da interface
+	 */
+	private void limpaComponentes() {
+
+		this.gestao = new Gestao();
+		this.parteFiscal = new ParteFiscal();
+		this.folhaPagamento = new FolhaPagamento();
+		this.rotinaAdmissao = new RotinaAdmissao();
+		this.rotinaDesligamento = new RotinaDesligamento();
+		this.jornadaTrabalho = new JornadaTrabalho();
+		this.trabalho = new SegurancaMedicinaTrabalho();
+		this.setDatamodel(null);
+		
+		
+		this.contratadas.removeAll(getContratadas());
+		this.setOpcContratante(null);
+		this.setOpcAno("");
+		this.setOpcMes("");
+		
+		this.contratantes.removeAll(getContratantes());
+		this.meses.removeAll(getContratadas());
+		this.anos.removeAll(getAnos());
+		this.gestoes.removeAll(getGestoes());
+		
+		this.setOpcContSocial("");
+		this.setOpCrf("");
+		this.setOpGrf("");
+		this.setOpcProtConec("");
+		this.setOpcCartCnpj("");
+		this.setOpcCndtTrab("");
+		this.setOpcGps("");
+		this.setOpcNotFiscRet("");
+		this.setOpcCndPrevi("");
+		this.setOpcFolPag("");
+		this.setOpcDarf("");
+		this.setOpcDeclRais("");
+		this.setOpcCndTrib("");
+		this.setOpcPlanFuncAloc("");
+		this.setOpcGfip("");
+
+	}
+
+	/**
+	 * salva o escopo de parte fiscal
+	 * 
+	 * @return
+	 */
+	public String saveParteFiscal() {
+
+		boolean ok = true;
+
+		if (this.parteFiscal == null) {
+			this.parteFiscal = new ParteFiscal();
+
+		}
+
+		if (this.gestao == null) {
+			this.gestao = new Gestao();
+		}
+		try {
+
+		
+				this.parteFiscal.setContratoSocial(this.opcContSocial);
+
+				this.parteFiscal.setCartaoCnpj(this.opcCartCnpj);
+			
+				this.parteFiscal.setCndDebitostrabalhista(this.opcCndtTrab);
+		
+				this.parteFiscal.setCndPrevidencia(this.opcCndPrevi);
+			
+				this.parteFiscal.setCndTributaria(this.opcCndTrib);
+
+				this.parteFiscal.setCrfFgts(this.opCrf);
+		
+				this.parteFiscal.setDarf(this.opcDarf);
+			
+				this.parteFiscal.setDeclRais(this.opcDeclRais);
+
+				this.parteFiscal.setFolhaPagamento(this.opcFolPag);
+			
+				this.parteFiscal.setGuiaPrevSoc(this.opcGps);
+			
+				this.parteFiscal.setGuiaRecFgts(this.opGrf);
+			
+				this.parteFiscal.setNotaFiscRetencaoInss(this.opcNotFiscRet);
+		
+				this.parteFiscal.setPlaFuncAlocContratante(this.opcPlanFuncAloc);
+
+				this.parteFiscal.setProtConecSocial(this.opcProtConec);
+			
+				this.parteFiscal.setSefipGfip(this.opcGfip);
+				
+
+			if (this.opcContratante == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratante é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (this.opcContratada == 0) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Contratada é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcMes)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Mês é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if ("".equals(this.opcAno)) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O campo Ano é obrigatório.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			if (!ok) {
+
+				return "/escopo/partefiscal";
+			}
+
+			this.gestao
+					.setContratante(this.contratante = this.contratanteService
+							.findById(getOpcContratante()));
+			this.gestao.setContratada(this.contratada = this.contratadaService
+					.findById(getOpcContratada()));
+			this.gestao.setMes(getOpcMes());
+			this.gestao.setAno(getOpcAno());
+			
+			if((this.opcContSocial.equals("Insatisfatorio"))||(this.opcCartCnpj.equals("Insatisfatorio"))
+					||(this.opcCndtTrab.equals("Insatisfatorio"))||(this.opcCndPrevi.equals("Insatisfatorio"))
+					||(this.opcCndTrib.equals("Insatisfatorio"))||(this.opCrf.equals("Insatisfatorio"))
+					||(this.opcDarf.equals("Insatisfatorio"))||(this.opcDeclRais.equals("Insatisfatorio"))
+					||(this.opcFolPag.equals("Insatisfatorio"))||(this.opcGps.equals("Insatisfatorio"))
+					||(this.opGrf.equals("this.opGrf"))||(this.opcNotFiscRet.equals("Insatisfatorio"))
+					||(this.opcPlanFuncAloc.equals("Insatisfatorio"))||(this.opcProtConec.equals("Insatisfatorio"))
+					||(this.opcGfip.equals("Insatisfatorio"))){
+				
+				this.gestao.setSituacao(INSATISFATORIO);
+			}else{
+				this.gestao.setSituacao(SATISFATORIO);
+			}
+
+			this.gestaoService.saveParteFiscal(this.parteFiscal, this.gestao);
+
+		} catch (Exception e) {
+			logger.error(" saveParteFiscal() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/escopo/partefiscal";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O escopo de Parte Fiscal foi Salvo com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+	
+
+	/**
+	 * preencha a combocontratante
+	 * 
+	 * @return List<Contratante>
+	 */
+	public List<Contratante> comboContratante() throws Exception {
+
+		this.contratantes.removeAll(this.contratantes);
+
+		return this.contratanteService.find();
+	}
+
+	/**
+	 * preenche a combo de contratada
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratada> comboContratada() throws Exception {
+
+		this.contratadas.removeAll(this.contratadas);
+		this.contratadas.addAll(this.contratadaService
+				.findContratadasByIdContratante(this.opcContratante));
+		return this.contratadas;
+	}
+
+	/**
+	 * preenche a combo do mes
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Mes> comboMes() throws Exception {
+
+		return this.gestaoService.listaMes();
+	}
+
+	/**
+	 * preenche a combo ano
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Ano> comboAno() throws Exception {
+
+		return this.gestaoService.listaAno();
+	}
+
+	public Contratada getContratada() {
+		return contratada;
+	}
+
+	public void setContratada(Contratada contratada) {
+		this.contratada = contratada;
+	}
+
+	public Contratante getContratante() {
+		return contratante;
+	}
+
+	public void setContratante(Contratante contratante) {
+		this.contratante = contratante;
+	}
+
+	public List<Contratante> getContratantes() {
+		return contratantes;
+	}
+
+	public void setContratantes(List<Contratante> contratantes) {
+		this.contratantes = contratantes;
+	}
+
+	public List<Contratada> getContratadas() {
+		return contratadas;
+	}
+
+	public void setContratadas(List<Contratada> contratadas) {
+		this.contratadas = contratadas;
+	}
+
+	public GestaoService getGestaoService() {
+		return gestaoService;
+	}
+
+	public void setGestaoService(GestaoService gestaoService) {
+		this.gestaoService = gestaoService;
+	}
+
+	public ContratadaService getContratadaService() {
+		return contratadaService;
+	}
+
+	public void setContratadaService(ContratadaService contratadaService) {
+		this.contratadaService = contratadaService;
+	}
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+	public Long getOpcContratante() {
+		return opcContratante;
+	}
+
+	public void setOpcContratante(Long opcContratante) {
+		this.opcContratante = opcContratante;
+	}
+
+	public Long getOpcContratada() {
+		return opcContratada;
+	}
+
+	public void setOpcContratada(Long opcContratada) {
+		this.opcContratada = opcContratada;
+	}
+
+	public String getOpcMes() {
+		return opcMes;
+	}
+
+	public void setOpcMes(String opcMes) {
+		this.opcMes = opcMes;
+	}
+
+	public String getOpcAno() {
+		return opcAno;
+	}
+
+	public void setOpcAno(String opcAno) {
+		this.opcAno = opcAno;
+	}
+
+	public List<Mes> getMeses() {
+		return meses;
+	}
+
+	public void setMeses(List<Mes> meses) {
+		this.meses = meses;
+	}
+
+	public List<Ano> getAnos() {
+		return anos;
+	}
+
+	public void setAnos(List<Ano> anos) {
+		this.anos = anos;
+	}
+
+	public ParteFiscal getParteFiscal() {
+		return parteFiscal;
+	}
+
+	public void setParteFiscal(ParteFiscal parteFiscal) {
+		this.parteFiscal = parteFiscal;
+	}
+
+	public Gestao getGestao() {
+		return gestao;
+	}
+
+	public void setGestao(Gestao gestao) {
+		this.gestao = gestao;
+	}
+
+
+	public String getOpcContSocial() {
+		return opcContSocial;
+	}
+
+	public void setOpcContSocial(String opcContSocial) {
+		this.opcContSocial = opcContSocial;
+	}
+
+	public String getOpCrf() {
+		return opCrf;
+	}
+
+	public void setOpCrf(String opCrf) {
+		this.opCrf = opCrf;
+	}
+
+	public String getOpcProtConec() {
+		return opcProtConec;
+	}
+
+	public void setOpcProtConec(String opcProtConec) {
+		this.opcProtConec = opcProtConec;
+	}
+
+	public String getOpcCartCnpj() {
+		return opcCartCnpj;
+	}
+
+	public void setOpcCartCnpj(String opcCartCnpj) {
+		this.opcCartCnpj = opcCartCnpj;
+	}
+
+	
+	public String getOpcCndtTrab() {
+		return opcCndtTrab;
+	}
+
+	public void setOpcCndtTrab(String opcCndtTrab) {
+		this.opcCndtTrab = opcCndtTrab;
+	}
+
+	public String getOpcNotFiscRet() {
+		return opcNotFiscRet;
+	}
+
+	public void setOpcNotFiscRet(String opcNotFiscRet) {
+		this.opcNotFiscRet = opcNotFiscRet;
+	}
+
+	public String getOpcGps() {
+		return opcGps;
+	}
+
+	public void setOpcGps(String opcGps) {
+		this.opcGps = opcGps;
+	}
+
+	public String getOpcCndPrevi() {
+		return opcCndPrevi;
+	}
+
+	public void setOpcCndPrevi(String opcCndPrevi) {
+		this.opcCndPrevi = opcCndPrevi;
+	}
+
+	public String getOpcFolPag() {
+		return opcFolPag;
+	}
+
+	public void setOpcFolPag(String opcFolPag) {
+		this.opcFolPag = opcFolPag;
+	}
+
+
+	public String getOpcDarf() {
+		return opcDarf;
+	}
+
+	public void setOpcDarf(String opcDarf) {
+		this.opcDarf = opcDarf;
+	}
+
+
+	public String getOpcDeclRais() {
+		return opcDeclRais;
+	}
+
+	public void setOpcDeclRais(String opcDeclRais) {
+		this.opcDeclRais = opcDeclRais;
+	}
+
+	public String getOpcCndTrib() {
+		return opcCndTrib;
+	}
+
+	public void setOpcCndTrib(String opcCndTrib) {
+		this.opcCndTrib = opcCndTrib;
+	}
+
+	
+	public String getOpcPlanFuncAloc() {
+		return opcPlanFuncAloc;
+	}
+
+	public void setOpcPlanFuncAloc(String opcPlanFuncAloc) {
+		this.opcPlanFuncAloc = opcPlanFuncAloc;
+	}
+
+	public String getOpcGfip() {
+		return opcGfip;
+	}
+
+	public void setOpcGfip(String opcGfip) {
+		this.opcGfip = opcGfip;
+	}
+
+	public String getOpGrf() {
+		return opGrf;
+	}
+
+	public void setOpGrf(String opGrf) {
+		this.opGrf = opGrf;
+	}
+
+	public FolhaPagamento getFolhaPagamento() {
+		return folhaPagamento;
+	}
+
+	public void setFolhaPagamento(FolhaPagamento folhaPagamento) {
+		this.folhaPagamento = folhaPagamento;
+	}
+
+	public RotinaAdmissao getRotinaAdmissao() {
+		return rotinaAdmissao;
+	}
+
+	public void setRotinaAdmissao(RotinaAdmissao rotinaAdmissao) {
+		this.rotinaAdmissao = rotinaAdmissao;
+	}
+
+	public RotinaDesligamento getRotinaDesligamento() {
+		return rotinaDesligamento;
+	}
+
+	public void setRotinaDesligamento(RotinaDesligamento rotinaDesligamento) {
+		this.rotinaDesligamento = rotinaDesligamento;
+	}
+
+	public JornadaTrabalho getJornadaTrabalho() {
+		return jornadaTrabalho;
+	}
+
+	public void setJornadaTrabalho(JornadaTrabalho jornadaTrabalho) {
+		this.jornadaTrabalho = jornadaTrabalho;
+	}
+
+	public SegurancaMedicinaTrabalho getTrabalho() {
+		return trabalho;
+	}
+
+	public void setTrabalho(SegurancaMedicinaTrabalho trabalho) {
+		this.trabalho = trabalho;
+	}
+
+	public List<Gestao> getGestoes() {
+		return gestoes;
+	}
+
+	public void setGestoes(List<Gestao> gestoes) {
+		this.gestoes = gestoes;
+	}
+
+	public DataModel<Gestao> getDatamodel() {
+		return datamodel;
+	}
+
+	public void setDatamodel(DataModel<Gestao> datamodel) {
+		this.datamodel = datamodel;
+	}
+	
+	
+	
+	
+
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	 xmlns:p="http://primefaces.org/ui">
+      
+      
+<ui:include src="/template/head.xhtml"/>
+<body>
+<h:form enctype="multipart/form-data">
+			
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<div  id="emape" style="margin-left: 630px;">
+						<h1>EMAPE</h1><br />	
+					</div>
+					<div  id="gestao" style="margin-left: 489px;">
+						<h1>Sistema de Validação e Gestão Documental</h1>
+					</div>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratadaBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{prestadorBean.doVoltarCadastroPrestador()}" immediate="true" /> &raquo; <label style="color:blue;">Prestador &raquo; Cadastro</label></h2>
+				 <div id="mensagem" style="margin-top: 20px;">
+   	            	<ul>
+   	            		<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+		</div>
+		<br/>
+		<br/>
+		<div id="fildset">
+			<fieldset class="fieldset">
+					<legend>Cadastro de Funcionário</legend>
+						<fieldset class="fieldset">
+								<legend>Funcionário</legend>
+								<div >
+									 <p:fileUpload fileUploadListener="#{prestadorBean.handleFileUpload}" mode="advanced" dragDropSupport="true"  
+            								update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx)$/" />  
+  
+    								<p:growl id="messages" showDetail="true"/>  
+								</div>
+						</fieldset>
+						<fieldset class="fieldset">
+								<legend>Associe o Funcionário</legend>
+								<div class="grid-6-12">
+								<label for="dtdemissao" class="form-lbl">Contratante<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{prestadorBean.contratSelec}"  class="form-txt form-large" required="true" requiredMessage="Contratante é obrigatório." >
+										<f:selectItem itemLabel="Selecione a Contratante" />
+	   									<f:selectItems value="#{prestadorBean.comboContratante}" var="c" itemLabel="#{c.id} - #{c.razaoSocial}"	 itemValue="#{c.id}" />
+	   								</h:selectOneMenu>
+								</div>
+								<div class="grid-6-12">
+								<label for="dtdemissao" class="form-lbl">Contratada<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{prestadorBean.contSelec}"  class="form-txt form-large" required="true" requiredMessage="Contratada é obrigatório." >
+										<f:selectItem itemLabel="Selecione a Contratada" />
+	   									<f:selectItems value="#{prestadorBean.comboCadastrada()}" var="c" itemLabel="#{c.id} - #{c.razaoSocial}" itemValue="#{c.id}" />
+	   								</h:selectOneMenu>
+								</div>
+						</fieldset>			
+			</fieldset>
+			<p class="form-req">* Campos obrigatórios </p>		
+		</div>	
+			<div class="botoes" style="margin-top: 25px;margin-bottom: 25px;">
+				<h:commandButton action="#{prestadorBean.cadastrarPrestador()}" id="btnCadstrar" type="submit" class="form-button dir"  accesskey="p" title="Salvar" value="Salvar" />
+			</div>
+	<div id="rodape" style="margin-top:310px;">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+	</div>
+</div>
+</h:form>			
+</body> 
+</html>

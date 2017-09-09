@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+<ui:include src="/template/head.xhtml"/>
+
+<body>
+	<h:form acceptcharset="ISO-8859-1" >
+		<div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<h1><h:outputText value="#{msg['label.emape']}" /></h1>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{prestadorBean.doVoltarPesquisaPrestador()}" immediate="true" /> &raquo; <label style="color:blue;">Funcionário &raquo; Edição</label></h2>
+			 <div id="mensagem" style="margin-top: 20px;">
+            	<ul>
+            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+            	</ul>
+             </div>	
+		</div>
+			<div class="div100_100">
+			<fieldset class="fieldset">
+			  <fieldset class="fieldset">
+				  <legend>Pesquisa</legend>
+					<div class="grid-2-12">
+						<label for="cnpj" class="form-lbl">Pis</label>
+						<p:inputMask  mask="999.99999.99-9" value="#{prestadorBean.maskpis}" required="true" requiredMessage="Pis é obrigatório." styleClass="form-txt form-large"  size="15" title="Pis" />
+				  	</div>
+				  	<div class="grid-1-12">
+						<h:commandButton action="#{prestadorBean.pesquisarPrestador()}" type="submit" name="button" class="form-button btnLupa"   accesskey="p" title="Pesquisar" value="Pesquisar" />
+				  	</div>
+				  	<div class="grid-9-12">
+				  	</div>
+				</fieldset>
+			  	<fieldset class="fieldset">
+			  		<legend>Funcionário(s)</legend>
+			  		<p:dataTable id="dataTable" value="#{prestadorBean.prestadores}" var="p" rows="5" emptyMessage="Não há registro na tabela">
+	               
+	               <p:column>  
+	            		<f:facet name="header">  
+	                		<h:outputText value="Nome do Funcionário" />  
+	            		</f:facet>  
+	            		<h:outputText value="#{p.nome}" /> 
+	        		</p:column>
+	        		 <p:column>  
+	            		<f:facet name="header">  
+	                		<h:outputText value="Contratante" />  
+	            		</f:facet>  
+	            		<h:outputText value="#{p.contratante.razaoSocial}" />  
+	        		</p:column>
+	        		<p:column>  
+	            		<f:facet name="header">  
+	                		<h:outputText value="Contratada" />  
+	            		</f:facet>  
+	            		<h:outputText value="#{p.contratada.razaoSocial}" />  
+	        		</p:column>
+	        		 <p:column style="width: 50px;"> 
+	            		<f:facet name="header">  
+	                		<h:outputText value="EDITAR" />  
+	            		</f:facet>  
+	            		<h:commandLink action="#{prestadorBean.doEditar(p)}" ajax="false" >
+	            			<img title="Clique p/ editar" alt="Clique p/ editar" style="padding-left: 20px;" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_editar.gif" />
+	            		</h:commandLink>
+	        		</p:column>
+	        		<p:column style="width: 50px;">
+	            		<f:facet name="header">  
+	                		<h:outputText value="EXCLUIR" />  
+	            		</f:facet>  
+	            		<h:commandLink action="#{prestadorBean.deletarPrestador(p)}"  ajax="false">
+	            			<img title="Clique p/ editar" alt="Clique p/ deletar" style="padding-left: 20px;" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_cancelar.gif" onclick="alert('Funcionário foi excluido.')"/>
+	            		</h:commandLink>
+	        		</p:column>   
+			  		</p:dataTable>
+			  		
+			  	</fieldset>	
+			</fieldset>
+			</div>
+		<div id="rodape" style="margin-top: 450px;" >
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+		</div>	
+	</div>
+	</h:form>
+</body>      
+</html>

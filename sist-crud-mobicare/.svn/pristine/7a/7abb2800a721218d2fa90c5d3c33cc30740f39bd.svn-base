@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/template/head.xhtml"/>
+<body>
+	<h:form acceptcharset="ISO-8859-1">
+		<div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<h1><h:outputText value="#{msg['label.emape']}" /></h1>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{contratadaBean.doVoltarPesquisa()}" /> &raquo; <label style="color:blue;">Contratada &raquo; Edição</label></h2>
+			 <div id="mensagem" style="margin-top: 20px;">
+            	<ul>
+            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+            	</ul>
+             </div>	
+		</div>
+			<div class="div100_100">
+			  <fieldset class="fieldset">
+			  		<legend>Contratada(s)</legend>
+			  		
+			  		 <p:dataTable id="tabela" var="e" value="#{contratadaBean.datamodel}" 
+		                                 emptyMessage="Não há Contratada cadastrada" 
+		                                 paginator="true" rows="5" resizableColumns="true"  lazy="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{currentPage} de {totalPages}"  
+                                         rowsPerPageTemplate="5,10,15"
+                                         paginatorPosition="bottom">
+	               
+		                <f:facet name="header">  
+			            <h:commandLink style="border:none;" ajax="false" >
+			           		<p:graphicImage styleClass="padding-left: 20px;" value="/imagens/excel.png" />
+	            			<p:dataExporter type="xls" target="tabela" fileName="contratadas" />  
+			           </h:commandLink>
+			            <h:commandLink style="border:none;" ajax="false">
+				            <p:graphicImage styleClass="padding-left: 25px;" value="/imagens/pdf.png" />  
+				            <p:dataExporter type="pdf" target="tabela" fileName="contratadas"/>  
+        				</h:commandLink>    
+				       </f:facet>  
+		                <p:column style="width: 120px;">
+	                         <f:facet name="header">
+	                             <h:outputText value="Numero de Ordem"/>
+	                         </f:facet>
+	                        <h:outputText value="#{e.id}" /> 
+	                     </p:column>
+		               <p:column>  
+		            		<f:facet name="header">  
+		                		<h:outputText value="CNPJ" />  
+		            		</f:facet>  
+		            		<h:outputText value="#{e.cnpj}" /> 
+		        		</p:column>
+		        		 <p:column>  
+		            		<f:facet name="header">  
+		                		<h:outputText value="RAZÃO SOCIAL" />  
+		            		</f:facet>  
+		            		<h:outputText value="#{e.razaoSocial}" />  
+		        		</p:column>
+		        		 <p:column  headerText="EDITAR"  style="width: 50px;" >  
+						     <h:commandLink style="border:none;" action="#{contratadaBean.editar(e)}" ajax="false" >
+							 <img title="Clique p/ editar" style="border:none;padding-left: 20px;" alt="Clique p/ editar" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_editar.gif" />
+						     </h:commandLink>
+						</p:column>
+		        		<p:column  headerText="EXCLUIR"  style="width: 50px;" >  
+						     <h:commandLink style="border:none;" action="#{contratadaBean.deletarContratada(e)}"  ajax="false" onclick="alert('A contratada foi excluida.');">
+							   <img title="Clique p/ editar" style="padding-left: 20px;" alt="Clique p/ deletar" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_cancelar.gif" />
+						     </h:commandLink>
+						</p:column>
+			  	</p:dataTable>
+			  	</fieldset>
+			</div>
+			<p class="form-req">* Contratada associadas ao Escopo de Competência não poderá ser Excluida. </p>
+			<p class="form-req">* Contratada associadas ao Prestador não poderá ser Excluida. </p>			
+		<div id="rodape" style="margin-top: 450px;" >
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+		</div>	
+	</div>
+	</h:form>
+</body>      
+</html>

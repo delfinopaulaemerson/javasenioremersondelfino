@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+/*ESTILO DAS TABELAS DE CONTEUDO*/
+table.azul1{border:0;border-collapse:collapse;}
+table.azul1 td, table.azul1 th{border:1px solid #f8f8f8;}
+table.azul1 th{background:#CBD4EA url(../imagens/th_azul1_bg.jpg) repeat-x top;line-height:11px;
+font-size:11px;font-weight:bold;text-align:center;padding:6px 4px;vertical-align:middle;}
+/*table.azul1 th:hover{background:#D0F0EC url(../imagens/th_azul1_bg_h.jpg) repeat-x bottom;}*/
+table.azul1 tr.even td{background-color:#E3E8F1;}
+table.azul1 th a img{_vertical-align:middle}
+table.azul1 th a{color:#233f72;}
+table.azul1 th a:hover{color:#233f72;}
+table.azul1 td{padding:4px 5px;vertical-align:middle;line-height:11px;font-size:11px;}
+table.azul1 tr.cor{background:#DFF4F2;}
+table.azul1 tr:hover td{background:#eef3fc;border-bottom:1px solid #aab7d5;}
+table.azul1 tr:hover td.multi{background:#F5FCFB url(../imagens/tddupla_line.gif) repeat-x bottom center;}
+table.azul1 tr.cor:hover td.multi{background:#F5FCFB url(../imagens/tddupla_line.gif) repeat-x bottom center;}
+table.azul1 td.icon{text-align:center;}
+table.azul1 td.icon a{border-bottom:none;}
+table.azul1 a:hover img{-moz-opacity:0.8;filter:alpha(opacity=80);}
+table.azul1 td.multi{padding:0 0 0 0;}
+table.azul1 tr td.multi{background:url(../imagens/tddupla_line.gif) repeat-x bottom center;}
+table.azul1 tr.cor td.multi{background:#DFF4F2 url(../imagens/tddupla_line.gif) repeat-x bottom center;}
+table.azul1 td p{margin-bottom:0;padding:4px 5px;}
+table.azul1 td p.prim{padding:3px 5px 4px 5px;}
+table.azul1 tr td input.txt{font-size:11px;}
+
+/* UL */
+ul.list_scroll{overflow:auto;border:1px solid #B0C8D7;}
+ul.list_scroll li label{line-height:30px;padding-left:5px;}
+ul.list_scroll li.even label{background-color:#f7f7f7;}
+
+ul.list_scroll_3{max-height:90px;}
+ul.list_scroll_4{max-height:120px;}
+ul.list_scroll_6{max-height:180px;}
+
+/*PAGINACAO*/
+
+.pagebanner, .pagelinks{position:relative;overflow:hidden;width:100%;display:block;}
+.pagebanner{ font-size:1.1em; color:#246092; line-height:30px; text-align: left;}
+.pagelinks span{ font-size:11px; display:block; float:left; margin:0 4px 0 0; background:none;border:1px solid #a7a7a7;padding:3px 6px;color:#a7a7a7;}
+.pagelinks a{ font-size:11px; float:left;display:block;margin:0 4px 0 0;padding:3px 6px;border:1px solid #a7a7a7;color:#323252;
+background:#cbd4ea;/*font-weight:bold;*/}
+.pagelinks a:hover{ border:1px solid #a7a7a7; background:#fefefe; color:#a7a7a7; font-weight: normal;}
+
+
+/*ESTILO PADRAO DO GRAILS ADAPTADO PARA O PROJETO*/
+
+/* TABLES */
+table.cinza{border:1px solid #ccc;width:100%}
+table.cinza td, th{font:11px arial, sans-serif;line-height:13px;padding:5px 6px;text-align:left;vertical-align:middle;}
+table.cinza tr{border:0;}
+table.cinza th{background:url("../imagens/grid_shadow.jpg") repeat-x scroll left bottom #FFFFFF;color:#666;font-size:11px;font-weight:bold;line-height:17px;padding:2px 6px;border:1px solid #ccc;/*text-align:center;*/}
+table.cinza th.left{text-align:left;}
+table.cinza th.center{text-align:center;}
+table.cinza th.right{text-align:right;}
+table.cinza th a{border-bottom:0;}
+table.cinza th a:link, table.cinza th a:visited, table.cinza th a:hover{  color:#333;display:block;font-size:11px;text-decoration:none;width:100%;}
+table.cinza th.asc a, table.cinza th.desc a{background-position:right;background-repeat:no-repeat;}
+table.cinza th.asc a{background-image:url(../imagens/grid_sorted_asc.gif);}
+table.cinza th.desc a{background-image:url(../imagens/grid_sorted_desc.gif);}
+table.cinza .odd{background:#f7f7f7;}
+table.cinza td.icon a{border-bottom:none;}
+table.cinza .even{background:#fff;}
+table.cinza .icon{text-align:center;}
+
+table.cinza td.td1jqtooltipgrid{border-top:1px solid #DDD;border-bottom:1px solid #DDD;border-right:none;}
+table.cinza td.td2jqtooltipgrid{border-bottom:1px solid #DDD;border-left:none;}
+
+table.cinza td.left{text-align:left;}
+table.cinza td.center{text-align:center;}
+table.cinza td.right{text-align:right;}
+
+/* LIST */
+table.cinza{border-collapse:collapse;}
+table.cinza th, table.cinza td{border-left:1px solid #ddd;}
+/*table.cinza td ul{list-style:circle;margin-left:10px;background:url(../imagens/em_mais.png) no-repeat center bottom;padding-bottom:8px;_background:none;}
+table.cinza td ul:hover{background:none;}
+table.cinza td ul li{display:none;cursor:pointer;_display:list-item;}
+table.cinza td ul:hover li{display: list-item;}
+table.cinza td ul li:first-child{display: list-item;}*/
+table.cinza tr:hover{background:#E1F1FB;}
+
+
+/* PAGINATION */
+.paginacao{background:#fff url(../imagens/grid_shadow.jpg) bottom repeat-x;border:1px solid #ccc;border-top:0;
+color:#666;font-size:10px;overflow:hidden;padding:10px 3px;}
+.paginacao a{background:#fff;border:1px solid #ccc;border-color:#ccc #aaa #aaa #ccc;color:#666;margin:0 3px;padding:2px 6px;}
+.paginacao a:hover{border:1px solid #ccc;border-color:#ccc #aaa #aaa #ccc;}
+.paginacao span{padding:2px 3px;}
+

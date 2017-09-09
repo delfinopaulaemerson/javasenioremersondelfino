@@ -1,0 +1,68 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="contratante_contratada")
+public class Contratante_Contratada implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	@Column(name="id")
+	private Long id;
+	
+	@Column(name="contratante_id",nullable=false)
+	private Long contratante_id;
+	
+	@Column(name="contratadas_id",nullable=false)
+	private Long contratadas_id;
+	
+	public Contratante_Contratada(){
+		
+	}
+
+	public Long getContratante_id() {
+		return contratante_id;
+	}
+
+	public void setContratante_id(Long contratante_id) {
+		this.contratante_id = contratante_id;
+	}
+
+	public Long getContratadas_id() {
+		return contratadas_id;
+	}
+
+	public void setContratadas_id(Long contratadas_id) {
+		this.contratadas_id = contratadas_id;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
+
+	
+
+}

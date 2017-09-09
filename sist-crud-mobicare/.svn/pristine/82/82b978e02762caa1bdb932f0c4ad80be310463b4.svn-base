@@ -1,0 +1,237 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="rotinaAdmissao")
+public class RotinaAdmissao implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="regEmpregado")
+	private String regEmpregado;
+	
+	@Column(name="obs_regEmpregado")
+	private String obs_regEmpregado;
+	
+	@Column(name="contTrab")
+	private String contTrab;
+	
+	@Column(name="obs_contTrab")
+	private String obs_contTrab;
+	
+	@Column(name="fichSalFam")
+	private String fichSalFam;
+	
+	@Column(name="obs_fichSalFam")
+	private String obs_fichSalFam;
+	
+	@Column(name="declDependIrrf")
+	private String declDependIrrf;
+	
+	@Column(name="obs_declDependIrrf")
+	private String obs_declDependIrrf;
+	
+	@Column(name="declMultVenc")
+	private String declMultVenc;
+	
+	@Column(name="obs_declMultVenc")
+	private String obs_declMultVenc;
+	
+	@Column(name="exaMedAdmi")
+	private String exaMedAdmi;
+	
+	@Column(name="obs_exaMedAdmi")
+	private String obs_exaMedAdmi;
+	
+	@Column(name="declCaged")
+	private String declCaged;
+	
+	@Column(name="obs_declCaged")
+	private String obs_declCaged;
+	
+	@Column(name="descContSind")
+	private String descContSind;
+	
+	@Column(name="obs_descContSind")
+	private String obs_descContSind;
+	
+	@Column(name="inclVt")
+	private String inclVt;
+	
+	@Column(name="obs_inclVt")
+	private String obs_inclVt;
+	
+	public RotinaAdmissao(){
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getRegEmpregado() {
+		return regEmpregado;
+	}
+
+	public void setRegEmpregado(String regEmpregado) {
+		this.regEmpregado = regEmpregado;
+	}
+
+	public String getObs_regEmpregado() {
+		return obs_regEmpregado;
+	}
+
+	public void setObs_regEmpregado(String obs_regEmpregado) {
+		this.obs_regEmpregado = obs_regEmpregado;
+	}
+
+	public String getContTrab() {
+		return contTrab;
+	}
+
+	public void setContTrab(String contTrab) {
+		this.contTrab = contTrab;
+	}
+
+	public String getObs_contTrab() {
+		return obs_contTrab;
+	}
+
+	public void setObs_contTrab(String obs_contTrab) {
+		this.obs_contTrab = obs_contTrab;
+	}
+
+	public String getFichSalFam() {
+		return fichSalFam;
+	}
+
+	public void setFichSalFam(String fichSalFam) {
+		this.fichSalFam = fichSalFam;
+	}
+
+	public String getObs_fichSalFam() {
+		return obs_fichSalFam;
+	}
+
+	public void setObs_fichSalFam(String obs_fichSalFam) {
+		this.obs_fichSalFam = obs_fichSalFam;
+	}
+
+	public String getDeclDependIrrf() {
+		return declDependIrrf;
+	}
+
+	public void setDeclDependIrrf(String declDependIrrf) {
+		this.declDependIrrf = declDependIrrf;
+	}
+
+	public String getObs_declDependIrrf() {
+		return obs_declDependIrrf;
+	}
+
+	public void setObs_declDependIrrf(String obs_declDependIrrf) {
+		this.obs_declDependIrrf = obs_declDependIrrf;
+	}
+
+	public String getDeclMultVenc() {
+		return declMultVenc;
+	}
+
+	public void setDeclMultVenc(String declMultVenc) {
+		this.declMultVenc = declMultVenc;
+	}
+
+	public String getObs_declMultVenc() {
+		return obs_declMultVenc;
+	}
+
+	public void setObs_declMultVenc(String obs_declMultVenc) {
+		this.obs_declMultVenc = obs_declMultVenc;
+	}
+
+	public String getExaMedAdmi() {
+		return exaMedAdmi;
+	}
+
+	public void setExaMedAdmi(String exaMedAdmi) {
+		this.exaMedAdmi = exaMedAdmi;
+	}
+
+	public String getObs_exaMedAdmi() {
+		return obs_exaMedAdmi;
+	}
+
+	public void setObs_exaMedAdmi(String obs_exaMedAdmi) {
+		this.obs_exaMedAdmi = obs_exaMedAdmi;
+	}
+
+	public String getDeclCaged() {
+		return declCaged;
+	}
+
+	public void setDeclCaged(String declCaged) {
+		this.declCaged = declCaged;
+	}
+
+	public String getObs_declCaged() {
+		return obs_declCaged;
+	}
+
+	public void setObs_declCaged(String obs_declCaged) {
+		this.obs_declCaged = obs_declCaged;
+	}
+
+	public String getDescContSind() {
+		return descContSind;
+	}
+
+	public void setDescContSind(String descContSind) {
+		this.descContSind = descContSind;
+	}
+
+	public String getObs_descContSind() {
+		return obs_descContSind;
+	}
+
+	public void setObs_descContSind(String obs_descContSind) {
+		this.obs_descContSind = obs_descContSind;
+	}
+
+	public String getInclVt() {
+		return inclVt;
+	}
+
+	public void setInclVt(String inclVt) {
+		this.inclVt = inclVt;
+	}
+
+	public String getObs_inclVt() {
+		return obs_inclVt;
+	}
+
+	public void setObs_inclVt(String obs_inclVt) {
+		this.obs_inclVt = obs_inclVt;
+	}
+
+}

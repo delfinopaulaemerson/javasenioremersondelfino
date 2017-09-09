@@ -1,0 +1,76 @@
+package br.com.emape.dao;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.emape.model.User;
+
+@Component("userDAO")
+public class UserDAO {
+	
+	
+	private EntityManager entityManager;
+	
+	/**
+	 * seleciona um usuario com o cnpj
+	 * @param cnpj
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public User findByCnpj(String cnpj){
+		
+		Query query = this.entityManager.createQuery(" SELECT u FROM User u WHERE u.cnpj=:cnpj ");
+		
+		query.setParameter("cnpj", cnpj);
+		
+		try {
+			
+			return (User) query.getResultList();
+			
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * seleciona o usuario com nome e senha
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public User findUserNameAndPassword(String username, String password){
+		
+		Query query = this.entityManager.createQuery(" SELECT u FROM User u WHERE u.username=:username and u.password=:password ");
+		
+		query.setParameter("username", username);
+		query.setParameter("password", password);
+		
+		try {
+			return (User) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+}

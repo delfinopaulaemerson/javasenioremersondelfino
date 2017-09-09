@@ -1,0 +1,658 @@
+package br.com.emape.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Dados;
+import br.com.emape.model.Endereco;
+import br.com.emape.service.ContratanteService;
+import br.com.emape.service.DadoService;
+import br.com.emape.service.EnderecoService;
+import br.com.emape.service.ValidacoesService;
+
+@Component("contratanteBean")
+@ManagedBean
+@ViewScoped
+public class ContratanteBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(ContratanteBean.class);
+	@Autowired
+	private ContratanteService contratanteService;
+	@Autowired
+	private EnderecoService enderecoService;
+	@Autowired
+	private DadoService dadoService;
+	@Autowired
+	private ValidacoesService validacoesService;
+
+	private Contratante contratante;
+
+	private Endereco endereco;
+
+	private Dados dados;
+
+	private String opt;
+
+	private List<Contratante> contratantes = new ArrayList<Contratante>();
+	
+	private String maskcnpj;
+	
+	private DataModel<Contratante> datamodel;
+	
+	
+	
+	public ContratanteBean() {
+		super();
+		contratante = new Contratante();
+		endereco = new Endereco();
+		dados = new Dados();
+
+	}
+	
+
+	public String doCadastroContratante() {
+
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			limpaComponente(this.contratante, this.endereco, this.dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao reedirecionar para o  cadastro Contratante "
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			e.printStackTrace();
+
+			return "/begin/begin";
+		}
+
+		return "/cadastro/contratante";
+	}
+
+	/**
+	 * volta da edicao do contratante
+	 * 
+	 * @return
+	 */
+	public String doVoltarEdicao() {
+
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		return "/begin/begin";
+
+	}
+	
+	/**
+	 * retorna para a tela de pesquisa
+	 * @return
+	 */
+	public String doVoltarEditar(){
+		
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+		
+		try {
+
+			limpaComponente(this.contratante, this.endereco, this.dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao reedirecionar para a pesquisa Contratante "
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			e.printStackTrace();
+
+			return "/begin/begin";
+		}
+		
+		
+
+		return "/edicao/contratante";
+		
+	}
+
+	/**
+	 * rederiza para a tela edicao
+	 * 
+	 * @return
+	 */
+	public String doEdicaoContratante() {
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+		
+		try {
+			limpaComponente(this.contratante, this.endereco, this.dados);
+			
+			this.contratantes.removeAll(this.contratantes);
+			
+		} catch (Exception e) {
+			logger.error("Erro ao reedirecionar para o  edição Contratante "
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/begin/begin";
+		}
+
+		return "/edicao/contratante";
+	}
+	
+	/**
+	 * preenche a grid contratante
+	 * @return
+	 */
+	public String pesquisarContratante() {
+
+		boolean ok;
+
+		if (this.contratante == null) {
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			this.contratantes.removeAll(getContratantes());
+
+			getContratantes().addAll(this.contratanteService.find());
+
+		} catch (Exception e) {
+			logger.error("Erro ao Pesquisar o Contratante " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratante";
+		}
+
+		return "/edicao/contratante";
+	}
+
+	/**
+	 * metodo edita os dados do contrarante
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public String doEditar(Contratante contratante) {
+
+		if (this.contratante == null) {
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			this.setContratante(this.contratanteService.findById(contratante
+					.getId()));
+			this.setMaskcnpj(this.contratante.getCnpj());
+			this.setOpt(contratante.getOptSimpNacional());
+			
+			List<Endereco> enderecos = new ArrayList<Endereco>();
+			
+			enderecos.addAll(this.enderecoService.findContratante(contratante
+					.getId()));
+			if(!enderecos.isEmpty()){
+				
+				this.setEndereco(enderecos.get(0));
+			}
+			
+			List<Dados> dados = new ArrayList<Dados>();
+			
+			dados.addAll(this.dadoService.findDadosContratante(contratante
+					.getId()));
+			
+			if(!dados.isEmpty()){
+				
+				this.setDados(dados.get(0));
+			}
+			
+
+		} catch (Exception e) {
+			logger.error("Erro ao Editar o Contratante " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratante";
+		}
+
+
+		return "/edicao/contratanteditar";
+	}
+
+	/**
+	 * atualiza as informacoes do contratante
+	 * 
+	 * @return
+	 */
+	public String atualizarDadosContratante() {
+
+		boolean ok = true;
+
+		if (this.contratante == null) {
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+			
+			if(!this.validacoesService.isCnpj(contratante.getCnpj())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Numero do CNPJ inválido.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+				this.contratante.setOptSimpNacional(getOpt());
+
+			if (!ok) {
+
+				return "/edicao/contratanteditar";
+
+			}
+			this.contratanteService.updateContratante(contratante, endereco,
+					dados);
+			limpaComponente(contratante, endereco, dados);
+		} catch (Exception e) {
+			logger.error("Erro ao Atualizar o Contratante " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O contratante foi Atualizado com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+
+	}
+
+	public String deletarContratante(Contratante contratante) {
+
+		if (this.contratante == null) {
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			this.contratanteService.deleteContratante(contratante);
+
+			limpaComponente(contratante, endereco, dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao Deletar o Contratante " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratante";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Contratante foi Excluido com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * limpa os dados e atualiza os componentes
+	 * 
+	 * @param c
+	 * @param e
+	 * @param d
+	 * @throws Exception
+	 */
+	private void limpaComponente(Contratante c, Endereco e, Dados d)
+			throws Exception {
+
+		this.contratante.setId(null);
+		this.contratante.setRazaoSocial("");
+		this.contratante.setCnpj("");
+		this.contratante.setCnae("");
+		this.contratante.setOptSimpNacional("");
+		this.contratante.setDscAtividade("");
+		this.setMaskcnpj("");
+		
+		
+
+		this.setOpt("");
+
+		this.endereco.setId(null);
+		this.endereco.setBairro("");
+		this.endereco.setCep("");
+		this.endereco.setCidade("");
+		this.endereco.setComplemento("");
+		this.endereco.setEstado("");
+		this.endereco.setNumero("");
+		this.endereco.setRua("");
+
+		this.dados.setId(null);
+		this.dados.setEmail("");
+		this.dados.setNome("");
+		this.dados.setTelefone("");
+
+	}
+
+	/**
+	 * metodo cadastra as informacoes do contratante
+	 * 
+	 * @return
+	 */
+
+	public String cadastrarContratante() {
+
+		boolean ok = false;
+
+		try {
+			if (this.contratante == null) {
+
+				this.setContratante(new Contratante());
+			}
+
+			if (this.endereco == null) {
+				this.setEndereco(new Endereco());
+			}
+
+			if (this.dados == null) {
+				this.setDados(new Dados());
+			}
+			
+				this.contratante.setOptSimpNacional(this.getOpt());
+		
+				this.contratante.setCnpj(getMaskcnpj());
+				
+				if(!this.validacoesService.isCnpj(contratante.getCnpj())){
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"Numero do CNPJ inválido.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+					ok = true;
+				}
+			
+			if (ok) {
+
+				return "/cadastro/contratante";
+			}
+			
+
+			contratanteService.cadastrarContratante(contratante, endereco,
+					dados);
+			limpaComponente(contratante, endereco, dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao Cadastrar o Contratante " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			return "/cadastro/contratante";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O contratante foi criado com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	public String pesquisar() {
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+		return "/edicao/gridcontratante";
+	}
+
+	/**
+	 * retorno do link voltar no cadastro do contratante
+	 * 
+	 * @return
+	 */
+	public String doVoltarCadastoContratante() {
+
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		return "/begin/begin";
+	}
+
+	/*
+	 * sair da aplicacao
+	 */
+	public String doSair() {
+		if (this.contratante == null) {
+
+			this.setContratante(new Contratante());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		return "/index";
+	}
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+	public Contratante getContratante() {
+		return contratante;
+	}
+
+	public void setContratante(Contratante contratante) {
+		this.contratante = contratante;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Dados getDados() {
+		return dados;
+	}
+
+	public void setDados(Dados dados) {
+		this.dados = dados;
+	}
+
+	
+
+	public String getOpt() {
+		return opt;
+	}
+
+
+	public void setOpt(String opt) {
+		this.opt = opt;
+	}
+
+
+	public List<Contratante> getContratantes() {
+		return contratantes;
+	}
+
+	public void setContratantes(List<Contratante> contratantes) {
+		this.contratantes = contratantes;
+	}
+
+	public EnderecoService getEnderecoService() {
+		return enderecoService;
+	}
+
+	public void setEnderecoService(EnderecoService enderecoService) {
+		this.enderecoService = enderecoService;
+	}
+
+	public DadoService getDadoService() {
+		return dadoService;
+	}
+	
+	public void setDadoService(DadoService dadoService) {
+		this.dadoService = dadoService;
+	}
+
+	public String getMaskcnpj() {
+		return maskcnpj;
+	}
+
+	public void setMaskcnpj(String maskcnpj) {
+		this.maskcnpj = maskcnpj;
+	}
+
+	public ValidacoesService getValidacoesService() {
+		return validacoesService;
+	}
+
+	public void setValidacoesService(ValidacoesService validacoesService) {
+		this.validacoesService = validacoesService;
+	}
+	
+	public DataModel<Contratante> getDatamodel() throws Exception {
+		this.datamodel = new ListDataModel<Contratante>(this.contratanteService.find());
+		return this.datamodel;
+	}
+
+	public void setDatamodel(DataModel<Contratante> datamodel) {
+		this.datamodel = datamodel;
+	}
+	
+
+}

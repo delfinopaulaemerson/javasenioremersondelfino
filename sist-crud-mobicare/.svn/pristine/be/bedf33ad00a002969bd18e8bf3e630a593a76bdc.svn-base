@@ -1,0 +1,148 @@
+package br.com.emape.service;
+
+import java.math.BigInteger;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.dao.ContratadaDAO;
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante_Contratada;
+import br.com.emape.model.Dados;
+import br.com.emape.model.Endereco;
+
+/**
+ * 
+ * @author Emerson
+ *
+ */
+@Component("CadastradaService")
+public class ContratadaService{
+	
+	
+			@Autowired
+	private ContratadaDAO contratadaDAO;
+	
+	/**
+	 * cadastro de cadastrada
+	 * @param contratada
+	 * @param endereco
+	 * @param dados
+	 * @throws Exception
+	 */
+	public void cadastrarContratada(Contratada contratada,Endereco endereco, Dados dados, Long idContratante) throws Exception{
+		
+		contratadaDAO.cadastrarContratada(contratada, endereco, dados,idContratante);
+		
+	}
+	
+	/**
+	 * retorna uma lista de id de contratante e suas contratadas
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante_Contratada> findAllContContrat() throws Exception{
+		
+		return this.contratadaDAO.findAllContContrat();
+	}
+	
+	/**
+	 * metodo retorna a pesquisa de contratada
+	 * @param contratada
+	 * @return Contratada
+	 * @throws Exception
+	 */
+	public List<Contratada> Find(Contratada contratada) throws Exception{
+		
+		return this.contratadaDAO.Find(contratada);
+	}
+	
+	/**
+	 * retorna a contratada pelo cnpj
+	 * @param cnpj
+	 * @return Contratada
+	 * @throws Exception
+	 */
+	public Contratada findByCnpj(String cnpj) throws Exception{
+		
+		return this.contratadaDAO.findByCnpj(cnpj);
+	}
+	
+	/**
+	 *  metodo me retorna uma lista de empresas cadastratas
+	 * @return List<Contratada>
+	 * @throws Exception
+	 */
+	public List<Contratada> getListaCadastrada() throws Exception{
+		
+		return contratadaDAO.getListaCadastrada();
+	}
+	
+	/**
+	 * retorna a contratante vinculada
+	 * @param idContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public BigInteger getContratanteVinculado(Long idContratada) throws Exception{
+		
+		return this.contratadaDAO.getContratanteVinculado(idContratada);
+	}
+	
+	/**
+	 * atualiza o objeto contratada
+	 * @param c
+	 * @param e
+	 * @param d
+	 * @throws Exception
+	 */
+	public void updateContratada(Contratada c,Endereco e,Dados d,Long idContratante)throws Exception{
+		
+		this.contratadaDAO.updateContratada(c, e, d,idContratante);
+	}
+	
+	/**
+	 * metodo retorna o objeto contratada pelo id
+	 * @param id
+	 * @return
+	 */
+	public Contratada findById(Long id){
+		
+		return this.contratadaDAO.findById(id);
+	}
+	
+	/**
+	 * retorna a lista de contratadas da contratante
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratada> findContratadasByIdContratante(Long id) throws Exception{
+		
+		return this.contratadaDAO.findContratadasByIdContratante(id);
+	}
+	
+	
+	/**
+	 * metodo deleta o objeto contratada
+	 * @param c
+	 * @throws Exception
+	 */
+	public void deleteContratada(Contratada c)throws Exception{
+		
+		this.contratadaDAO.deleteContratada(c);
+		
+	}
+
+	public ContratadaDAO getContratadaDAO() {
+		return contratadaDAO;
+	}
+
+	public void setContratadaDAO(ContratadaDAO contratadaDAO) {
+		this.contratadaDAO = contratadaDAO;
+	}
+	
+	
+
+}

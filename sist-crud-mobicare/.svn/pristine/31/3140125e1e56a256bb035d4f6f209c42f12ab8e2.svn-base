@@ -1,0 +1,62 @@
+/*FOLHA DE ESTILO COM HACKS PARA O IE E ANTERIORES*/
+
+body{behavior:url(css/csshover.htc);/*background:#fff url(../imagens/bg_bodyIe6.png) no-repeat center top;*/}
+.hasLayout{height:0;
+he\ight:auto;
+zoom:1;}
+/*
+div.contlogin{background-color:#fff0b2;border-width:5px; border-style:solid; border-color:#ffefb2;}
+div.contlogin{margin:0 auto;}
+*/
+#wrapper{overflow-x:hidden;}
+
+#login_box{border:none;}
+#form_box{background-color:transparent;}
+
+#msg-error .icone, #msg-info .icone, #msg-warn .icone{position:absolute;top:50px;width:40px;}
+
+.form-req {color:#d10000;position:inherit;}
+
+.form-button{padding:0 1px;}
+
+/*div#header img.h1Logo{margin:20px 0 0 90px;}*/
+
+/* MENU */
+
+.menulist #sbumenu02,.menulist #sbumenu03,.menulist #sbumenu04{width:150px;}
+
+
+/* RODAPE */
+
+div#rodape{overflow:visible;height:80px;position:relative;}
+div#rodape div.logo a.logo2{width:80px;}
+div#rodape div.logo a.logo2 img{margin-bottom:5px;}
+
+/*FRMINTERNOS.HTML*/
+form#frmInternos div#divDadosSEI,form#frmInternos div#divDadosGRP{width:74%;}
+form#frmInternos div#divFoto{width:23%;}
+form#frmInternos div#divDadosPrisionais{width:99%;}
+form#frmInternos div#divVulgosSIPEN{width:49%;}
+form#frmInternos div#divVulgosVEP{width:48%;}
+form#frmInternos div#divObs1{width:24%;}
+form#frmInternos div#divObs2{width:69%;}
+
+/*=====================Modal============================*/
+
+#divmodal{margin:0;padding:0;width:100%;height:100%;position:absolute;top:0;left:0;z-index:9999;display:none;}
+
+#divfundomodal{margin:0;padding:0;width:100%;;overflow:hidden;height:9999px;background-color:#c8c8c8;position:fixed;top:0;left:0;z-index:9999;filter:alpha(opacity=90);-ms-filter:alpha(opacity=90);opacity:0.9;display:none;overflow:hidden;}
+
+body:nth-of-type(1) #divfundomodal{position:fixed;height:100%;}/*hack chrome*/
+
+#divModalContent{margin:0 auto;padding:0;width:280px;height:110px;position:absolute;margin-top:15%;z-index:99999;display:none;font-size:1.2em;position:fixed; background:#fff url("../imagens/loadinfo.gif") no-repeat center center; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;}
+
+#divModalContent fieldset{bottom:0;position:absolute;width:93%;padding:10px;display:none;}
+
+#divModalContent label{margin-right:34px;}
+
+#divModalContent p{font-weight:bold;}
+
+#divModalContent p.subtitulo{padding-top:5px;border:none;}
+
+#divModalContent p.subtitulo label{line-height:20px;width:100%;text-align:center;display:block;}

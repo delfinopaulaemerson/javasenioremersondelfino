@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/facelets/tags">
+      
+	<div id="menu">
+			<div id="bgmenu">
+				<div class="menu_box">
+					<ul id="menulista" class="menulist">
+						<li class="item"><h:link value="Persistência" rendered="#{sec:ifAnyGranted('ADMIN')}"/>
+							<ul>
+								<li><h:link value="Empregado"/>
+									<ul>
+										<li><h:commandLink value="Cadastro" action="#{empregradoBean.doCadastro()}"  immediate="true" /></li>
+										<li><h:commandLink action="#{empregradoBean.doEdicao()}" value="Edição" immediate="true" /></li>
+									</ul>	
+								</li>
+								<li><h:link value="Departamento"/>
+									<ul>
+										<li><h:commandLink value="Cadastro" action="#{departamentoBean.doCadastroDepartamento}"  immediate="true" /></li>
+										<li><h:commandLink action="#{departamentoBean.doEdicao}" value="Edição" immediate="true" /></li>
+									</ul>	
+								</li>
+							</ul>		
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+</html>

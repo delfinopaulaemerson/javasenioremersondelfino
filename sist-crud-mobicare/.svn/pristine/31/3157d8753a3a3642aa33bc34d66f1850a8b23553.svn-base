@@ -1,0 +1,357 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="folhaPagamento")
+public class FolhaPagamento implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="normaColCat")
+	private String normaColCat;
+	
+	@Column(name="obs_normaColCat")
+	private String obs_normaColCat;
+	
+	@Column(name="folhaPagamento")
+	private String folhaPagamento;
+	
+	@Column(name="obs_folhaPagamento")
+	private String obs_folhaPagamento;
+	
+	@Column(name="recPagSalario")
+	private String recPagSalario;
+	
+	@Column(name="obs_recPagSalario")
+	private String obs_recPagSalario;
+	
+	@Column(name="plaCargSal")
+	private String plaCargSal;
+	
+	@Column(name="obs_plaCargSal")
+	private String obs_plaCargSal;
+	
+	@Column(name="abPecFeria")
+	private String abPecFeria;
+	
+	@Column(name="obs_abPecFeria")
+	private String obs_abPecFeria;
+	
+	@Column(name="avisFerias")
+	private String avisFerias;
+	
+	@Column(name="obs_avisFerias")
+	private String obs_avisFerias;
+	
+	@Column(name="abonPec")
+	private String abonPec;
+	
+	@Column(name="obs_abonPec")
+	private String obs_abonPec;
+
+	@Column(name="gps")
+	private String gps;
+	
+	@Column(name="obs_gps")
+	private String obs_gps;
+	
+	@Column(name="darf")
+	private String darf;
+	
+	@Column(name="obs_darf")
+	private String obs_darf;
+	
+	@Column(name="grf")
+	private String grf;
+	
+	@Column(name="obs_grf")
+	private String obs_grf;
+	
+	@Column(name="compPagVt")
+	private String compPagVt;
+	
+	@Column(name="obs_compPagVt")
+	private String obs_compPagVt;
+	
+	@Column(name="compInscPat")
+	private String compInscPat;
+	
+	@Column(name="obs_compInscPat")
+	private String obs_compInscPat;
+	
+	
+	public FolhaPagamento(){
+		
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public String getNormaColCat() {
+		return normaColCat;
+	}
+
+
+	public void setNormaColCat(String normaColCat) {
+		this.normaColCat = normaColCat;
+	}
+
+
+	public String getObs_normaColCat() {
+		return obs_normaColCat;
+	}
+
+
+	public void setObs_normaColCat(String obs_normaColCat) {
+		this.obs_normaColCat = obs_normaColCat;
+	}
+
+
+	public String getFolhaPagamento() {
+		return folhaPagamento;
+	}
+
+
+	public void setFolhaPagamento(String folhaPagamento) {
+		this.folhaPagamento = folhaPagamento;
+	}
+
+
+	public String getObs_folhaPagamento() {
+		return obs_folhaPagamento;
+	}
+
+
+	public void setObs_folhaPagamento(String obs_folhaPagamento) {
+		this.obs_folhaPagamento = obs_folhaPagamento;
+	}
+
+
+	public String getRecPagSalario() {
+		return recPagSalario;
+	}
+
+
+	public void setRecPagSalario(String recPagSalario) {
+		this.recPagSalario = recPagSalario;
+	}
+
+
+	public String getObs_recPagSalario() {
+		return obs_recPagSalario;
+	}
+
+
+	public void setObs_recPagSalario(String obs_recPagSalario) {
+		this.obs_recPagSalario = obs_recPagSalario;
+	}
+
+
+	public String getPlaCargSal() {
+		return plaCargSal;
+	}
+
+
+	public void setPlaCargSal(String plaCargSal) {
+		this.plaCargSal = plaCargSal;
+	}
+
+
+	public String getObs_plaCargSal() {
+		return obs_plaCargSal;
+	}
+
+
+	public void setObs_plaCargSal(String obs_plaCargSal) {
+		this.obs_plaCargSal = obs_plaCargSal;
+	}
+
+
+	public String getAbPecFeria() {
+		return abPecFeria;
+	}
+
+
+	public void setAbPecFeria(String abPecFeria) {
+		this.abPecFeria = abPecFeria;
+	}
+
+
+	public String getObs_abPecFeria() {
+		return obs_abPecFeria;
+	}
+
+
+	public void setObs_abPecFeria(String obs_abPecFeria) {
+		this.obs_abPecFeria = obs_abPecFeria;
+	}
+
+
+	public String getAvisFerias() {
+		return avisFerias;
+	}
+
+
+	public void setAvisFerias(String avisFerias) {
+		this.avisFerias = avisFerias;
+	}
+
+
+	public String getObs_avisFerias() {
+		return obs_avisFerias;
+	}
+
+
+	public void setObs_avisFerias(String obs_avisFerias) {
+		this.obs_avisFerias = obs_avisFerias;
+	}
+
+
+	public String getAbonPec() {
+		return abonPec;
+	}
+
+
+	public void setAbonPec(String abonPec) {
+		this.abonPec = abonPec;
+	}
+
+
+	public String getObs_abonPec() {
+		return obs_abonPec;
+	}
+
+
+	public void setObs_abonPec(String obs_abonPec) {
+		this.obs_abonPec = obs_abonPec;
+	}
+
+
+	public String getGps() {
+		return gps;
+	}
+
+
+	public void setGps(String gps) {
+		this.gps = gps;
+	}
+
+
+	public String getObs_gps() {
+		return obs_gps;
+	}
+
+
+	public void setObs_gps(String obs_gps) {
+		this.obs_gps = obs_gps;
+	}
+
+
+	public String getDarf() {
+		return darf;
+	}
+
+
+	public void setDarf(String darf) {
+		this.darf = darf;
+	}
+
+
+	public String getObs_darf() {
+		return obs_darf;
+	}
+
+
+	public void setObs_darf(String obs_darf) {
+		this.obs_darf = obs_darf;
+	}
+
+
+	public String getGrf() {
+		return grf;
+	}
+
+
+	public void setGrf(String grf) {
+		this.grf = grf;
+	}
+
+
+	public String getObs_grf() {
+		return obs_grf;
+	}
+
+
+	public void setObs_grf(String obs_grf) {
+		this.obs_grf = obs_grf;
+	}
+
+
+	public String getCompPagVt() {
+		return compPagVt;
+	}
+
+
+	public void setCompPagVt(String compPagVt) {
+		this.compPagVt = compPagVt;
+	}
+
+
+	public String getObs_compPagVt() {
+		return obs_compPagVt;
+	}
+
+
+	public void setObs_compPagVt(String obs_compPagVt) {
+		this.obs_compPagVt = obs_compPagVt;
+	}
+
+
+	public String getCompInscPat() {
+		return compInscPat;
+	}
+
+
+	public void setCompInscPat(String compInscPat) {
+		this.compInscPat = compInscPat;
+	}
+
+
+	public String getObs_compInscPat() {
+		return obs_compInscPat;
+	}
+
+
+	public void setObs_compInscPat(String obs_compInscPat) {
+		this.obs_compInscPat = obs_compInscPat;
+	}
+	
+	
+
+}

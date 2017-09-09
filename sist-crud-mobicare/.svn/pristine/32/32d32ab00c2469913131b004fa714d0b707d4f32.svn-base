@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/template/head.xhtml"/>
+<body>
+	<h:form acceptcharset="ISO-8859-1" >
+		<div id="wrapper" class="hasLayout">
+			<div id="header">
+					<div id="headerinterna">
+						<div  id="emape" style="margin-left: 630px;">
+						<h1>EMAPE</h1><br />	
+					</div>
+					<div  id="gestao" style="margin-left: 489px;">
+						<h1>Sistema de Validação e Gestão Documental</h1>
+					</div>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{cadastroLoginBean.doVoltarPesquisaUsuario()}" /> &raquo; <label style="color:blue;"> Cadastro de Usuário &raquo; Pesquisar</label></h2>
+			 <div id="mensagem" style="margin-top: 20px;">
+            	<ul>
+            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+            	</ul>
+             </div>	
+		</div>
+			<div class="div100_100">
+			  <fieldset class="fieldset">	
+				  <legend>Pesquisa</legend>
+					<div class="grid-5-12">
+						<label for="cnpj" class="form-lbl">Usuário</label>
+						<h:inputText value="#{cadastroLoginBean.userName}"  maxlength="18"  title="Usuário" onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase()"  />
+				  	</div>
+					<div class="grid-5-12">
+						<label for="rsocial" class="form-lbl">Senha</label>
+						<h:inputText value="#{cadastroLoginBean.password}"   maxlength="10" title="Senha" />
+				  	</div>
+					<div class="grid-2-12">
+						<h:commandButton action="#{cadastroLoginBean.pesquisar()}" type="submit" name="button" class="form-button btnLupa"   accesskey="p" title="Pesquisar" value="Pesquisar" />
+				  	</div>
+			  	<fieldset class="fieldset">
+			  		<legend>Usuário(s)</legend>
+			  		 <p:dataTable id="tabela" var="u" value="#{cadastroLoginBean.datamodel}" 
+                                emptyMessage="Não há Usuário cadastrados" 
+                                paginator="true" rows="5" resizableColumns="true"  lazy="true"
+                                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                currentPageReportTemplate="{currentPage} de {totalPages}"  
+                                rowsPerPageTemplate="5,10,15"
+                                paginatorPosition="bottom"> 
+	               
+	               <p:column>  
+	            		<f:facet name="header">  	
+	                		<h:outputText value="USUÁRIO" />  
+	            		</f:facet>  
+	            		<h:outputText value="#{u.username}" /> 
+	        		</p:column>
+	        		 <p:column>  
+	            		<f:facet name="header">  
+	                		<h:outputText value="SENHA" />  
+	            		</f:facet>  
+	            		<h:outputText value="#{u.password}" />  
+	        		</p:column>
+	        		 <p:column style="width: 50px;">  
+	            		<f:facet name="header">  
+	                		<h:outputText value="EDITAR" />  
+	            		</f:facet>  
+	            		<h:commandLink action="#{cadastroLoginBean.doEdicaoLogin(u)}" ajax="false" >
+	            			<img title="Clique p/ editar" style="padding-left: 20px;" alt="Clique p/ editar" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_editar.gif" />
+	            		</h:commandLink>
+	        		</p:column>
+	        		<p:column style="width: 50px;">  
+	            		<f:facet name="header">  
+	                		<h:outputText value="EXCLUIR" />  
+	            		</f:facet>  
+	            		<h:commandLink action="#{cadastroLoginBean.deleteUser(u)}"  ajax="false" onclick="alert('A Usuário foi excluido.');">
+	            			<img title="Clique p/ editar" style="padding-left: 20px;" alt="Clique p/ editar" src="#{facesContext.externalContext.request.contextPath}/imagens/icon_cancelar.gif" />
+	            		</h:commandLink>
+	        		</p:column>   
+			  		</p:dataTable>
+			  	</fieldset>
+				  </fieldset>
+			</div>
+		<div id="rodape" style="margin-top: 450px;" >
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+		</div>	
+	</div>
+	</h:form>
+</body>      
+</html>

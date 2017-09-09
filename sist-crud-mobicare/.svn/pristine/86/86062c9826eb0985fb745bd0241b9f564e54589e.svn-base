@@ -1,0 +1,154 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="prestador")
+public class Prestador implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="nome")
+	private String nome;
+	
+	@Column(name="cpf")
+	private String cpf;
+	
+	@Column(name="funcao")
+	private String funcao;
+	
+	@Column(name="dt_alocacao")
+	private String alocacao;
+	
+	@Column(name="dt_desalocacao")
+	private String desalocacao;
+	
+	@Column(name="salario")
+	private String salario;
+	
+	@Column(name="pis")
+	private String pis;
+	
+	@Column(name="locTarbalho")
+	private String locTarbalho;
+	
+	@OneToOne
+	@JoinColumn(name = "contratada_fk")
+	private Contratada contratada;
+	
+	@OneToOne
+	@JoinColumn(name = "contratante_fk")
+	private Contratante contratante;
+	
+	public Prestador(){
+		
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
+	}
+
+	public Contratada getContratada() {
+		return contratada;
+	}
+
+	public void setContratada(Contratada contratada) {
+		this.contratada = contratada;
+	}
+
+	public String getAlocacao() {
+		return alocacao;
+	}
+
+	public void setAlocacao(String alocacao) {
+		this.alocacao = alocacao;
+	}
+
+	public String getDesalocacao() {
+		return desalocacao;
+	}
+
+	public void setDesalocacao(String desalocacao) {
+		this.desalocacao = desalocacao;
+	}
+
+	public String getSalario() {
+		return salario;
+	}
+
+	public void setSalario(String salario) {
+		this.salario = salario;
+	}
+
+	public String getPis() {
+		return pis;
+	}
+
+	public void setPis(String pis) {
+		this.pis = pis;
+	}
+
+	public String getLocTarbalho() {
+		return locTarbalho;
+	}
+
+	public void setLocTarbalho(String locTarbalho) {
+		this.locTarbalho = locTarbalho;
+	}
+
+	public Contratante getContratante() {
+		return contratante;
+	}
+
+	public void setContratante(Contratante contratante) {
+		this.contratante = contratante;
+	}
+
+}

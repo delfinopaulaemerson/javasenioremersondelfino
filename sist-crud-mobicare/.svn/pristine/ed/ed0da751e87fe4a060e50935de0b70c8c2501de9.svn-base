@@ -1,0 +1,239 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="segurancaMedicinaTrabalho")
+public class SegurancaMedicinaTrabalho implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="sesmt")
+	private String sesmt;
+	
+	@Column(name="obs_sesmt")
+	private String obs_sesmt;
+	
+	@Column(name="cipa")
+	private String cipa;
+	
+	@Column(name="obs_cipa")
+	private String obs_cipa;
+	
+	@Column(name="epi")
+	private String epi;
+	
+	@Column(name="obs_epi")
+	private String obs_epi;
+	
+	@Column(name="pcmso")
+	private String pcmso;
+	
+	@Column(name="obs_pcmso")
+	private String obs_pcmso;
+	
+	@Column(name="ppra")
+	private String ppra;
+	
+	@Column(name="obs_ppra")
+	private String obs_ppra;
+	
+	@Column(name="pcmat")
+	private String pcmat;
+	
+	@Column(name="obs_pcmat")
+	private String obs_pcmat;
+	
+	@Column(name="rat")
+	private String rat;
+	
+	@Column(name="obs_rat")
+	private String obs_rat;
+	
+	@Column(name="exMed")
+	private String exMed;
+	
+	@Column(name="obs_exMed")
+	private String obs_exMed;
+	
+	@Column(name="cat")
+	private String cat;
+	
+	@Column(name="obs_cat")
+	private String obs_cat;
+	
+	public SegurancaMedicinaTrabalho(){
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getSesmt() {
+		return sesmt;
+	}
+
+	public void setSesmt(String sesmt) {
+		this.sesmt = sesmt;
+	}
+
+	public String getObs_sesmt() {
+		return obs_sesmt;
+	}
+
+	public void setObs_sesmt(String obs_sesmt) {
+		this.obs_sesmt = obs_sesmt;
+	}
+
+	public String getCipa() {
+		return cipa;
+	}
+
+	public void setCipa(String cipa) {
+		this.cipa = cipa;
+	}
+
+	public String getObs_cipa() {
+		return obs_cipa;
+	}
+
+	public void setObs_cipa(String obs_cipa) {
+		this.obs_cipa = obs_cipa;
+	}
+
+	public String getEpi() {
+		return epi;
+	}
+
+	public void setEpi(String epi) {
+		this.epi = epi;
+	}
+
+	public String getObs_epi() {
+		return obs_epi;
+	}
+
+	public void setObs_epi(String obs_epi) {
+		this.obs_epi = obs_epi;
+	}
+
+	public String getPcmso() {
+		return pcmso;
+	}
+
+	public void setPcmso(String pcmso) {
+		this.pcmso = pcmso;
+	}
+
+	public String getObs_pcmso() {
+		return obs_pcmso;
+	}
+
+	public void setObs_pcmso(String obs_pcmso) {
+		this.obs_pcmso = obs_pcmso;
+	}
+
+	public String getPpra() {
+		return ppra;
+	}
+
+	public void setPpra(String ppra) {
+		this.ppra = ppra;
+	}
+
+	public String getObs_ppra() {
+		return obs_ppra;
+	}
+
+	public void setObs_ppra(String obs_ppra) {
+		this.obs_ppra = obs_ppra;
+	}
+
+	public String getPcmat() {
+		return pcmat;
+	}
+
+	public void setPcmat(String pcmat) {
+		this.pcmat = pcmat;
+	}
+
+	public String getObs_pcmat() {
+		return obs_pcmat;
+	}
+
+	public void setObs_pcmat(String obs_pcmat) {
+		this.obs_pcmat = obs_pcmat;
+	}
+
+	public String getRat() {
+		return rat;
+	}
+
+	public void setRat(String rat) {
+		this.rat = rat;
+	}
+
+	public String getObs_rat() {
+		return obs_rat;
+	}
+
+	public void setObs_rat(String obs_rat) {
+		this.obs_rat = obs_rat;
+	}
+
+	public String getExMed() {
+		return exMed;
+	}
+
+	public void setExMed(String exMed) {
+		this.exMed = exMed;
+	}
+
+	public String getObs_exMed() {
+		return obs_exMed;
+	}
+
+	public void setObs_exMed(String obs_exMed) {
+		this.obs_exMed = obs_exMed;
+	}
+
+	public String getCat() {
+		return cat;
+	}
+
+	public void setCat(String cat) {
+		this.cat = cat;
+	}
+
+	public String getObs_cat() {
+		return obs_cat;
+	}
+
+	public void setObs_cat(String obs_cat) {
+		this.obs_cat = obs_cat;
+	}
+	
+	
+
+}

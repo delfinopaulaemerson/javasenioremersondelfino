@@ -1,0 +1,18 @@
+package br.com.emape.util;
+
+import java.util.Comparator;
+
+import br.com.emape.model.RelatorioGerencial;
+
+public class DataComparator implements Comparator<RelatorioGerencial> {
+
+	@Override
+	public int compare(RelatorioGerencial o1, RelatorioGerencial o2) {
+		// TODO Auto-generated method stub
+		return o1.getVide().compareTo(o2.getVide());
+	}
+
+	
+
+	
+}

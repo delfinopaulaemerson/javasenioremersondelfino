@@ -1,0 +1,38 @@
+INSERT INTO USUARIO (ID, PASSWORD, USERNAME,CNPJ) VALUES (1,'123','ADMIN','42645681000195');
+INSERT INTO USUARIO (ID, PASSWORD, USERNAME,CNPJ) VALUES (2,'123','CONTRATANTE','42645681000195');
+INSERT INTO USUARIO (ID, PASSWORD, USERNAME,CNPJ) VALUES (3,'123','CONTRATADA','42645681000195');
+
+INSERT INTO ROLE (ID, NAME) VALUES (1,'ADMIN');
+INSERT INTO ROLE (ID, NAME) VALUES (2,'CONTRATANTE');
+INSERT INTO ROLE (ID, NAME) VALUES (3,'CONTRATADA');
+
+INSERT INTO USUARIO_ROLE (USUARIO_ID, ROLES_ID) VALUES (1,1);
+INSERT INTO USUARIO_ROLE (USUARIO_ID, ROLES_ID) VALUES (2,2);
+INSERT INTO USUARIO_ROLE (USUARIO_ID, ROLES_ID) VALUES (3,3);
+
+INSERT INTO mes(id,descricao, calandario) VALUES (1,'JANEIRO','01');
+INSERT INTO mes(id,descricao, calandario) VALUES (2,'FEVEREIRO','02');
+INSERT INTO mes(id,descricao, calandario) VALUES (3,'MARCO','03');
+INSERT INTO mes(id,descricao, calandario) VALUES (4,'ABRIL','04');
+INSERT INTO mes(id,descricao, calandario) VALUES (5,'MAIO','05');
+INSERT INTO mes(id,descricao, calandario) VALUES (6,'JUNHO','06');
+INSERT INTO mes(id,descricao, calandario) VALUES (7,'JULHO','07');
+INSERT INTO mes(id,descricao, calandario) VALUES (8,'AGOSTO','08');
+INSERT INTO mes(id,descricao, calandario) VALUES (9,'SETEMBRO','09');
+INSERT INTO mes(id,descricao, calandario) VALUES (10,'OUTUBRO','10');
+INSERT INTO mes(id,descricao, calandario) VALUES (11,'NOVEMBRO','11');
+INSERT INTO mes(id,descricao, calandario) VALUES (12,'DEZEMBRO','12');
+
+
+INSERT INTO ano (id,descricao) VALUES (1,'2012');
+INSERT INTO ano (id,descricao) VALUES (2,'2013');
+INSERT INTO ano (id,descricao) VALUES (3,'2014');
+INSERT INTO ano (id,descricao) VALUES (4,'2015');
+INSERT INTO ano (id,descricao) VALUES (5,'2016');
+INSERT INTO ano (id,descricao) VALUES (6,'2017');
+INSERT INTO ano (id,descricao) VALUES (7,'2018');
+INSERT INTO ano (id,descricao) VALUES (8,'2019');
+INSERT INTO ano (id,descricao) VALUES (9,'2020');
+
+
+

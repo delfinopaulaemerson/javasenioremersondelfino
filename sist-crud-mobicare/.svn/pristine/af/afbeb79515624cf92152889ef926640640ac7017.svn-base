@@ -1,0 +1,887 @@
+package br.com.emape.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.emape.model.Ano;
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.FolhaPagamento;
+import br.com.emape.model.Gestao;
+import br.com.emape.model.JornadaTrabalho;
+import br.com.emape.model.Mes;
+import br.com.emape.model.ParteFiscal;
+import br.com.emape.model.RotinaAdmissao;
+import br.com.emape.model.RotinaDesligamento;
+import br.com.emape.model.SegurancaMedicinaTrabalho;
+
+@Component("gestaoDAO")
+public class GestaoDAO {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	private static final String PARTE_FISCAL = "PARTE FISCAL";
+	private static final String FOLHA_PAGAMENTO = "FOLHA DE PAGAMENTO";
+	private static final String ROTINA_ADMISSAO = "ROTINA DE ADMISSAO";
+	private static final String ROTINA_DESLIGAMENTO = "ROTINA DE DESLIGAMENTO";
+	private static final String JORNADA_TRABALHO = "JORNADA DE TRABALHO";
+	private static final String SEGURANCA_MEDICINA_TRABALHO = "SEGURANCA E MEDICINA DO TRABALHO";
+	private static final Long ZERO = new Long(0);
+
+	/**
+	 * retorna o objeto gestao
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public Gestao findById(Long id) throws Exception {
+
+		Gestao gestao = this.entityManager.find(Gestao.class, id);
+
+		return gestao;
+	}
+
+	/**
+	 * deleta o escopo de gestao
+	 * 
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void deleteGestao(Long id) throws Exception {
+
+		ParteFiscal p;
+
+		FolhaPagamento f;
+
+		JornadaTrabalho j;
+
+		RotinaAdmissao ra;
+
+		RotinaDesligamento rd;
+
+		SegurancaMedicinaTrabalho sm;
+
+		Gestao g = this.entityManager.find(Gestao.class, id);
+
+		if (g.getParteFiscal() != null) {
+
+			p = this.entityManager.find(ParteFiscal.class, g.getParteFiscal()
+					.getId());
+
+			this.entityManager.remove(g);
+
+			this.entityManager.remove(p);
+
+		}
+
+		if (g.getFolhaPagamento() != null) {
+
+			f = this.entityManager.find(FolhaPagamento.class, g
+					.getFolhaPagamento().getId());
+
+			this.entityManager.remove(g);
+
+			this.entityManager.remove(f);
+		}
+
+		if (g.getJornadaTrabalho() != null) {
+
+			j = this.entityManager.find(JornadaTrabalho.class, g
+					.getJornadaTrabalho().getId());
+
+			this.entityManager.remove(g);
+
+			this.entityManager.remove(j);
+		}
+
+		if (g.getRotinaAdmissao() != null) {
+
+			ra = this.entityManager.find(RotinaAdmissao.class, g
+					.getRotinaAdmissao().getId());
+
+			this.entityManager.remove(g);
+
+			this.entityManager.remove(ra);
+		}
+
+		if (g.getRotinaDesligamento() != null) {
+
+			rd = this.entityManager.find(RotinaDesligamento.class, g
+					.getRotinaDesligamento().getId());
+
+			this.entityManager.remove(g);
+
+			this.entityManager.remove(rd);
+		}
+
+		if (g.getSegurancaMedicinaTrabalho() != null) {
+
+			sm = this.entityManager.find(SegurancaMedicinaTrabalho.class, g
+					.getSegurancaMedicinaTrabalho().getId());
+
+			this.entityManager.remove(g);
+
+			this.entityManager.remove(sm);
+		}
+
+		this.entityManager.flush();
+
+		this.entityManager.clear();
+
+	}
+
+	/**
+	 * obtem uma lista de gestoes
+	 * 
+	 * @param idContrante
+	 * @param idContratada
+	 * @param mes
+	 * @param ano
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Gestao> findAllGestao(Long idContrante, Long idContratada,
+			String mes, String ano) throws Exception {
+
+		Query query = this.entityManager
+				.createQuery(" FROM Gestao g WHERE g.contratante.id=:a AND g.contratada.id=:b AND g.mes=:c AND g.ano=:d ");
+
+		query.setParameter("a", idContrante);
+		query.setParameter("b", idContratada);
+		query.setParameter("c", mes);
+		query.setParameter("d", ano);
+
+		return query.getResultList();
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Gestao> findAllGestaoByContratante(Long idContrante,Long idContratada) throws Exception {
+
+		Query query = this.entityManager
+				.createQuery(" FROM Gestao g WHERE g.contratante.id=:a and g.contratada.id=:b order by g.id ");
+
+		query.setParameter("a", idContrante);
+		query.setParameter("b", idContratada);
+
+		return query.getResultList();
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Gestao> findAll() throws Exception{
+		
+		Query query = this.entityManager.createQuery(" FROM Gestao g order by g.contratante.id,g.contratada.id ");
+		
+		return query.getResultList();
+	}
+	
+	/**
+	 * retorna uma lista de gestao da contratada
+	 * @return  List<Gestao>
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Gestao> findGestaoByContratada(Long idContratada)throws Exception{
+		Query query = this.entityManager.createQuery(" FROM Gestao g WHERE g.contratada.id=:a order by g.contratante.id,g.contratada.id ");
+
+		query.setParameter("a", idContratada);
+
+		return query.getResultList();
+	}
+
+	
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void saveMedSegTrabalho(SegurancaMedicinaTrabalho s, Gestao gestao)
+			throws Exception {
+
+		if (gestao.getId()  > ZERO) {
+
+			Gestao g = this.entityManager.find(Gestao.class, gestao.getId());
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSituacao(gestao.getSituacao());
+
+			SegurancaMedicinaTrabalho m = this.entityManager.find(
+					SegurancaMedicinaTrabalho.class, g
+							.getSegurancaMedicinaTrabalho().getId());
+
+			m.setCat(s.getCat());
+			m.setCipa(s.getCipa());
+			m.setEpi(s.getEpi());
+			m.setExMed(s.getExMed());
+			m.setPcmat(s.getPcmat());
+			m.setPcmso(s.getPcmso());
+			m.setPpra(s.getPpra());
+			m.setRat(s.getRat());
+			m.setSesmt(s.getSesmt());
+			m.setObs_cat(s.getObs_cat());
+			m.setObs_cipa(s.getObs_cipa());
+			m.setObs_epi(s.getObs_epi());
+			m.setObs_exMed(s.getObs_exMed());
+			m.setObs_pcmat(s.getObs_pcmat());
+			m.setObs_pcmso(s.getObs_pcmat());
+			m.setObs_ppra(s.getObs_ppra());
+			m.setObs_rat(s.getObs_rat());
+			m.setObs_sesmt(s.getObs_sesmt());
+           
+			g.setSegurancaMedicinaTrabalho(m);
+
+			g.setDescricao(SEGURANCA_MEDICINA_TRABALHO);
+
+			this.entityManager.flush();
+			this.entityManager.clear();
+
+		} else {
+
+			SegurancaMedicinaTrabalho m = new SegurancaMedicinaTrabalho();
+
+			m.setCat(s.getCat());
+			m.setCipa(s.getCipa());
+			m.setEpi(s.getEpi());
+			m.setExMed(s.getExMed());
+			m.setPcmat(s.getPcmat());
+			m.setPcmso(s.getPcmso());
+			m.setPpra(s.getPpra());
+			m.setRat(s.getRat());
+			m.setSesmt(s.getSesmt());
+			m.setObs_cat(s.getObs_cat());
+			m.setObs_cipa(s.getObs_cipa());
+			m.setObs_epi(s.getObs_epi());
+			m.setObs_exMed(s.getObs_exMed());
+			m.setObs_pcmat(s.getObs_pcmat());
+			m.setObs_pcmso(s.getObs_pcmat());
+			m.setObs_ppra(s.getObs_ppra());
+			m.setObs_rat(s.getObs_rat());
+			m.setObs_sesmt(s.getObs_sesmt());
+
+			this.entityManager.persist(m);
+			this.entityManager.flush();
+
+			Gestao g = new Gestao();
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSegurancaMedicinaTrabalho(m);
+			g.setSituacao(gestao.getSituacao());
+
+			g.setDescricao(SEGURANCA_MEDICINA_TRABALHO);
+
+			saveGestao(g);
+
+			this.entityManager.clear();
+
+		}
+
+	}
+
+	/**
+	 * metodo retorna uma lista de contratante
+	 * 
+	 * @return List<Contratada>
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Mes> getListaMes() throws Exception {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Mes> query = criteriaBuilder.createQuery(Mes.class);
+		query.select(query.from(Mes.class));
+
+		return entityManager.createQuery(query).getResultList();
+
+	}
+
+	/**
+	 * salva o escopo de jornada de trabalho
+	 * 
+	 * @param j
+	 * @param gestao
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void saveJornadaTrabalho(JornadaTrabalho j, Gestao gestao)
+			throws Exception {
+
+		if (gestao.getId()  > ZERO) {
+
+			Gestao g = this.entityManager.find(Gestao.class, gestao.getId());
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSituacao(gestao.getSituacao());
+
+			JornadaTrabalho jt = this.entityManager.find(JornadaTrabalho.class,
+					g.getJornadaTrabalho().getId());
+
+			jt.setAcordCompHoras(j.getAcordCompHoras());
+			jt.setAcordProrrHoras(j.getAcordProrrHoras());
+			jt.setAutMte(j.getAutMte());
+			jt.setBancHoras(j.getBancHoras());
+			jt.setCertRelPonto(j.getCertRelPonto());
+			jt.setEscRevez(j.getEscRevez());
+			jt.setFolPonto(j.getFolPonto());
+			jt.setNormColCat(j.getNormColCat());
+			jt.setObs_acordCompHoras(j.getObs_acordCompHoras());
+			jt.setObs_acordProrrHoras(j.getObs_acordProrrHoras());
+			jt.setObs_autMte(j.getObs_autMte());
+			jt.setObs_bancHoras(j.getObs_bancHoras());
+			jt.setObs_certRelPonto(j.getObs_certRelPonto());
+			jt.setObs_escRevez(j.getObs_escRevez());
+			jt.setObs_folPonto(j.getObs_folPonto());
+			jt.setObs_normColCat(j.getObs_normColCat());
+
+			g.setJornadaTrabalho(jt);
+			g.setDescricao(JORNADA_TRABALHO);
+
+			this.entityManager.flush();
+			this.entityManager.clear();
+
+		} else {
+
+			JornadaTrabalho jt = new JornadaTrabalho();
+
+			jt.setAcordCompHoras(j.getAcordCompHoras());
+			jt.setAcordProrrHoras(j.getAcordProrrHoras());
+			jt.setAutMte(j.getAutMte());
+			jt.setBancHoras(j.getBancHoras());
+			jt.setCertRelPonto(j.getCertRelPonto());
+			jt.setEscRevez(j.getEscRevez());
+			jt.setFolPonto(j.getFolPonto());
+			jt.setNormColCat(j.getNormColCat());
+			jt.setObs_acordCompHoras(j.getObs_acordCompHoras());
+			jt.setObs_acordProrrHoras(j.getObs_acordProrrHoras());
+			jt.setObs_autMte(j.getObs_autMte());
+			jt.setObs_bancHoras(j.getObs_bancHoras());
+			jt.setObs_certRelPonto(j.getObs_certRelPonto());
+			jt.setObs_escRevez(j.getObs_escRevez());
+			jt.setObs_folPonto(j.getObs_folPonto());
+			jt.setObs_normColCat(j.getObs_normColCat());
+
+			this.entityManager.persist(jt);
+			this.entityManager.flush();
+
+			Gestao g = new Gestao();
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setJornadaTrabalho(jt);
+			g.setSituacao(gestao.getSituacao());
+
+			g.setDescricao(JORNADA_TRABALHO);
+
+			saveGestao(g);
+
+			this.entityManager.clear();
+
+		}
+	}
+
+	/**
+	 * 
+	 * @param d
+	 * @param gestao
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void salvarRotinaDesligamento(RotinaDesligamento d, Gestao gestao)
+			throws Exception {
+
+		if (gestao.getId()  > ZERO) {
+
+			Gestao g = this.entityManager.find(Gestao.class, gestao.getId());
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSituacao(gestao.getSituacao());
+
+			RotinaDesligamento r = this.entityManager.find(
+					RotinaDesligamento.class, gestao.getRotinaDesligamento()
+							.getId());
+
+			r.setChavLibFgts(d.getChavLibFgts());
+			r.setComunDesl(d.getComunDesl());
+			r.setDeclCaged(d.getDeclCaged());
+			r.setExamMedDem(d.getExamMedDem());
+			r.setExtFgts(d.getExtFgts());
+			r.setGrrf(d.getGrrf());
+			r.setSegDesemp(d.getSegDesemp());
+			r.setTermHomRec(d.getTermHomRec());
+			r.setTermQuitRec(d.getTermQuitRec());
+			r.setTermRec(d.getTermRec());
+			r.setObs_chavLibFgts(d.getObs_chavLibFgts());
+			r.setObs_comunDesl(d.getObs_comunDesl());
+			r.setObs_declCaged(d.getObs_declCaged());
+			r.setObs_examMedDem(d.getObs_examMedDem());
+			r.setObs_extFgts(d.getObs_extFgts());
+			r.setObs_grrf(d.getObs_grrf());
+			r.setObs_segDesemp(d.getObs_segDesemp());
+			r.setObs_termHomRec(d.getObs_termHomRec());
+			r.setObs_termQuitRec(d.getObs_termQuitRec());
+			r.setObs_termRec(d.getObs_termRec());
+
+			g.setRotinaDesligamento(r);
+			g.setDescricao(ROTINA_DESLIGAMENTO);
+
+			this.entityManager.flush();
+			this.entityManager.clear();
+
+		} else {
+
+			RotinaDesligamento r = new RotinaDesligamento();
+
+			r.setChavLibFgts(d.getChavLibFgts());
+			r.setComunDesl(d.getComunDesl());
+			r.setDeclCaged(d.getDeclCaged());
+			r.setExamMedDem(d.getExamMedDem());
+			r.setExtFgts(d.getExtFgts());
+			r.setGrrf(d.getGrrf());
+			r.setSegDesemp(d.getSegDesemp());
+			r.setTermHomRec(d.getTermHomRec());
+			r.setTermQuitRec(d.getTermQuitRec());
+			r.setTermRec(d.getTermRec());
+			r.setObs_chavLibFgts(d.getObs_chavLibFgts());
+			r.setObs_comunDesl(d.getObs_comunDesl());
+			r.setObs_declCaged(d.getObs_declCaged());
+			r.setObs_examMedDem(d.getObs_examMedDem());
+			r.setObs_extFgts(d.getObs_extFgts());
+			r.setObs_grrf(d.getObs_grrf());
+			r.setObs_segDesemp(d.getObs_segDesemp());
+			r.setObs_termHomRec(d.getObs_termHomRec());
+			r.setObs_termQuitRec(d.getObs_termQuitRec());
+			r.setObs_termRec(d.getObs_termRec());
+
+			this.entityManager.persist(r);
+			this.entityManager.flush();
+
+			Gestao g = new Gestao();
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setRotinaDesligamento(r);
+			g.setDescricao(ROTINA_DESLIGAMENTO);
+			g.setSituacao(gestao.getSituacao());
+
+			saveGestao(g);
+
+			this.entityManager.clear();
+
+		}
+	}
+
+	/**
+	 * salva o escopo de rotina de admissao
+	 * 
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void saveRotinaAdmissao(RotinaAdmissao rot, Gestao gestao)
+			throws Exception {
+
+		if (gestao.getId()  > ZERO) {
+
+			Gestao g = this.entityManager.find(Gestao.class, gestao.getId());
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSituacao(gestao.getSituacao());
+
+			RotinaAdmissao r = this.entityManager.find(RotinaAdmissao.class,
+					gestao.getRotinaAdmissao().getId());
+
+			r.setContTrab(rot.getContTrab());
+			r.setDeclCaged(rot.getDeclCaged());
+			r.setDeclDependIrrf(rot.getDeclDependIrrf());
+			r.setDeclMultVenc(rot.getDeclMultVenc());
+			r.setDescContSind(rot.getDescContSind());
+			r.setExaMedAdmi(rot.getExaMedAdmi());
+			r.setFichSalFam(rot.getFichSalFam());
+			r.setInclVt(rot.getInclVt());
+			r.setRegEmpregado(rot.getRegEmpregado());
+			r.setObs_contTrab(rot.getObs_contTrab());
+			r.setObs_declCaged(rot.getObs_declCaged());
+			r.setObs_declDependIrrf(rot.getObs_declDependIrrf());
+			r.setObs_declMultVenc(rot.getObs_declMultVenc());
+			r.setObs_descContSind(rot.getObs_descContSind());
+			r.setObs_exaMedAdmi(rot.getObs_exaMedAdmi());
+			r.setObs_fichSalFam(rot.getObs_fichSalFam());
+			r.setObs_inclVt(rot.getObs_inclVt());
+			r.setObs_regEmpregado(rot.getRegEmpregado());
+
+			g.setRotinaAdmissao(r);
+			g.setDescricao(ROTINA_ADMISSAO);
+
+			this.entityManager.flush();
+			this.entityManager.clear();
+
+		} else {
+
+			RotinaAdmissao r = new RotinaAdmissao();
+
+			r.setContTrab(rot.getContTrab());
+			r.setDeclCaged(rot.getDeclCaged());
+			r.setDeclDependIrrf(rot.getDeclDependIrrf());
+			r.setDeclMultVenc(rot.getDeclMultVenc());
+			r.setDescContSind(rot.getDescContSind());
+			r.setExaMedAdmi(rot.getExaMedAdmi());
+			r.setFichSalFam(rot.getFichSalFam());
+			r.setInclVt(rot.getInclVt());
+			r.setRegEmpregado(rot.getRegEmpregado());
+			r.setObs_contTrab(rot.getObs_contTrab());
+			r.setObs_declCaged(rot.getObs_declCaged());
+			r.setObs_declDependIrrf(rot.getObs_declDependIrrf());
+			r.setObs_declMultVenc(rot.getObs_declMultVenc());
+			r.setObs_descContSind(rot.getObs_descContSind());
+			r.setObs_exaMedAdmi(rot.getObs_exaMedAdmi());
+			r.setObs_fichSalFam(rot.getObs_fichSalFam());
+			r.setObs_inclVt(rot.getObs_inclVt());
+			r.setObs_regEmpregado(rot.getRegEmpregado());
+			
+
+			this.entityManager.persist(r);
+			this.entityManager.flush();
+
+			Gestao g = new Gestao();
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setRotinaAdmissao(r);
+			g.setDescricao(ROTINA_ADMISSAO);
+			g.setSituacao(gestao.getSituacao());
+
+			saveGestao(g);
+
+			this.entityManager.clear();
+		}
+	}
+
+	/**
+	 * metodo salva o escopo de parte fiscal
+	 * 
+	 * @param parteFiscal
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void saveParteFiscal(ParteFiscal parteFiscal, Gestao gestao)
+			throws Exception {
+
+		if (gestao.getId()  > ZERO) {
+
+			Gestao g = this.entityManager.find(Gestao.class, gestao.getId());
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSituacao(gestao.getSituacao());
+
+			ParteFiscal p = this.entityManager.find(ParteFiscal.class, gestao
+					.getParteFiscal().getId());
+
+			p.setCartaoCnpj(parteFiscal.getCartaoCnpj());
+			p.setCndDebitostrabalhista(parteFiscal.getCndDebitostrabalhista());
+			p.setCndPrevidencia(parteFiscal.getCndPrevidencia());
+			p.setCndTributaria(parteFiscal.getCndTributaria());
+			p.setContratoSocial(parteFiscal.getContratoSocial());
+			p.setCrfFgts(parteFiscal.getCrfFgts());
+			p.setDarf(parteFiscal.getDarf());
+			p.setDeclRais(parteFiscal.getDeclRais());
+			p.setFolhaPagamento(parteFiscal.getFolhaPagamento());
+			p.setGuiaPrevSoc(parteFiscal.getGuiaPrevSoc());
+			p.setGuiaRecFgts(parteFiscal.getGuiaRecFgts());
+			p.setNotaFiscRetencaoInss(parteFiscal.getNotaFiscRetencaoInss());
+			p.setPlaFuncAlocContratante(parteFiscal.getPlaFuncAlocContratante());
+			p.setProtConecSocial(parteFiscal.getProtConecSocial());
+			p.setSefipGfip(parteFiscal.getSefipGfip());
+			p.setObs_cartaoCnpj(parteFiscal.getObs_cartaoCnpj());
+			p.setObs_cndDebitostrabalhista(parteFiscal
+					.getObs_cndDebitostrabalhista());
+			p.setObs_cndPrevidencia(parteFiscal.getObs_cndPrevidencia());
+			p.setObs_cndTributaria(parteFiscal.getObs_cndTributaria());
+			p.setObs_contratoSocial(parteFiscal.getObs_contratoSocial());
+			p.setObs_crfFgts(parteFiscal.getObs_crfFgts());
+			p.setObs_darf(parteFiscal.getObs_darf());
+			p.setObs_declRais(parteFiscal.getObs_declRais());
+			p.setObs_folhaPagamento(parteFiscal.getObs_folhaPagamento());
+			p.setObs_guiaPrevSoc(parteFiscal.getObs_guiaPrevSoc());
+			p.setObs_guiaRecFgts(parteFiscal.getObs_guiaRecFgts());
+			p.setObs_notaFiscRetencaoInss(parteFiscal
+					.getObs_notaFiscRetencaoInss());
+			p.setObs_plaFuncAlocContratante(parteFiscal
+					.getObs_plaFuncAlocContratante());
+			p.setObs_protConecSocial(parteFiscal.getObs_protConecSocial());
+			p.setObs_sefipGfip(parteFiscal.getObs_sefipGfip());
+
+			g.setParteFiscal(p);
+			g.setDescricao(PARTE_FISCAL);
+
+			this.entityManager.flush();
+			this.entityManager.clear();
+
+		} else {
+
+			ParteFiscal p = new ParteFiscal();
+
+			p.setCartaoCnpj(parteFiscal.getCartaoCnpj());
+			p.setCndDebitostrabalhista(parteFiscal.getCndDebitostrabalhista());
+			p.setCndPrevidencia(parteFiscal.getCndPrevidencia());
+			p.setCndTributaria(parteFiscal.getCndTributaria());
+			p.setContratoSocial(parteFiscal.getContratoSocial());
+			p.setCrfFgts(parteFiscal.getCrfFgts());
+			p.setDarf(parteFiscal.getDarf());
+			p.setDeclRais(parteFiscal.getDeclRais());
+			p.setFolhaPagamento(parteFiscal.getFolhaPagamento());
+			p.setGuiaPrevSoc(parteFiscal.getGuiaPrevSoc());
+			p.setGuiaRecFgts(parteFiscal.getGuiaRecFgts());
+			p.setNotaFiscRetencaoInss(parteFiscal.getNotaFiscRetencaoInss());
+			p.setPlaFuncAlocContratante(parteFiscal.getPlaFuncAlocContratante());
+			p.setProtConecSocial(parteFiscal.getProtConecSocial());
+			p.setSefipGfip(parteFiscal.getSefipGfip());
+			p.setObs_cartaoCnpj(parteFiscal.getObs_cartaoCnpj());
+			p.setObs_cndDebitostrabalhista(parteFiscal
+					.getObs_cndDebitostrabalhista());
+			p.setObs_cndPrevidencia(parteFiscal.getObs_cndPrevidencia());
+			p.setObs_cndTributaria(parteFiscal.getObs_cndTributaria());
+			p.setObs_contratoSocial(parteFiscal.getObs_contratoSocial());
+			p.setObs_crfFgts(parteFiscal.getObs_crfFgts());
+			p.setObs_darf(parteFiscal.getObs_darf());
+			p.setObs_declRais(parteFiscal.getObs_declRais());
+			p.setObs_folhaPagamento(parteFiscal.getObs_folhaPagamento());
+			p.setObs_guiaPrevSoc(parteFiscal.getObs_guiaPrevSoc());
+			p.setObs_guiaRecFgts(parteFiscal.getObs_guiaRecFgts());
+			p.setObs_notaFiscRetencaoInss(parteFiscal
+					.getObs_notaFiscRetencaoInss());
+			p.setObs_plaFuncAlocContratante(parteFiscal
+					.getObs_plaFuncAlocContratante());
+			p.setObs_protConecSocial(parteFiscal.getObs_protConecSocial());
+			p.setObs_sefipGfip(parteFiscal.getObs_sefipGfip());
+
+			this.entityManager.persist(p);
+			this.entityManager.flush();
+
+			Gestao g = new Gestao();
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setParteFiscal(p);
+			g.setDescricao(PARTE_FISCAL);
+			g.setSituacao(gestao.getSituacao());
+
+			saveGestao(g);
+
+			this.entityManager.clear();
+
+		}
+	}
+
+	/**
+	 * salva o escopo de folha de pagamento
+	 * 
+	 * @param folhaPagamento
+	 * @param gestao
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void saveFolhaPagamento(FolhaPagamento folhaPagamento, Gestao gestao)
+			throws Exception {
+
+		if (gestao.getId()  > ZERO) {
+
+			Gestao g = this.entityManager.find(Gestao.class, gestao.getId());
+
+			g.setContratante(gestao.getContratante());
+			g.setContratada(gestao.getContratada());
+			g.setAno(gestao.getAno());
+			g.setMes(gestao.getMes());
+			g.setSituacao(gestao.getSituacao());
+
+			FolhaPagamento f = this.entityManager.find(FolhaPagamento.class,
+					gestao.getFolhaPagamento().getId());
+
+			f.setAbonPec(folhaPagamento.getAbonPec());
+			f.setAbPecFeria(folhaPagamento.getAbPecFeria());
+			f.setAvisFerias(folhaPagamento.getAvisFerias());
+			f.setCompInscPat(folhaPagamento.getCompInscPat());
+			f.setCompPagVt(folhaPagamento.getCompPagVt());
+			f.setDarf(folhaPagamento.getDarf());
+			f.setFolhaPagamento(folhaPagamento.getFolhaPagamento());
+			f.setGps(folhaPagamento.getGps());
+			f.setGrf(folhaPagamento.getGrf());
+			f.setNormaColCat(folhaPagamento.getNormaColCat());
+			f.setPlaCargSal(folhaPagamento.getPlaCargSal());
+			f.setRecPagSalario(folhaPagamento.getRecPagSalario());
+			f.setObs_abonPec(folhaPagamento.getObs_abonPec());
+			f.setObs_abPecFeria(folhaPagamento.getAbPecFeria());
+			f.setObs_avisFerias(folhaPagamento.getObs_avisFerias());
+			f.setObs_compInscPat(folhaPagamento.getObs_compInscPat());
+			f.setObs_compPagVt(folhaPagamento.getObs_compPagVt());
+			f.setObs_darf(folhaPagamento.getObs_darf());
+			f.setObs_folhaPagamento(folhaPagamento.getObs_folhaPagamento());
+			f.setObs_grf(folhaPagamento.getObs_grf());
+			f.setGps(folhaPagamento.getGps());
+			f.setObs_normaColCat(folhaPagamento.getObs_normaColCat());
+			f.setObs_plaCargSal(folhaPagamento.getObs_plaCargSal());
+			f.setObs_recPagSalario(folhaPagamento.getObs_recPagSalario());
+
+			g.setFolhaPagamento(f);
+			g.setDescricao(FOLHA_PAGAMENTO);
+
+			this.entityManager.flush();
+			this.entityManager.clear();
+
+		} else {
+
+		}
+
+		FolhaPagamento f = new FolhaPagamento();
+
+		f.setAbonPec(folhaPagamento.getAbonPec());
+		f.setAbPecFeria(folhaPagamento.getAbPecFeria());
+		f.setAvisFerias(folhaPagamento.getAvisFerias());
+		f.setCompInscPat(folhaPagamento.getCompInscPat());
+		f.setCompPagVt(folhaPagamento.getCompPagVt());
+		f.setDarf(folhaPagamento.getDarf());
+		f.setFolhaPagamento(folhaPagamento.getFolhaPagamento());
+		f.setGps(folhaPagamento.getGps());
+		f.setGrf(folhaPagamento.getGrf());
+		f.setNormaColCat(folhaPagamento.getNormaColCat());
+		f.setPlaCargSal(folhaPagamento.getPlaCargSal());
+		f.setRecPagSalario(folhaPagamento.getRecPagSalario());
+		f.setObs_abonPec(folhaPagamento.getObs_abonPec());
+		f.setObs_abPecFeria(folhaPagamento.getAbPecFeria());
+		f.setObs_avisFerias(folhaPagamento.getObs_avisFerias());
+		f.setObs_compInscPat(folhaPagamento.getObs_compInscPat());
+		f.setObs_compPagVt(folhaPagamento.getObs_compPagVt());
+		f.setObs_darf(folhaPagamento.getObs_darf());
+		f.setObs_folhaPagamento(folhaPagamento.getObs_folhaPagamento());
+		f.setObs_grf(folhaPagamento.getObs_grf());
+		f.setGps(folhaPagamento.getGps());
+		f.setObs_normaColCat(folhaPagamento.getObs_normaColCat());
+		f.setObs_plaCargSal(folhaPagamento.getObs_plaCargSal());
+		f.setObs_recPagSalario(folhaPagamento.getObs_recPagSalario());
+
+		this.entityManager.persist(f);
+		this.entityManager.flush();
+
+		Gestao g = new Gestao();
+
+		g.setContratante(gestao.getContratante());
+		g.setContratada(gestao.getContratada());
+		g.setAno(gestao.getAno());
+		g.setMes(gestao.getMes());
+
+		g.setFolhaPagamento(f);
+		g.setDescricao(FOLHA_PAGAMENTO);
+		g.setSituacao(gestao.getSituacao());
+		saveGestao(g);
+
+		this.entityManager.clear();
+	}
+
+	/**
+	 * salva o modulo de gestao
+	 * 
+	 * @param gestao
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public void saveGestao(Gestao gestao) throws Exception {
+
+		this.entityManager.persist(gestao);
+		this.entityManager.flush();
+		this.entityManager.clear();
+
+	}
+
+	/**
+	 * metodo retorna um objeto contratante
+	 * 
+	 * @param cnpjContratante
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Contratante> findByCnpjContratante(String cnpjContratante)
+			throws Exception {
+
+		Query query = entityManager.createQuery(
+				"from Contratante where cnpj=:cnpj").setParameter("cnpj",
+				cnpjContratante);
+
+		return query.getResultList();
+	}
+
+	/**
+	 * metodo retorna um objeto contratada
+	 * 
+	 * @param CnpjContratada
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Contratada> findByCnpjContratada(String CnpjContratada)
+			throws Exception {
+
+		Query query = entityManager.createQuery(
+				"from Contratada where cnpj=:cnpj").setParameter("cnpj",
+				CnpjContratada);
+
+		return query.getResultList();
+	}
+
+	/**
+	 * metodo retorna uma lista de contratante
+	 * 
+	 * @return List<Contratada>
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Ano> getListaAno() throws Exception {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Ano> query = criteriaBuilder.createQuery(Ano.class);
+		query.select(query.from(Ano.class));
+
+		return entityManager.createQuery(query).getResultList();
+
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
+}

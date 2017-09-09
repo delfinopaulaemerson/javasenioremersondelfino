@@ -1,0 +1,141 @@
+package br.com.emape.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.emape.dao.ContratanteDao;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Dados;
+import br.com.emape.model.Endereco;
+
+@Component("contratanteService")
+public class ContratanteService {
+
+	@Autowired
+	private ContratanteDao contratanteDao;
+
+	/**
+	 * metodo cadastra o cadastrante
+	 * 
+	 * @param contratante
+	 * @param endereco
+	 * @param dados
+	 * @throws Exception
+	 */
+	public void cadastrarContratante(Contratante contratante,
+			Endereco endereco, Dados dados) throws Exception {
+
+		this.contratanteDao.cadastrarContratante(contratante, endereco, dados);
+
+	}
+	
+	/**
+	 * metodo responsavel pela lista de paginacao
+	 * @param first
+	 * @param pageSize
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> findPagination(int first, int pageSize) throws Exception{
+		
+		return this.contratanteDao.findPagination(first, pageSize);
+	}
+	
+	/**
+	 * retorna uma lista de contratante 
+	 * @param idContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> findByContratada(Long idContratada) throws Exception{
+		
+		 return this.contratanteDao.findByContratada(idContratada);
+	}
+	
+	/**
+	 * metodo responsavel pela contagem de linhas
+	 * @return
+	 * @throws Exception
+	 */
+	public int findRowCount() throws Exception{
+		
+		return this.contratanteDao.findRowCount();
+	}
+
+	/**
+	 * metodo retorna uma lista de contratante.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+	public List<Contratante> Find() throws Exception {
+
+		return this.contratanteDao.Find();
+	}
+
+	/**
+	 * retorna uma lista de todas as contratantes
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> getListaContratante() throws Exception {
+
+		return this.contratanteDao.getListaContratante();
+	}
+
+	/**
+	 * metodo preocura o contratante
+	 * 
+	 * @param c
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> find() throws Exception {
+		return this.contratanteDao.Find();
+	}
+
+	/**
+	 * recupera o objeto com o id
+	 * 
+	 * @param id
+	 * @return Contratante
+	 */
+	public Contratante findById(Long id) {
+
+		return this.contratanteDao.findById(id);
+
+	}
+	
+	/**
+	 * seleciona a contratante com o numero do cnpj
+	 * @param cnpj
+	 * @return
+	 */
+	public Contratante findByCnpj(String cnpj){
+		return this.contratanteDao.findByCnpj(cnpj);
+	}
+
+	public void updateContratante(Contratante c, Endereco e, Dados d)
+			throws Exception {
+
+		this.contratanteDao.updateContratante(c, e, d);
+	}
+
+	/**
+	 * deleta o objeto
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
+	public void deleteContratante(Contratante contratante) throws Exception {
+
+		this.contratanteDao.deleteContratante(contratante);
+	}
+
+}

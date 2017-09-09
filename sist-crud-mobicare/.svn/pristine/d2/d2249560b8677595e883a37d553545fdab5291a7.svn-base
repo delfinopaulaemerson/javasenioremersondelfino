@@ -1,0 +1,294 @@
+package br.com.emape.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Contratante;
+import br.com.emape.model.RelatorioAdmin;
+import br.com.emape.service.RelatorioAdminService;
+import br.com.emape.service.RelatorioService;
+
+
+@ManagedBean
+@Component("relatorioAdminBean")
+@RequestScoped
+public class RelatorioAdminBean implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(RelatorioAdminBean.class);
+	
+	@Autowired
+	private RelatorioAdminService relatorioAdminService;
+	@Autowired
+	private RelatorioService relatorioService;
+	
+	private RelatorioAdmin relatorioAdmin;
+	
+	private List<RelatorioAdmin> relatorioAdmins = new ArrayList<RelatorioAdmin>();
+	
+	private String dataHj;
+
+	
+	public RelatorioAdminBean(){
+		this.relatorioAdmin = new RelatorioAdmin();
+	}
+	
+	
+	/**
+	 * direciona para a interface de gerenciamento de relatorio
+	 * @return
+	 */
+	public String doRelatorioAdmin(){
+		
+		if(this.relatorioAdmin == null){
+			this.setRelatorioAdmin(new RelatorioAdmin());
+		}
+		
+		return "/relatorio/relatorioadmin";
+		
+	}
+	
+	//retorna da interface de gerenciamento de relatorio
+	public String doVoltarRelatorioAdmin(){
+		if(this.relatorioAdmin == null){
+			this.setRelatorioAdmin(new RelatorioAdmin());
+		}
+		
+		return "/begin/begin";
+		
+	}
+	
+	//visualisa o conteudo de impressao
+	public String doVisualisaRelContratante(){
+		if(this.relatorioAdmin == null){
+			this.setRelatorioAdmin(new RelatorioAdmin());
+		}
+		
+		try{
+			
+			
+			this.dataHj = this.relatorioAdminService.getTime();
+			
+			this.relatorioAdmins = this.relatorioAdminService.findAllContratantes();
+			
+			Integer num = this.relatorioAdminService.findAllContratantes().size();
+			
+			this.relatorioAdmin.setQtdContratante(String.valueOf(num));
+			
+		}catch (Exception e) {
+			logger.error(" doVisualisaRelContratante() "
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			e.printStackTrace();
+		}
+		
+		
+		return "/relatorio/visualisarcontratante";
+	}
+	
+	   //visualisa o conteudo de impressao contratada
+		public String doVisualisaRelContratada(){
+			if(this.relatorioAdmin == null){
+				this.setRelatorioAdmin(new RelatorioAdmin());
+			}
+			
+			try{
+				
+				this.dataHj = this.relatorioAdminService.getTime();
+				
+				this.relatorioAdmins = this.relatorioAdminService.getContsContrats();
+				
+			}catch (Exception e) {
+				logger.error(" doVisualisaRelContratada() "
+						+ e.getMessage());
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Favor contactar o administrador.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				e.printStackTrace();
+			}
+			
+			
+			return "/relatorio/visualisarcontratada";
+		}
+		
+		/**
+		 * visualisa o conteudo de impressao do relatorio consolidado
+		 * @return
+		 */
+		public String doVisualisarFuncionario(){
+			
+			if(this.relatorioAdmin == null){
+				this.setRelatorioAdmin(new RelatorioAdmin());
+			}
+			
+		
+		try{
+			
+			this.dataHj = this.relatorioAdminService.getTime();
+			
+			this.relatorioAdmins = this.relatorioAdminService.getFuncionarios();
+			
+		}catch (Exception e) {
+			logger.error(" doVisualisarFuncionario() "
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			e.printStackTrace();
+		}
+			
+			return "/relatorio/visualisarfuncionario";
+		}
+		
+		
+		/**
+		 * metodo gera o relatorio de contratante
+		 */
+		public void gerarRelatorioContratante(){
+			
+			try {
+				
+				this.relatorioAdmins = this.relatorioAdminService.findAllContratantes();
+				
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_contratante.jasper");
+				
+				String filePdf = "Relatório_de_Contratante";
+				
+				this.relatorioService.gerarPdf(reportPath, getRelatorioAdmins(), filePdf);
+				
+			} catch (Exception e) {
+				logger.error(" gerarRelatorioContratante() "
+						+ e.getMessage());
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Favor contactar o administrador.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		/**
+		 * metodo gera o relatorio consolidado
+		 * com contratantes, contratada, funcionario.
+		 * 
+		 */
+		public void gerarRelatorioConsolidado(){
+			
+			try {
+				
+				this.relatorioAdmins = this.relatorioAdminService.getFuncionarios();
+				
+				String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_consolidado.jasper");
+				
+				String filePdf = "Relatório_Consolidado";
+				
+				this.relatorioService.gerarPdf(reportPath, getRelatorioAdmins(), filePdf);
+				
+			} catch (Exception e) {
+				logger.error(" gerarRelatorioConsolidado() "
+						+ e.getMessage());
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Favor contactar o administrador.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				e.printStackTrace();
+			}
+			
+		}
+	
+		/**
+		 * metodo gera o relatorio das contratadas
+		 */
+	public void gerarRelatorioContratada(){
+		
+		try {
+			
+			this.relatorioAdmins = this.relatorioAdminService.getContsContrats();
+			
+			String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/rel_contratada.jasper");
+			
+			String filePdf = "Relatório_de_Contratante_Contratada";
+			
+			this.relatorioService.gerarPdf(reportPath, getRelatorioAdmins(), filePdf);
+			
+		} catch (Exception e) {
+			logger.error(" gerarRelatorioContratada() "
+					+ e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	public RelatorioAdminService getRelatorioAdminService() {
+		return relatorioAdminService;
+	}
+
+	public void setRelatorioAdminService(RelatorioAdminService relatorioAdminService) {
+		this.relatorioAdminService = relatorioAdminService;
+	}
+
+	public RelatorioAdmin getRelatorioAdmin() {
+		return relatorioAdmin;
+	}
+
+	public void setRelatorioAdmin(RelatorioAdmin relatorioAdmin) {
+		this.relatorioAdmin = relatorioAdmin;
+	}
+
+	public String getDataHj() {
+		return dataHj;
+	}
+
+
+	public List<RelatorioAdmin> getRelatorioAdmins() {
+		return relatorioAdmins;
+	}
+
+
+	public void setRelatorioAdmins(List<RelatorioAdmin> relatorioAdmins) {
+		this.relatorioAdmins = relatorioAdmins;
+	}
+
+
+	public void setDataHj(String dataHj) {
+		this.dataHj = dataHj;
+	}
+
+
+	public RelatorioService getRelatorioService() {
+		return relatorioService;
+	}
+
+
+	public void setRelatorioService(RelatorioService relatorioService) {
+		this.relatorioService = relatorioService;
+	}
+	
+
+}

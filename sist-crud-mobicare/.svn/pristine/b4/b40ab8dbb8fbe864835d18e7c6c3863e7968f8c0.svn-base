@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_consolidado" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="79bdee83-403a-405e-a0e6-22725bc48916">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logoA" class="java.lang.String"/>
+	<parameter name="logoB" class="java.lang.String"/>
+	<field name="cnpjContratante" class="java.lang.String"/>
+	<field name="razaoSocialContratante" class="java.lang.String"/>
+	<field name="cnpjContratada" class="java.lang.String"/>
+	<field name="razaoSocialContratada" class="java.lang.String"/>
+	<field name="nomeFuncionario" class="java.lang.String"/>
+	<field name="qtdFuncionario" class="java.lang.String"/>
+	<field name="qtdContratada" class="java.lang.String"/>
+	<field name="qtdContratante" class="java.lang.String"/>
+	<field name="numContratante" class="java.lang.String"/>
+	<field name="numContratada" class="java.lang.String"/>
+	<field name="numFuncionario" class="java.lang.String"/>
+	<field name="pisFuncionario" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="120" splitType="Stretch">
+			<image>
+				<reportElement uuid="e97abf8f-a731-435a-8555-48d406e3a793" x="0" y="0" width="100" height="50"/>
+				<imageExpression><![CDATA[new File($P{logoA})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="7d5f9410-8dab-4480-a7fb-93c8f14161f0" x="455" y="0" width="100" height="50"/>
+				<imageExpression><![CDATA[new File($P{logoB})]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="d03c32fc-84ed-4e7b-823b-a134cffc0ebd" x="455" y="80" width="100" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9d785c29-0959-4cf1-827a-7db890a5251b" x="455" y="50" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Advogados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef04f827-c16a-463d-a4ec-8ee08fc50262" x="433" y="80" width="22" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Rio,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2bd0cf1e-9de5-4be2-9872-7af6e777544c" x="170" y="30" width="193" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Relatório Consolidado]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="dbb7b174-fc9e-481c-8996-986b6a055d56" x="0" y="119" width="555" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="88" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3e35cf7a-e7a3-4784-b5f3-0c2c6d7edefc" isPrintRepeatedValues="false" x="87" y="1" width="132" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cnpjContratante}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="764e6645-e3fb-4598-aa5a-70972e47ee33" isPrintRepeatedValues="false" x="221" y="1" width="334" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{razaoSocialContratante}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9dfb5123-4957-4a8b-9190-bfddb5adbfd9" isPrintRepeatedValues="false" x="96" y="15" width="137" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cnpjContratada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e3f2af91-0c78-4049-bb39-5ceee06d9cb9" isPrintRepeatedValues="false" x="234" y="15" width="321" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{razaoSocialContratada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="74c6f778-82ad-496c-9506-ddba27ec7d49" isPrintRepeatedValues="false" x="282" y="29" width="273" height="14"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeFuncionario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e95c029e-b609-4cb3-b220-d93c3a4dd43b" isPrintRepeatedValues="false" x="2" y="2" width="70" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{numContratante}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8fb45642-a39f-4f60-aa53-0b637d015996" isPrintRepeatedValues="false" x="28" y="16" width="66" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{numContratada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="477c1524-5d3a-4cad-9dc2-0c58816a34d7" isPrintRepeatedValues="false" x="50" y="30" width="69" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{numFuncionario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="deb45a86-267c-4df6-a920-b4f0f30102a3" isPrintRepeatedValues="false" x="50" y="46" width="120" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qtdFuncionario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="52b6c645-c51f-4e79-93c7-d5c3a1982cfd" isPrintRepeatedValues="false" x="2" y="60" width="142" height="14"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdContratante}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3e6b979b-b817-4a5f-8de9-fb8a08cbabea" isPrintRepeatedValues="false" x="2" y="74" width="142" height="14"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdContratada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a99495e7-4788-4895-b0ae-4c5e16f10f82" x="121" y="28" width="123" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pisFuncionario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement uuid="21c3f8b6-ca7c-482f-8f26-e7373d6f3421" x="455" y="21" width="100" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3456a909-4b53-47f5-9021-7a72f30d1533" x="2" y="17" width="453" height="12"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Contatos: (21) 3579-5537 / 3591-5537 / 7862-5537 / 7851-0681]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40fe1e11-5a45-45ba-a438-cbd79a924317" x="136" y="29" width="221" height="12"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[contato@emape-assessoria.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea987aa6-abb4-4cc7-9ec4-64f372938da6" x="2" y="4" width="553" height="12"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Estrada Marechal Miguel Salazar Mendes de Moraes, 128 - Sala 304, Taquara, Rio de Janeiro/RJ CEP: 22770-331]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="f303cf02-0728-4ee4-a54e-acbf6af68e2a" x="2" y="1" width="553" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

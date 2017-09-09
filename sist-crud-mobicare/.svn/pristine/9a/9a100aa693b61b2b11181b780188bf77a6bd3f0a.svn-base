@@ -1,0 +1,45 @@
+package br.com.emape.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.dao.UserDAO;
+import br.com.emape.model.User;
+
+@Component("userService")
+public class UserService {
+
+	@Autowired
+	private UserDAO userDAO;
+
+	/**
+	 * seleciona o usuario com o cnpj da empresa
+	 * 
+	 * @param cnpj
+	 * @return
+	 */
+	public User findByCnpj(String cnpj) {
+
+		return this.userDAO.findByCnpj(cnpj);
+	}
+	
+	/**
+	 * seleciona o usuario pelo login e senha 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public User findUserNameAndPassword(String username, String password){
+		
+		return this.userDAO.findUserNameAndPassword(username, password);
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
+}

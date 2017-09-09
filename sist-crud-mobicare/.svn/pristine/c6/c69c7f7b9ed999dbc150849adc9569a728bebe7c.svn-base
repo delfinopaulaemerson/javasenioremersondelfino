@@ -1,0 +1,5 @@
+#divColunaBtnsFixed,.menuabas_box,#headerinterna,#menu{display:none;}
+
+.continterna{margin:0;}
+
+input[type=buttom]{display:none;}

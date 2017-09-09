@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+<ui:include src="/template/head.xhtml"/>
+
+<body>
+<h:form acceptcharset="ISO-8859-1">
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<h1><h:outputText value="#{msg['label.emape']}" /></h1>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratadaBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{contratadaBean.doVoltarEditar()}" immediate="true" /> &raquo; <label style="color:blue;">Contratada &raquo; Editar</label></h2>
+				 <div id="mensagem" style="margin-top: 20px;">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+		</div>
+		<br/>
+		<br/>
+		<div id="fildset">
+			<fieldset class="fieldset">
+					<fieldset class="fieldset">
+						<legend>Contratante</legend>
+						<div class="grid-4-12">
+							<h:selectOneMenu value="#{contratadaBean.opcContratante}"  class="form-txt form-large" required="true" requiredMessage="Contratante é obrigatório." >
+								<f:selectItem itemLabel="Selecione o Contratante" />
+								<f:selectItems value="#{contratadaBean.contratantes}" var="c" itemLabel="#{c.id} - #{c.razaoSocial}" itemValue="#{c.id}" />
+		   					</h:selectOneMenu>
+		   				</div>	
+					</fieldset>
+					<legend>Cadastro de Contratada</legend>
+						<fieldset class="fieldset">
+								<legend>Contratada</legend>
+								<div class="grid-3-12">
+									<label for="id" class="form-lbl">Razão Social<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{contratadaBean.contratada.razaoSocial}"  required="true" requiredMessage="Razão Social é obrigatório." maxlength="50" title="Digite o Razão Social"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-2-12">
+									<label for="rg" class="form-lbl">CNPJ<em class="form-req" title="Obrigatório">*</em></label>
+									<p:inputMask  mask="99.999.999/9999-99" styleClass="form-txt form-large" value="#{contratadaBean.maskcnpj}" size="20"  required="true"  requiredMessage="CNPJ é obrigatório." />
+								</div>
+								<div class="grid-2-12">
+									<label for="dtnasc" class="form-lbl">CNAE<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.contratada.cnae}" required="true" requiredMessage="CNAE é obrigatório."   maxlength="10"  title="Digite o CNAE" onkeydown="this.value = this.value.toUpperCase();"  />
+								</div>
+								<div class="grid-2-12">
+									<label for="nome" class="form-lbl">FPAS<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.contratada.fpas}" required="true" requiredMessage="FPAS é obrigatório." maxlength="30"  title="Digite o FPAS"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-2-12">
+									<label for="pai" class="form-lbl">RAT<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.contratada.rat}" required="true" requiredMessage="RAT é obrigatório." maxlength="20" title="Digite o RAT"  onkeydown="this.value = this.value.toUpperCase();"/>
+								</div>
+								<div class="grid-2-12">
+									<label for="mae" class="form-lbl">Outras Entidades<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.contratada.outrasunidades}" required="true" requiredMessage="Outras Entidades é obrigatório." maxlength="40"  title="Outras Entidades"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-2-12">
+									<label for="mae" class="form-lbl">Optante Pelo Simples Nacional<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneRadio  value="#{contratadaBean.opt}"  class="form-txt form-large" required="true" requiredMessage="Optante Pelo Simples Nacional é obrigatório." >
+   										<f:selectItem itemValue="Sim" itemLabel="Sim" />
+   										<f:selectItem itemValue="Não" itemLabel="Não" />
+									</h:selectOneRadio>	
+								</div>
+								<div class="grid-2-12">
+									<label for="dtnasc" class="form-lbl">Valor do Contrato</label>
+									<h:inputText  class="form-txt form-large" value="#{contratadaBean.contratada.valorContrato}" onkeypress="return formatar_moeda(this,'.',',',event);" maxlength="15"  title="Digite Valor Estimado" />
+								</div>
+								<div class="grid-2-12">
+									<label for="mae" class="form-lbl">Código SAP</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.contratada.codigoSap}" maxlength="52"  title="Código de Serviços SAP"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-2-12">
+									<label for="rg" class="form-lbl">Data de Vigência<em class="form-req" title="Obrigatório">*</em></label>
+									<p:inputMask  mask="99/99/9999" styleClass="form-txt form-large" value="#{contratadaBean.maskdtVigencia}" required="true" requiredMessage="Data de Vigência é oberigatória." size="10"  />
+								</div>
+								<div class="grid-6-12">
+									<label for="id" class="form-lbl">Descrição de Atividade<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText value="#{contratadaBean.contratada.dscatividade}" required="true" requiredMessage="Descrição de Atividade é obrigatório." onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase();"  class="form-txt form-large" maxlength="110" titlee="Descrição de Atividade é obrigatório."  />
+								</div>
+								<div class="grid-2-12">
+									<label for="mae" class="form-lbl">Status<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneRadio  value="#{contratadaBean.optStatus}"  class="form-txt form-large" required="true" requiredMessage="Status é obrigatório." >
+   										<f:selectItem itemValue="Ativa" itemLabel="Ativa" />
+   										<f:selectItem itemValue="Inativa" itemLabel="Inativa" />
+									</h:selectOneRadio>	
+								</div>
+						</fieldset>
+						<fieldset class="fieldset">
+								<legend>Endereço da Contratada</legend>
+								<div class="grid-3-12">
+									<label for="id" class="form-lbl">Rua</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.rua}" maxlength="60" size="65" title="Rua"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-3-12">
+									<label for="rg" class="form-lbl">Numero</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.numero}" onkeypress="return onlyDigit(event);" maxlength="20"  title="Numero" />
+								</div>
+								<div class="grid-3-12">
+									<label for="dtnasc" class="form-lbl">Complemento</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.complemento}" maxlength="20" size="65" title="Complemento"  onkeydown="this.value = this.value.toUpperCase();"/>
+								</div>
+								<div class="grid-3-12">
+									<label for="nome" class="form-lbl">Cidade</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.cidade}" maxlength="20" size="65" title="Cidade"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-3-12">
+									<label for="pai" class="form-lbl">Bairro</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.bairro}" onkeypress="mascara(this,cep)" maxlength="9" title="Bairro" />
+								</div>
+								<div class="grid-3-12">
+									<label for="pai" class="form-lbl">Estado</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.estado}" maxlength="9" title="Estado"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+								<div class="grid-3-12">
+									<label for="pai" class="form-lbl">Cep</label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.endereco.cep}" onkeypress="mascara(this,cep)" maxlength="9" title="Cep"  onkeydown="this.value = this.value.toUpperCase();" />
+								</div>
+						</fieldset>
+						<fieldset class="fieldset">
+								<legend>Dados do Responsável</legend>
+								<div class="grid-3-12">
+									<label for="rg" class="form-lbl">Nome do Gestor da Contratada<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.dados.nome}" required="true" requiredMessage="Nome do Gestor da Contratada é obrigatório." maxlength="20" size="50" title="Nome do Gestor da Contratante"  onkeydown="this.value = this.value.toUpperCase();"/>
+								</div>
+								<div class="grid-3-12">
+									<label for="dtnasc" class="form-lbl">Telefone<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText  class="form-txt form-large" value="#{contratadaBean.dados.telefone}" required="true" requiredMessage="Telefone é obrigatório." onkeypress="return(maskEvent(this, '(###)####-####',event));" maxlength="8"  title="Email do Gestor da Contratante" />
+								</div>
+								<div class="grid-3-12">
+									<label for="dtnasc" class="form-lbl">Email do Gestor da Contratada<em class="form-req" title="Obrigatório">*</em></label>
+									<h:inputText   class="form-txt form-large" value="#{contratadaBean.dados.email}" required="true" requiredMessage="Email do Gestor da Contratada é obrigatório." maxlength="20" size="50" title="Email do Gestor da Contratante" />
+								</div>
+						</fieldset>						
+			</fieldset>
+			<p class="form-req">* Campos obrigatórios </p>		
+		</div>	
+			<div class="botoes" style="margin-top: 25px;margin-bottom: 25px;">
+				<h:commandButton action="#{contratadaBean.atualizaContratada()}"  type="submit" class="form-button dir btnPesquisar"  accesskey="p" title="Atualizar" value="Atualizar" />
+			</div>
+	<div id="rodape">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+	</div>
+</div>
+</h:form>			
+</body> 
+</html>

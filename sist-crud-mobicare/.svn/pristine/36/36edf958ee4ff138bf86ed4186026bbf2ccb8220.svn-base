@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:head>
+    <title>Spring Security + JSF + JPA</title>
+    <meta http-equiv="content-type" content="text/xhtml; charset=UTF-8" />
+    <link href="style/default.css" type="text/css" rel="stylesheet" />
+</h:head>
+
+<body >
+	<h:form prependId="false" >
+	
+		<p:growl id="growlMessage" showDetail="true" />
+	
+		<p:panel header="Entre com o seu login e senha"
+		    style="width: 250px;margin: auto;"> 
+
+	        <h:panelGrid columns="3" >
+	        
+			    <h:outputLabel for="userName" value="Username: " />
+			    <p:inputText id="userName" value="#{loginBean.userName}" />
+			    <h:message  for="userName" errorClass="error"/>
+			    
+			    <h:outputLabel for="password" value="Password: " />
+			    <p:password id="password" value="#{loginBean.password}" feedback="false" />
+			    <h:message for="password" errorClass="error"/>
+			    
+			    <p:commandButton type="submit" ajax="false" id="login" action="#{loginBean.login}" value="Ok" update="growlMessage" />
+			    <p:commandButton type="submit" ajax="false" id="cancelar" action="home" value="Cancelar" update="growlMessage" />
+		    </h:panelGrid>
+		    
+	    </p:panel> 
+	</h:form>
+</body>
+</html>

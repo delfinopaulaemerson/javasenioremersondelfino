@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+      
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>::: Mobicare :::</title>
+    <link href="#{facesContext.externalContext.request.contextPath}/css/reset.css" type="text/css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.request.contextPath}/css/forms.css" type="text/css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.request.contextPath}/css/messages.css" type="text/css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.request.contextPath}/css/displaytag.css" type="text/css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.request.contextPath}/css/estilo.css" type="text/css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.request.contextPath}/css/print.css" type="text/css" rel="stylesheet" media="print" />
+	<link href="#{facesContext.externalContext.request.contextPath}/css/form-structure.css" type="text/css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.request.contextPath}/css/form-style.css" type="text/css" rel="stylesheet" />
+	<link href="#{facesContext.externalContext.request.contextPath}/css/login.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/jquery.js" language="javascript"></script>
+	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/jquery-modal.js" language="javascript"></script>
+	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/validacoes.js" language="javascript"></script>
+    <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/scriptGeral.js" language="javascript"></script>
+	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/menu.js" language="javascript"></script>
+</h:head> 
+<body>
+	<f:loadBundle basename="br.com.mobicare.properties.messages" var="msg"/>
+	
+    <div id="wrapper" class="hasLayout">
+		<div id="header">
+			<div>
+				<h1 style="margin-left: 718px;">MOBICARE</h1><br />
+				<div id="login_box">
+				  <h:form acceptcharset="ISO-8859-1">
+					<div class="ynormal">
+						<fieldset class="fieldset">
+							<p class="tp3">
+								<label for="txtUsuario">Usu&aacute;rio:</label>
+							</p>
+							<p class="tp5">
+								<h:inputText value="#{loginBean.userName}" id="txtUsuario" class="txt te6"  maxlength="15" onkeydown="this.value = this.value.toUpperCase();" onkeyup="this.value = this.value.toUpperCase()" title="Digite o login do usu&aacute;rio" />
+							</p>
+							<p class="tp3">
+								<label for="txtSenha">Senha:</label>
+							</p>
+							<p class="tp5">
+								<h:inputSecret value="#{loginBean.password}" id="txtSenha" class="txt te6"  maxlength="8" title="Digite a senha" />
+							</p>
+						<div class="botoes">
+							<h:commandButton type="submit" action="#{loginBean.login()}" id="btnOK" class="form-button dir" title="OK" value="OK" accesskey="o" tabindex="3" style="margin-right: 55px;margin-bottom: 0px;border-top-width: 0px;"/>
+						</div>
+						</fieldset>
+					</div>
+				  </h:form>
+				</div>
+			</div>
+		</div>
+		<div class="contentloginbg">
+		<div id="error">
+		  <ul>
+			<h3><li style="padding-left:1450px;" ><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h3>
+		  </ul>
+		</div>
+			<div class="login_left">
+				
+			</div>
+				<div id="content" class="contindex">
+					
+					<div id="index_box">
+						<img width="100%" src="#{facesContext.externalContext.request.contextPath}/imagens/bg_index2.png" />
+					</div>
+					
+				</div>
+				<div class="login_right">
+					<p><h:outputText value="#{msg['label.telefone']}" />
+					<br />
+					Scarlett Suzan
+					Employee Experience Advisor
+					Desenvolvimento da Cultura
+					<br />
+					+55(21)3529-9001 mobicare.com.br
+					<br />
+					E-mail
+					<br /> 
+					escarlet.suzan@mobicare.com.br</p>
+				</div>
+		</div>
+		<div id="rodape">
+			<p class="nome_sistema">Praia de Botafogo, 518 - Botafogo, Rio de Janeiro - RJ, 22250-040</p>
+		</div>
+
+		<!-- fim #rodape -->
+	</div>
+</body>     
+</html>

@@ -1,0 +1,844 @@
+package br.com.emape.bean;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+import org.primefaces.event.FileUploadEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Prestador;
+import br.com.emape.service.ContratadaService;
+import br.com.emape.service.ContratanteService;
+import br.com.emape.service.PrestadorService;
+import br.com.emape.service.ValidacoesService;
+
+@Component("prestadorBean")
+@ManagedBean(name = "prestadorBean")
+@SessionScoped
+public class PrestadorBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(PrestadorBean.class);
+
+	private Prestador prestador;
+
+	@Autowired
+	private PrestadorService prestadorService;
+	@Autowired
+	private ContratanteService contratanteService;
+	@Autowired
+	private ContratadaService contratadaService;
+	@Autowired
+	private ValidacoesService validacoesService;
+
+	private Long contSelec;
+	
+	private Long contratSelec;
+
+	private List<Contratada> contratadas = new ArrayList<Contratada>();
+	
+	private List<Contratante> contratantes = new ArrayList<Contratante>();
+
+	private List<Prestador> prestadores = new ArrayList<Prestador>();
+
+	private Contratada contratada;
+	
+	private String maskcpf;
+	
+	private String maskpis;
+	
+	private String maskalocacao;
+	
+	private String maskDesalocacao;
+	
+
+	public PrestadorBean() {
+
+		this.prestador = new Prestador();
+		this.contratada = new Contratada();
+
+	}
+
+	/**
+	 * redireciona para a pagina de pesquisa
+	 * 
+	 * @return
+	 */
+	public String doPesquisar() {
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+		
+		try {
+			limpaComponente(getPrestador());
+		} catch (Exception e) {
+			logger.error("Erro  doPesquisar() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/begin/begin";
+			
+		}
+
+		return "/edicao/prestador";
+	}
+	
+	public void handleFileUpload(FileUploadEvent event) {
+		
+		try {
+			
+			this.setPrestadores(this.prestadorService.xlsxToPrestadores(event)) ;
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("xlsx", this.getPrestadores());
+	              
+		} catch (Exception e) {
+			logger.error("Erro handleFileUpload(FileUploadEvent event)" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+		}
+	
+        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");  
+        FacesContext.getCurrentInstance().addMessage(null, msg);  
+    }  
+
+	/**
+	 * deleta o objeto pretador
+	 * 
+	 * @param prestador
+	 * @return
+	 */
+	public String deletarPrestador(Prestador prestador) {
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		try {
+
+		boolean isDelete = this.prestadorService.deletePrestador(prestador);
+		
+		if(!isDelete){
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"O prestador já foi excluido");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/edicao/prestador";
+			
+		}
+
+
+		} catch (Exception e) {
+
+			logger.error("Erro ao Deletar o Prestador " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/prestador";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Funcionário foi Excluido com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * faz a pesquisa do prestador
+	 * 
+	 * @return
+	 */
+	public String pesquisarPrestador() {
+
+		boolean ok = true;
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		try {
+			this.prestador.setPis(getMaskpis());
+
+			if (!ok) {
+				return "/edicao/prestador";
+			}
+
+			this.prestadores.removeAll(this.prestadores);
+
+			this.prestadores.addAll(this.prestadorService.Find(prestador));
+
+			if (this.prestadores.isEmpty()) {
+
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Funcionário inexistente.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				return "/edicao/prestador";
+			}
+
+			
+
+		} catch (Exception e) {
+			logger.error("Erro ao Pesquisar o Funcionário " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/prestador";
+		}
+
+		return "/edicao/prestador";
+	}
+
+	/**
+	 * metodo atualiza os dados do contrarante
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public String doEditar(Prestador prestador) {
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+		
+	
+
+		try {
+			this.prestadores.removeAll(prestadores);
+
+			this.setPrestador(this.prestadorService.findById(prestador.getId()));
+			this.contSelec = this.prestador.getContratada().getId();
+			this.contratSelec = this.prestador.getContratante().getId();
+			
+			this.setMaskalocacao(this.prestador.getAlocacao());
+			this.setMaskDesalocacao(this.prestador.getDesalocacao());
+			this.setMaskcpf(this.prestador.getCpf());
+
+			if (this.prestador != null) {
+				this.contratada = this.prestador.getContratada();
+			}
+
+		} catch (Exception e) {
+			logger.error("Erro ao Editar o Funcionário " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratante";
+		}
+
+		return "/edicao/prestadoreditar";
+	}
+
+	/**
+	 * atualiza os dados do prestador
+	 * 
+	 * @return
+	 */
+	public String editarPrestador() {
+
+		boolean ok = true;
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		try {
+
+			if(!this.validacoesService.isCpf(this.prestador.getCpf())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"CPF é inválido.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+			
+			if(!this.validacoesService.isPIS(this.prestador.getPis())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"PIS é inválido.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+				
+			if(!this.validacoesService.isValidaData(this.prestador.getDesalocacao())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Data de Desalocação é inválida.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				
+				ok = false;
+			}
+			
+			if(!this.validacoesService.isValidaData(this.prestador.getAlocacao())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Data de Alocação é inválida.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+
+			
+
+			if (!ok) {
+
+				return "/edicao/prestadoreditar";
+
+			}
+			
+			
+			
+			Contratada contratada = new Contratada();
+			contratada.setId(getContSelec());
+			this.prestador.setContratada(contratada);
+
+			this.prestadorService.updateContratada(prestador);
+
+
+		} catch (Exception e) {
+			logger.error("Erro ao atualizar o Funcionário " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Funcionário foi Atualizado com Sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+	
+	
+
+	/**
+	 * limpa os componentes da interface
+	 * 
+	 * @param p
+	 * @throws Exception
+	 */
+	private void limpaComponente(Prestador p) throws Exception {
+
+		p.setAlocacao("");
+		p.setCpf("");
+		p.setDesalocacao("");
+		p.setFuncao("");
+		p.setNome("");
+		p.setPis("");
+		p.setSalario("");
+		p.setLocTarbalho("");
+		
+		this.setMaskcpf("");
+		
+		this.setMaskalocacao("");
+		
+		this.setMaskDesalocacao("");
+		
+		this.setMaskpis("");
+		
+		this.prestadores.removeAll(getPrestadores());
+
+	}
+
+
+	/**
+	 * preenche a combo de Empresas.
+	 * 
+	 * @return
+	 */
+	public List<Contratada> comboCadastrada() {
+
+		try {
+			this.contratadas = this.prestadorService.getListaCadastrada();
+		} catch (Exception e) {
+			logger.error("Erro ao Preecher a combo Cadastrada" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Erro ao Preecher a combo Cadastrada");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		}
+		return this.contratadas;
+
+	}
+
+	/**
+	 * metodo que cadastra o prestador
+	 * 
+	 * @return String
+	 */
+	
+	public String cadastrarPrestador() {
+
+		boolean ok = true;
+		
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		try {
+			
+			for(Prestador p : this.prestadores){
+				
+			}
+			
+			if(!this.validacoesService.isCpf(this.prestador.getCpf())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"CPF é inválido.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+			
+			if(!this.validacoesService.isPIS(this.prestador.getPis())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"PIS é inválido.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+				
+			if(!this.validacoesService.isValidaData(this.prestador.getDesalocacao())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Data de Desalocação é inválida.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				
+				ok = false;
+			}
+			
+			if(!this.validacoesService.isValidaData(this.prestador.getAlocacao())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Data de Alocação é inválida.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				ok = false;
+			}
+			
+			if (!ok) {
+
+				return "/cadastro/prestador";
+			}
+			
+			this.prestador.setContratada(contratadaService.findById(getContSelec()));
+			
+			this.prestador.setContratante(contratanteService.findById(getContratSelec()));
+			
+			this.prestador.setCpf(getMaskcpf());
+			this.prestador.setAlocacao(getMaskalocacao());       
+			this.prestador.setDesalocacao(getMaskDesalocacao());
+			this.prestador.setPis(getMaskpis());
+			
+			
+			ok = this.prestadorService.findPrestadorByContratada(this.getPrestador().getPis());
+			
+			if (!ok) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Funcionário Já cadastrado.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				return "/cadastro/prestador";
+			}
+			
+			
+			ok = this.prestadorService.findCpfByContratada(this.prestador.getCpf());
+
+			if (!ok) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Funcionário Já cadastrado.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				return "/cadastro/prestador";
+			}
+			
+
+			this.prestadorService.cadastrarPrestador(this.prestador);
+
+			limpaComponente(prestador);
+
+			this.contratadas.removeAll(this.contratadas);
+
+		} catch (Exception e) {
+			
+			logger.error("Erro ao cadastrar o Prestador" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor Contactar o Administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/cadastro/prestador";
+			
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"O Funcionário foi Salvo com Sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		
+	
+		return "/begin/begin";
+	}
+	
+	/**
+	 * preenche a lista de contratantes
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> getComboContratante() throws Exception{
+		
+		this.setContratantes(this.contratanteService.getListaContratante());
+		
+		return this.contratantes; 
+	}
+
+
+	/**
+	 * redireciona para a tela de cadastro prestador
+	 * 
+	 * @return
+	 */
+	public String doCadastroPrestador() {
+
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+		
+		File dir = new File("C:/upload/funcionario");
+		 
+		 if(!dir.exists()){
+			 dir.mkdirs();
+		 }
+		
+		try {
+			this.setPrestador(new Prestador());
+			this.getContratadas().removeAll(getContratadas());
+			this.getContratantes().removeAll(getContratantes());
+			this.setContratSelec(null);
+			this.setContSelec(null);
+			this.setMaskalocacao("");
+			this.setMaskcpf("");
+			this.setMaskDesalocacao("");
+			this.setMaskpis("");
+		} catch (Exception e) {
+			logger.error("Erro doCadastroPrestador()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor Contactar o Administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/cadastro/prestador";
+		}
+
+		return "/cadastro/prestador";
+	}
+	
+	/**
+	 * retorna ta interface de cadastro
+	 * @return
+	 */
+	public String doVoltarCadastroPrestador(){
+		
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+		
+		try {
+			limpaComponente(prestador);
+		} catch (Exception e) {
+			logger.error("Erro doVoltarCadastroPrestador()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor Contactar o Administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/cadastro/prestador";
+		}
+		
+		
+		return "/begin/begin";
+	}
+	
+	/**
+	 * retorna da interface de pesquisa de prestador
+	 * @return
+	 */
+	public String doVoltarPesquisaPrestador(){
+		
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+		
+		try {
+			limpaComponente(prestador);
+		} catch (Exception e) {
+			logger.error("Erro doVoltarPesquisaPrestador()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor Contactar o Administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/prestador";
+		}
+		
+		return "/begin/begin";
+	}
+	
+	
+	/**
+	 * retorna da interface de atualizacao
+	 * @return
+	 */
+	public String doVoltarEditarPrestador(){
+		
+		if (this.prestador == null) {
+
+			this.setPrestador(new Prestador());
+		}
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+		
+		try {
+			limpaComponente(prestador);
+			
+			this.contratadas.removeAll(getContratadas());
+			this.contratantes.removeAll(getContratantes());
+			
+		} catch (Exception e) {
+			logger.error("Erro doVoltarPesquisaPrestador()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor Contactar o Administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/prestadoreditar";
+		}
+		
+		return "/edicao/prestador";
+		
+	}
+
+	public Prestador getPrestador() {
+		return prestador;
+	}
+
+	public void setPrestador(Prestador prestador) {
+		this.prestador = prestador;
+	}
+
+	public Long getContSelec() {
+		return contSelec;
+	}
+
+	public void setContSelec(Long contSelec) {
+		this.contSelec = contSelec;
+	}
+
+	public PrestadorService getPrestadorService() {
+		return prestadorService;
+	}
+
+	public void setPrestadorService(PrestadorService prestadorService) {
+		this.prestadorService = prestadorService;
+	}
+
+	public List<Contratada> getLista() {
+		return contratadas;
+	}
+
+	public void setLista(List<Contratada> lista) {
+		this.contratadas = lista;
+	}
+
+	public List<Prestador> getPrestadores() {
+		return prestadores;
+	}
+
+	public void setPrestadores(List<Prestador> prestadores) {
+		this.prestadores = prestadores;
+	}
+
+	public List<Contratada> getContratadas() {
+		return contratadas;
+	}
+
+	public void setContratadas(List<Contratada> contratadas) {
+		this.contratadas = contratadas;
+	}
+
+	public Contratada getContratada() {
+		return contratada;
+	}
+
+	public void setContratada(Contratada contratada) {
+		this.contratada = contratada;
+	}
+
+	public String getMaskcpf() {
+		return maskcpf;
+	}
+
+	public void setMaskcpf(String maskcpf) {
+		this.maskcpf = maskcpf;
+	}
+
+	public String getMaskpis() {
+		return maskpis;
+	}
+
+	public void setMaskpis(String maskpis) {
+		this.maskpis = maskpis;
+	}
+
+	public String getMaskDesalocacao() {
+		return maskDesalocacao;
+	}
+
+	public void setMaskDesalocacao(String maskDesalocacao) {
+		this.maskDesalocacao = maskDesalocacao;
+	}
+
+	public String getMaskalocacao() {
+		return maskalocacao;
+	}
+
+	public void setMaskalocacao(String maskalocacao) {
+		this.maskalocacao = maskalocacao;
+	}
+
+	public Long getContratSelec() {
+		return contratSelec;
+	}
+
+	public void setContratSelec(Long contratSelec) {
+		this.contratSelec = contratSelec;
+	}
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+	public ValidacoesService getValidacoesService() {
+		return validacoesService;
+	}
+
+	public void setValidacoesService(ValidacoesService validacoesService) {
+		this.validacoesService = validacoesService;
+	}
+
+	public ContratadaService getContratadaService() {
+		return contratadaService;
+	}
+
+	public void setContratadaService(ContratadaService contratadaService) {
+		this.contratadaService = contratadaService;
+	}
+
+	public List<Contratante> getContratantes() {
+		return contratantes;
+	}
+
+	public void setContratantes(List<Contratante> contratantes) {
+		this.contratantes = contratantes;
+	}
+	
+
+}

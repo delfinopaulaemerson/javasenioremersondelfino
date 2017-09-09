@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:sec="http://www.springframework.org/security/facelets/tags">
+
+<h:head>
+    <title>Spring Security + JSF + JPA</title>
+    <meta http-equiv="content-type" content="text/xhtml; charset=UTF-8" />
+    <link href="../style/default.css" type="text/css" rel="stylesheet" />
+</h:head>
+
+<body >
+	<p:panel style="width: 700px;margin: auto;" header="Demo Application"
+		footer="Essa aplicação demonstra Spring Security 3.0 + Spring 3.0 + JSF 2.0 + PrimeFaces 3.0 + JPA 2.0!" >
+		
+		<h:form>
+			<p:menubar >
+				<p:submenu label="Cadastro" icon="ui-icon ui-icon-document" rendered="#{sec:ifAnyGranted('ADMIN,SUPERVISOR,COMUM')}"  >
+					<p:menuitem value="Cliente" rendered="#{sec:ifAnyGranted('ADMIN,SUPERVISOR,COMUM')}" /> 
+					<p:menuitem value="Venda" rendered="#{sec:ifAnyGranted('ADMIN,SUPERVISOR')}" /> 
+				</p:submenu>
+				<p:submenu label="Relatório" icon="ui-icon ui-icon-document" rendered="#{sec:ifAnyGranted('ADMIN')}">
+					<p:menuitem value="Vendas no mês" rendered="#{sec:ifAnyGranted('ADMIN')}"/> 
+				</p:submenu>
+			</p:menubar>
+		
+			<h1>Parabéns, você está logado no sistema!</h1><br /><br />
+			
+			Para acessar essa página é preciso está logado no sistema! <br/><br/>
+			
+			Você está logado com o usuário: <b><h:outputText value="#{loginBean.usuarioLogado}" /></b> <br/><br/>
+			
+			<p:commandLink value="Logout" action="#{loginBean.logout}" /><br/><br/>
+		</h:form>
+		
+	</p:panel>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="rotinaDesligamento")
+public class RotinaDesligamento implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="comunDesl")
+	private String comunDesl;
+	
+	@Column(name="obs_comunDesl")
+	private String obs_comunDesl;
+	
+	@Column(name="termRec")
+	private String termRec;
+	
+	@Column(name="obs_termRec")
+	private String obs_termRec;
+	
+	@Column(name="termQuitRec")
+	private String termQuitRec;
+	
+	@Column(name="obs_termQuitRec")
+	private String obs_termQuitRec;
+	
+	@Column(name="termHomRec")
+	private String termHomRec;
+	
+	@Column(name="obs_termHomRec")
+	private String obs_termHomRec;
+	
+	@Column(name="extFgts")
+	private String extFgts;
+	
+	@Column(name="obs_extFgts")
+	private String obs_extFgts;
+	
+	@Column(name="grrf")
+	private String grrf;
+	
+	@Column(name="obs_grrf")
+	private String obs_grrf;
+	
+	@Column(name="chavLibFgts")
+	private String chavLibFgts;
+	
+	@Column(name="obs_chavLibFgts")
+	private String obs_chavLibFgts;
+	
+	@Column(name="examMedDem")
+	private String examMedDem;
+	
+	@Column(name="obs_examMedDem")
+	private String obs_examMedDem;
+	
+	@Column(name="segDesemp")
+	private String segDesemp;
+	
+	@Column(name="obs_segDesemp")
+	private String obs_segDesemp;
+	
+	@Column(name="declCaged")
+	private String declCaged;
+	
+	@Column(name="obs_declCaged")
+	private String obs_declCaged;
+	
+	public RotinaDesligamento(){
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getComunDesl() {
+		return comunDesl;
+	}
+
+	public void setComunDesl(String comunDesl) {
+		this.comunDesl = comunDesl;
+	}
+
+	public String getObs_comunDesl() {
+		return obs_comunDesl;
+	}
+
+	public void setObs_comunDesl(String obs_comunDesl) {
+		this.obs_comunDesl = obs_comunDesl;
+	}
+
+	public String getTermRec() {
+		return termRec;
+	}
+
+	public void setTermRec(String termRec) {
+		this.termRec = termRec;
+	}
+
+	public String getObs_termRec() {
+		return obs_termRec;
+	}
+
+	public void setObs_termRec(String obs_termRec) {
+		this.obs_termRec = obs_termRec;
+	}
+
+	public String getTermQuitRec() {
+		return termQuitRec;
+	}
+
+	public void setTermQuitRec(String termQuitRec) {
+		this.termQuitRec = termQuitRec;
+	}
+
+	public String getObs_termQuitRec() {
+		return obs_termQuitRec;
+	}
+
+	public void setObs_termQuitRec(String obs_termQuitRec) {
+		this.obs_termQuitRec = obs_termQuitRec;
+	}
+
+	public String getTermHomRec() {
+		return termHomRec;
+	}
+
+	public void setTermHomRec(String termHomRec) {
+		this.termHomRec = termHomRec;
+	}
+
+	public String getObs_termHomRec() {
+		return obs_termHomRec;
+	}
+
+	public void setObs_termHomRec(String obs_termHomRec) {
+		this.obs_termHomRec = obs_termHomRec;
+	}
+
+	public String getExtFgts() {
+		return extFgts;
+	}
+
+	public void setExtFgts(String extFgts) {
+		this.extFgts = extFgts;
+	}
+
+	public String getObs_extFgts() {
+		return obs_extFgts;
+	}
+
+	public void setObs_extFgts(String obs_extFgts) {
+		this.obs_extFgts = obs_extFgts;
+	}
+
+	public String getGrrf() {
+		return grrf;
+	}
+
+	public void setGrrf(String grrf) {
+		this.grrf = grrf;
+	}
+
+	public String getObs_grrf() {
+		return obs_grrf;
+	}
+
+	public void setObs_grrf(String obs_grrf) {
+		this.obs_grrf = obs_grrf;
+	}
+
+	public String getChavLibFgts() {
+		return chavLibFgts;
+	}
+
+	public void setChavLibFgts(String chavLibFgts) {
+		this.chavLibFgts = chavLibFgts;
+	}
+
+	public String getObs_chavLibFgts() {
+		return obs_chavLibFgts;
+	}
+
+	public void setObs_chavLibFgts(String obs_chavLibFgts) {
+		this.obs_chavLibFgts = obs_chavLibFgts;
+	}
+
+	public String getExamMedDem() {
+		return examMedDem;
+	}
+
+	public void setExamMedDem(String examMedDem) {
+		this.examMedDem = examMedDem;
+	}
+
+	public String getObs_examMedDem() {
+		return obs_examMedDem;
+	}
+
+	public void setObs_examMedDem(String obs_examMedDem) {
+		this.obs_examMedDem = obs_examMedDem;
+	}
+
+	public String getObs_segDesemp() {
+		return obs_segDesemp;
+	}
+
+	public void setObs_segDesemp(String obs_segDesemp) {
+		this.obs_segDesemp = obs_segDesemp;
+	}
+
+	public String getDeclCaged() {
+		return declCaged;
+	}
+
+	public void setDeclCaged(String declCaged) {
+		this.declCaged = declCaged;
+	}
+
+	public String getObs_declCaged() {
+		return obs_declCaged;
+	}
+
+	public void setObs_declCaged(String obs_declCaged) {
+		this.obs_declCaged = obs_declCaged;
+	}
+
+	public String getSegDesemp() {
+		return segDesemp;
+	}
+
+	public void setSegDesemp(String segDesemp) {
+		this.segDesemp = segDesemp;
+	}
+
+}

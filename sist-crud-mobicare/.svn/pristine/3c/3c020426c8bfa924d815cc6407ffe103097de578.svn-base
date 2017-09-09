@@ -1,0 +1,119 @@
+package br.com.emape.bean;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+
+import net.sf.jasperreports.engine.JasperPrint;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Contratante;
+import br.com.emape.service.ContratanteService;
+import br.com.emape.service.RelatorioService;
+
+/**
+ * 
+ * @author emerson
+ * 
+ */
+@Component("relatorioBean")
+@ManagedBean
+@RequestScoped
+public class RelatorioBean {
+
+	private static Logger logger = Logger.getLogger(RelatorioBean.class);
+
+	private Map<String, Object> param;
+
+	private List<Contratante> contratantes;
+	@Autowired
+	private ContratanteService contratanteService;
+	@Autowired
+	private RelatorioService relatorioService;
+	
+	JasperPrint jasperPrint;
+
+	public RelatorioBean() {
+
+	}
+
+	public void gerarRelatorio() {
+
+		param = new HashMap<String, Object>();
+
+		contratantes = new ArrayList<Contratante>();
+
+		try {
+
+			this.contratantes.addAll(this.contratanteService
+					.getListaContratante());
+			
+			String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("WEB-INF/relatorio/teste.jasper");
+			
+			String filePdf = "teste";
+			
+			this.relatorioService.gerarPdf(reportPath, this.contratantes, filePdf);
+
+		} catch (Exception e) {
+			logger.error("Erro  doPesquisar() " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		}
+
+	}
+
+	public Map<String, Object> getParam() {
+		return param;
+	}
+
+	public void setParam(Map<String, Object> param) {
+		this.param = param;
+	}
+
+	public List<Contratante> getContratante() {
+		return contratantes;
+	}
+
+	public void setContratante(List<Contratante> contratante) {
+		this.contratantes = contratante;
+	}
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+	public List<Contratante> getContratantes() {
+		return contratantes;
+	}
+
+	public void setContratantes(List<Contratante> contratantes) {
+		this.contratantes = contratantes;
+	}
+
+	public RelatorioService getRelatorioService() {
+		return relatorioService;
+	}
+
+	public void setRelatorioService(RelatorioService relatorioService) {
+		this.relatorioService = relatorioService;
+	}
+	
+	
+
+}

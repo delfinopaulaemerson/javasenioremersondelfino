@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.prime.com.tr/ui">
+	  
+	  <script type="text/javascript">
+
+	  jQuery(document).ready(function($) {
+		  jQuery("#obs_contratoSocial").hide();
+		  jQuery("#obs_cartaoCnpj").hide();
+		  jQuery("#obs_cndPrevidencia").hide();
+		  jQuery("#obs_cndTributaria").hide();
+		  jQuery("#obs_crfFgts").hide();
+		  jQuery("#obs_cndDebitostrabalhista").hide();
+		  jQuery("#obs_folhaPagamento").hide();
+		  jQuery("#obs_cndDebitostrabalhista").hide();
+		  jQuery("#obs_folhaPagamento").hide();
+		  jQuery("#obs_plaFuncAlocContratante").hide();
+		  jQuery("#obs_guiaRecFgts").hide();
+		  jQuery("#obs_guiaPrevSoc").hide();
+		  jQuery("#obs_protConecSocial").hide();
+		  jQuery("#obs_sefipGfip").hide();
+		  jQuery("#obs_protConecSocial").hide();
+		  jQuery("#obs_notaFiscRetencaoInss").hide();
+		  jQuery("#obs_darf").hide();
+		  jQuery("#obs_notaFiscRetencaoInss").hide();
+		  jQuery("#obs_declRais").hide();
+		});
+
+		
+		function habilitarInput(obj,input){
+	
+			var valor = obj.value;
+			var id = input;
+			if(valor == "Insatisfatorio"){
+				
+				jQuery(id).show();
+				
+				}
+			if(valor == "Satisfatorio"){
+				jQuery(id).hide();
+				}
+			
+			}
+
+	  </script>	
+<div id="body">
+			<div class="grid-4-12">
+					<label for="mae" class="form-lbl">SESMT<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio id="contratoSocial" value="#{gestaoBean.opcContSocial}" onclick="habilitarInput(this,'#obs_contratoSocial');" class="form-txt form-large" required="true" requiredMessage="SESMT é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório"/>
+					</h:selectOneRadio>	
+			</div>
+			
+				<div class="grid-4-12" id="obs_contratoSocial">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_sesmt}"  class="form-txt form-large" /> 
+				</div>
+			<div class="grid-4-12" id="fgts">
+					<label for="rg" class="form-lbl">CIPA<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCartCnpj}" onclick="habilitarInput(this,'#obs_cartaoCnpj');" class="form-txt form-large" required="true" requiredMessage="CIPA é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_cartaoCnpj">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_cipa}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-4-12">
+					<label for="mae" class="form-lbl">EPI<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndPrevi}" onclick="habilitarInput(this,'#obs_cndPrevidencia');" class="form-txt form-large" required="true" requiredMessage="EPI é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_cndPrevidencia">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_epi}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-4-12" id="gfip">
+					<label for="nome" class="form-lbl">PCMSO<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndTrib}" onclick="habilitarInput(this,'#obs_cndTributaria');"  class="form-txt form-large" required="true" requiredMessage="PCMSO é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_cndTributaria">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_pcmso}"  class="form-txt form-large" /> 
+				</div>
+		
+			<div class="grid-4-12">
+					<label for="mae" class="form-lbl">PPRA<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opCrf}" onclick="habilitarInput(this,'#obs_crfFgts');" class="form-txt form-large" required="true" requiredMessage="PPRA é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+				
+			</div>
+			
+				<div class="grid-4-12" id="obs_crfFgts">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_ppra}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-4-12" id="folhapagamento">
+					<label for="mae" class="form-lbl">PCMAT<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndtTrab}" onclick="habilitarInput(this,'#obs_cndDebitostrabalhista');" class="form-txt form-large" required="true" requiredMessage="PCMAT é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_cndDebitostrabalhista">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_pcmat}" class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-4-12">
+					<label for="mae" class="form-lbl">RAT Adicional para Aposentadoria Especial<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcFolPag}" onclick="habilitarInput(this,'#obs_folhaPagamento');" class="form-txt form-large" required="true" requiredMessage="RAT Adicional para Aposentadoria Especial é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_folhaPagamento">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_rat}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-4-12" id="inss">
+					<label for="dtnasc" class="form-lbl" id="guiarecolhimento">Exames Médicos<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcPlanFuncAloc}" onclick="habilitarInput(this,'#obs_plaFuncAlocContratante');"  class="form-txt form-large" required="true" requiredMessage="Exames Médicos é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_plaFuncAlocContratante">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_exMed}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-4-12">
+					<label for="mae" class="form-lbl">CAT para Empregados Acidentados<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opGrf}" onclick="habilitarInput(this,'#obs_guiaRecFgts');" class="form-txt form-large" required="true" requiredMessage="CAT para Empregados Acidentados é obrigatório.">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-4-12" id="obs_guiaRecFgts">
+					<h:inputTextarea value="#{gestaoBean.trabalho.obs_cat}" class="form-txt form-large" /> 
+				</div>
+
+</div>
+</html>

@@ -1,0 +1,434 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="parteFiscal")
+public class ParteFiscal implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@Column(name="contratoSocial")
+	private String contratoSocial;
+	
+	@Column(name="obs_contratoSocial")
+	private String obs_contratoSocial;
+	
+	@Column(name="cartaoCnpj")
+	private String cartaoCnpj;
+	
+	@Column(name="obs_cartaoCnpj")
+	private String obs_cartaoCnpj;
+	
+	@Column(name="cndPrevidencia")
+	private String cndPrevidencia;
+	
+	@Column(name="obs_cndPrevidencia")
+	private String obs_cndPrevidencia;
+	
+	@Column(name="cndTributaria")
+	private String cndTributaria;
+	
+	@Column(name="obs_cndTributaria")
+	private String obs_cndTributaria;
+	
+	@Column(name="crfFgts")
+	private String crfFgts;
+	
+	@Column(name="obs_crfFgts")
+	private String obs_crfFgts;
+	
+	@Column(name="cndDebitostrabalhista")
+	private String cndDebitostrabalhista;
+	
+	@Column(name="obs_cndDebitostrabalhista")
+	private String obs_cndDebitostrabalhista;
+	
+	@Column(name="folhaPagamento")
+	private String folhaPagamento;
+	
+	@Column(name="obs_folhaPagamento")
+	private String obs_folhaPagamento;
+	
+	@Column(name="plaFuncAlocContratante")
+	private String plaFuncAlocContratante;
+	
+	@Column(name="obs_plaFuncAlocContratante")
+	private String obs_plaFuncAlocContratante;
+	
+	@Column(name="guiaRecFgts")
+	private String guiaRecFgts;
+	
+	@Column(name="obs_guiaRecFgts")
+	private String obs_guiaRecFgts;
+	
+	@Column(name="guiaPrevSoc")
+	private String guiaPrevSoc;
+	
+	@Column(name="obs_guiaPrevSoc")
+	private String obs_guiaPrevSoc;
+	
+	@Column(name="darf")
+	private String darf;
+	
+	@Column(name="obs_darf")
+	private String obs_darf;
+	
+	@Column(name="sefipGfip")
+	private String sefipGfip;
+	
+	@Column(name="obs_sefipGfip")
+	private String obs_sefipGfip;
+	
+	@Column(name="protConecSocial")
+	private String protConecSocial;
+	
+	@Column(name="obs_protConecSocial")
+	private String obs_protConecSocial;
+	
+	@Column(name="notaFiscRetencaoInss")
+	private String notaFiscRetencaoInss;
+	
+	@Column(name="obs_notaFiscRetencaoInss")
+	private String obs_notaFiscRetencaoInss;
+	
+	@Column(name="declRais")
+	private String declRais;
+	
+	@Column(name="obs_declRais")
+	private String obs_declRais;
+	
+	
+	public ParteFiscal(){
+		
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public String getContratoSocial() {
+		return contratoSocial;
+	}
+
+
+	public void setContratoSocial(String contratoSocial) {
+		this.contratoSocial = contratoSocial;
+	}
+
+
+	public String getObs_contratoSocial() {
+		return obs_contratoSocial;
+	}
+
+
+	public void setObs_contratoSocial(String obs_contratoSocial) {
+		this.obs_contratoSocial = obs_contratoSocial;
+	}
+
+
+	public String getCartaoCnpj() {
+		return cartaoCnpj;
+	}
+
+
+	public void setCartaoCnpj(String cartaoCnpj) {
+		this.cartaoCnpj = cartaoCnpj;
+	}
+
+
+	public String getObs_cartaoCnpj() {
+		return obs_cartaoCnpj;
+	}
+
+
+	public void setObs_cartaoCnpj(String obs_cartaoCnpj) {
+		this.obs_cartaoCnpj = obs_cartaoCnpj;
+	}
+
+
+	public String getCndPrevidencia() {
+		return cndPrevidencia;
+	}
+
+
+	public void setCndPrevidencia(String cndPrevidencia) {
+		this.cndPrevidencia = cndPrevidencia;
+	}
+
+
+	public String getObs_cndPrevidencia() {
+		return obs_cndPrevidencia;
+	}
+
+
+	public void setObs_cndPrevidencia(String obs_cndPrevidencia) {
+		this.obs_cndPrevidencia = obs_cndPrevidencia;
+	}
+
+
+	public String getCndTributaria() {
+		return cndTributaria;
+	}
+
+
+	public void setCndTributaria(String cndTributaria) {
+		this.cndTributaria = cndTributaria;
+	}
+
+
+	public String getObs_cndTributaria() {
+		return obs_cndTributaria;
+	}
+
+
+	public void setObs_cndTributaria(String obs_cndTributaria) {
+		this.obs_cndTributaria = obs_cndTributaria;
+	}
+
+
+	public String getCrfFgts() {
+		return crfFgts;
+	}
+
+
+	public void setCrfFgts(String crfFgts) {
+		this.crfFgts = crfFgts;
+	}
+
+
+	public String getObs_crfFgts() {
+		return obs_crfFgts;
+	}
+
+
+	public void setObs_crfFgts(String obs_crfFgts) {
+		this.obs_crfFgts = obs_crfFgts;
+	}
+
+
+	public String getCndDebitostrabalhista() {
+		return cndDebitostrabalhista;
+	}
+
+
+	public void setCndDebitostrabalhista(String cndDebitostrabalhista) {
+		this.cndDebitostrabalhista = cndDebitostrabalhista;
+	}
+
+
+	public String getObs_cndDebitostrabalhista() {
+		return obs_cndDebitostrabalhista;
+	}
+
+
+	public void setObs_cndDebitostrabalhista(String obs_cndDebitostrabalhista) {
+		this.obs_cndDebitostrabalhista = obs_cndDebitostrabalhista;
+	}
+
+
+	public String getFolhaPagamento() {
+		return folhaPagamento;
+	}
+
+
+	public void setFolhaPagamento(String folhaPagamento) {
+		this.folhaPagamento = folhaPagamento;
+	}
+
+
+	public String getObs_folhaPagamento() {
+		return obs_folhaPagamento;
+	}
+
+
+	public void setObs_folhaPagamento(String obs_folhaPagamento) {
+		this.obs_folhaPagamento = obs_folhaPagamento;
+	}
+
+
+	public String getPlaFuncAlocContratante() {
+		return plaFuncAlocContratante;
+	}
+
+
+	public void setPlaFuncAlocContratante(String plaFuncAlocContratante) {
+		this.plaFuncAlocContratante = plaFuncAlocContratante;
+	}
+
+
+	public String getObs_plaFuncAlocContratante() {
+		return obs_plaFuncAlocContratante;
+	}
+
+
+	public void setObs_plaFuncAlocContratante(String obs_plaFuncAlocContratante) {
+		this.obs_plaFuncAlocContratante = obs_plaFuncAlocContratante;
+	}
+
+
+	public String getGuiaRecFgts() {
+		return guiaRecFgts;
+	}
+
+
+	public void setGuiaRecFgts(String guiaRecFgts) {
+		this.guiaRecFgts = guiaRecFgts;
+	}
+
+
+	public String getObs_guiaRecFgts() {
+		return obs_guiaRecFgts;
+	}
+
+
+	public void setObs_guiaRecFgts(String obs_guiaRecFgts) {
+		this.obs_guiaRecFgts = obs_guiaRecFgts;
+	}
+
+
+	public String getGuiaPrevSoc() {
+		return guiaPrevSoc;
+	}
+
+
+	public void setGuiaPrevSoc(String guiaPrevSoc) {
+		this.guiaPrevSoc = guiaPrevSoc;
+	}
+
+
+	public String getObs_guiaPrevSoc() {
+		return obs_guiaPrevSoc;
+	}
+
+
+	public void setObs_guiaPrevSoc(String obs_guiaPrevSoc) {
+		this.obs_guiaPrevSoc = obs_guiaPrevSoc;
+	}
+
+
+	public String getDarf() {
+		return darf;
+	}
+
+
+	public void setDarf(String darf) {
+		this.darf = darf;
+	}
+
+
+	public String getObs_darf() {
+		return obs_darf;
+	}
+
+
+	public void setObs_darf(String obs_darf) {
+		this.obs_darf = obs_darf;
+	}
+
+
+	public String getSefipGfip() {
+		return sefipGfip;
+	}
+
+
+	public void setSefipGfip(String sefipGfip) {
+		this.sefipGfip = sefipGfip;
+	}
+
+
+	public String getObs_sefipGfip() {
+		return obs_sefipGfip;
+	}
+
+
+	public void setObs_sefipGfip(String obs_sefipGfip) {
+		this.obs_sefipGfip = obs_sefipGfip;
+	}
+
+
+	public String getProtConecSocial() {
+		return protConecSocial;
+	}
+
+
+	public void setProtConecSocial(String protConecSocial) {
+		this.protConecSocial = protConecSocial;
+	}
+
+
+	public String getObs_protConecSocial() {
+		return obs_protConecSocial;
+	}
+
+
+	public void setObs_protConecSocial(String obs_protConecSocial) {
+		this.obs_protConecSocial = obs_protConecSocial;
+	}
+
+
+	public String getNotaFiscRetencaoInss() {
+		return notaFiscRetencaoInss;
+	}
+
+
+	public void setNotaFiscRetencaoInss(String notaFiscRetencaoInss) {
+		this.notaFiscRetencaoInss = notaFiscRetencaoInss;
+	}
+
+
+	public String getObs_notaFiscRetencaoInss() {
+		return obs_notaFiscRetencaoInss;
+	}
+
+
+	public void setObs_notaFiscRetencaoInss(String obs_notaFiscRetencaoInss) {
+		this.obs_notaFiscRetencaoInss = obs_notaFiscRetencaoInss;
+	}
+
+
+	public String getDeclRais() {
+		return declRais;
+	}
+
+
+	public void setDeclRais(String declRais) {
+		this.declRais = declRais;
+	}
+
+
+	public String getObs_declRais() {
+		return obs_declRais;
+	}
+
+
+	public void setObs_declRais(String obs_declRais) {
+		this.obs_declRais = obs_declRais;
+	}
+	
+}

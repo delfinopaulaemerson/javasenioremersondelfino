@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/facelets/tags">
+      
+	<div id="menu">
+			<div id="bgmenu">
+				<div class="menu_box">
+					<ul id="menulista" class="menulist">
+						<li class="item"><h:link value="Autentificação" rendered="#{sec:ifAnyGranted('ADMIN')}"/>
+							<ul>
+								<li><h:link value="Usuário"/>
+									<ul>
+										<li><h:commandLink value="Cadastro" action="#{cadastroLoginBean.doVisualizarCadastro()}"  immediate="true" /></li>
+										<li><h:commandLink action="#{cadastroLoginBean.doPesquisa()}" value="Edição" immediate="true" /></li>
+									</ul>	
+								</li>
+							</ul>	
+						</li>
+						<li class="item"><h:link value="Manutenção de Dados" rendered="#{sec:ifAnyGranted('ADMIN')}"/>		
+							<ul>
+								<li><h:link value="Contratante"/>
+									<ul>
+										<li><h:commandLink value="Cadastro" action="#{contratanteBean.doCadastroContratante()}" immediate="true" /></li>
+										<li><h:commandLink action="#{contratanteBean.pesquisarContratante()}" value="Edição"  immediate="true" /></li>
+									</ul>	
+								</li>
+								<li><h:link value="Contratada"/>
+									<ul>
+										<li><h:commandLink action="#{contratadaBean.doCadastroContratada()}" value="Cadastro" immediate="true" /></li>
+										 <li><h:commandLink action="#{contratadaBean.doPesquisa()}" value="Edição" immediate="true" /></li>
+									</ul>	
+								</li>
+								<li><h:link value="Funcionário"/>
+									<ul>
+										<li><h:commandLink action="#{prestadorBean.doCadastroPrestador()}" value="Cadastro" immediate="true" /></li>
+										<li><h:commandLink action="#{prestadorBean.doPesquisar()}" value="Edição" immediate="true" /></li>
+									</ul>	
+								</li>
+							</ul>	
+						</li>
+						<li class="item"><h:link value="Escopo" rendered="#{sec:ifAnyGranted('ADMIN')}" />
+							<ul>
+								<li><h:link value="Gestão"/>
+									<ul>									
+										<li><h:commandLink action="#{gestaoBean.doParteFiscal()}" value="Parte Fiscal" immediate="true" /></li>
+										<li><h:commandLink action="#{gestaoBean.doFolhaPagamento()}" value="Folha de Pagamento" immediate="true" /></li>
+										<li><h:commandLink action="#{gestaoBean.doRotinaAdmissao()}" value="Rotina de Admissão" immediate="true" /></li>
+										<li><h:commandLink action="#{gestaoBean.doRetinaDesligamento()}" value="Rotina de Desligamento" immediate="true" /></li>
+										<li><h:commandLink action="#{gestaoBean.doJornadaTrabalho()}" value="Jornada de Trabalho" immediate="true" /></li>
+										<li><h:commandLink action="#{gestaoBean.doSegurancaMedicinaTrabalho()}" value="Seg. Medicina Trabalho" immediate="true" /></li>
+									</ul>	
+								</li>
+								<li><h:link value="Pesquisar" rendered="#{sec:ifAnyGranted('ADMIN')}"/>
+									<ul>									
+										<li><h:commandLink action="#{gestaoBean.doPesquisarGestao()}" value="Validação" immediate="true" /></li>
+									</ul>	
+								</li>
+							</ul>	
+						</li>
+						<li class="item"><h:link value="Relatório"/>
+						<ul>
+							<li><h:link value="Administrador" rendered="#{sec:ifAnyGranted('ADMIN')}"/>
+								<ul>
+									<li><h:commandLink action="#{relatorioAdminBean.doRelatorioAdmin()}" value="Gerenciamento de Impressão" immediate="true"/></li>
+								</ul>	
+							</li>
+							<li><h:link value="Gestão Mensal" rendered="#{sec:ifAnyGranted('ADMIN,CONTRATANTE')}" />
+								<ul>
+									<li><h:commandLink action="#{relatorioGerencialBean.doRelatorioGerencial()}" value="Contratante" immediate="true" /></li>
+								</ul>	
+							</li>
+							<li><h:link value="Gestão Mensal" rendered="#{sec:ifAnyGranted('ADMIN,CONTRATADA')}" />
+								<ul>
+									<li><h:commandLink action="#{relatorioGerencialBean.doRelatorioGerencial()}" value="Contratada" immediate="true" /></li>
+								</ul>	
+							</li>
+						</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+</html>

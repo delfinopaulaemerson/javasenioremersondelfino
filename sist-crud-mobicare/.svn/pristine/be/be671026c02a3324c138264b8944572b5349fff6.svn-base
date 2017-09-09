@@ -1,0 +1,301 @@
+package br.com.emape.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.text.MaskFormatter;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.bean.PrestadorBean;
+import br.com.emape.dao.ContratadaDAO;
+import br.com.emape.dao.PrestadorDAO;
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Prestador;
+
+@Component("prestadorService")
+public class PrestadorService {
+	
+	
+			@Autowired
+	private ContratadaDAO contratadaDAO;
+			@Autowired
+	private PrestadorDAO prestadorDAO;
+			
+	private static final Integer RAZAOSOCIAL = 1;
+	private static final Integer CNPJ = 2;
+	private static final Integer NOME = 3;
+	private static final Integer PIS = 4;
+	private static final Integer CPF = 5;
+	private static final Integer FUNCAO = 6;
+	private static final Integer DTMOBILIZACAO = 7;
+	private static final Integer DTDESMOBILIZACAO = 8;
+	private static final Integer LOCALTRABALHO = 9;
+	private static final Integer SALARIOBASE = 10;
+	
+	
+	
+	/**
+	 *  metodo me retorna uma lista de empresas cadastratas
+	 * @return List<Contratada>
+	 * @throws Exception
+	 */
+	public List<Contratada> getListaCadastrada() throws Exception{
+		
+		return contratadaDAO.getListaCadastrada();
+	}
+	
+	//lista todod os prestadores ordenados por id
+	public List<Prestador> findAll() throws Exception{
+		
+		return this.prestadorDAO.findAll();
+	}
+	
+	/**
+	 * retrorna uma lista de prestadores
+	 * @param prestador
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Prestador> Find(Prestador prestador) throws Exception{
+		
+		return this.prestadorDAO.Find(prestador);
+	}
+	
+	/**
+	 * retorna o objeto com o id
+	 * @param id
+	 * @return
+	 */
+	public Prestador findById(Long id){
+		
+		return this.prestadorDAO.findById(id);
+	}
+	
+	/**
+	 * metodo para deletar o prestador
+	 * @param p
+	 * @throws Exception
+	 */
+	public boolean deletePrestador(Prestador p)throws Exception{
+		
+		return this.prestadorDAO.deletePrestador(p);
+	}
+	
+	/**
+	 * atualiza o objeto prestador
+	 * @param p
+	 * @throws Exception
+	 */
+	public void updateContratada(Prestador p)throws Exception{
+		
+		this.prestadorDAO.updateContratada(p);
+	}
+	
+	/**
+	 * verifica se já existe um prestador cadastrado a uma contratada
+	 * @param pis
+	 * @param idContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean findPrestadorByContratada(String pis) throws Exception{
+		
+		return this.prestadorDAO.findPrestadorByContratada(pis);
+	}
+	
+	/**
+	 * verifica se existe algum funcionario cadastrado com o mesmo cpf.
+	 * @param cpf
+	 * @param idContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean findCpfByContratada(String cpf) throws Exception{
+		
+		return this.prestadorDAO.findCpfByContratada(cpf);
+	}
+	
+	
+	/**
+	 * gera uma lista de prestadores ordenadas pelo seu contratante
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Object> findByOrderContratante() throws Exception{
+		
+		return this.prestadorDAO.findByOrderContratante();
+	}
+	
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Prestador> xlsxToPrestadores(FileUploadEvent e)throws Exception{
+		
+		Integer i = 0;
+		Integer linha = 0;
+		
+		List<Prestador> prestadores =  new ArrayList<Prestador>();
+		
+		Prestador p = null;
+		
+		UploadedFile arquivo = e.getFile();  
+		 
+		  XSSFWorkbook wb = new XSSFWorkbook(arquivo.getInputstream());
+	
+		  int folhas = wb.getNumberOfSheets();
+		  
+		  for (int folha = 0; folha < folhas; folha++) {  
+               System.out.println(wb.getSheetName(folha) + " tem " + wb.getSheetAt(folha).getPhysicalNumberOfRows() + " linhas");
+               XSSFSheet sh = wb.getSheet(wb.getSheetName(folha));
+               Sheet sheet = wb.getSheetAt(folha);
+               for(Row row : sheet){
+            	   linha++;
+            	   p = new Prestador();
+            	   for(Cell cell : row){
+            		   i++;
+            		   System.out.println("incrementou ao contador"+" "+ i);
+            		   
+            		   if(-1 != cell.toString().indexOf(".0") && (i != Integer.valueOf("10"))){
+            			   i=0;
+            			   System.out.println("inicializou o contador"+" "+ i);  
+            		   }
+        			  
+        			   
+        			   switch (i) {
+					case 3:
+						p.setNome(cell.toString());
+						break;
+					case 4:
+						MaskFormatter pisFormater = new MaskFormatter("###.#####.##-#");
+						pisFormater.setValueContainsLiteralCharacters(false);
+						p.setPis(pisFormater.valueToString(cell.toString()));
+						break;
+					case 5:
+						String str = cell.toString().replace("-", "");
+						MaskFormatter cpfFormater = new MaskFormatter("###.###.###-##");
+						cpfFormater.setValueContainsLiteralCharacters(false);
+						p.setCpf(cpfFormater.valueToString(str));
+						break;
+					case 6:
+						p.setFuncao(cell.toString());
+						break;
+					case 7:
+						String strDtAl = formatData(cell.toString());
+						p.setAlocacao(strDtAl);
+						break;
+					case 8:
+						String strDtDes = formatData(cell.toString());
+						p.setDesalocacao(strDtDes);
+						break;
+					case 9:
+						p.setLocTarbalho(cell.toString());
+						break;
+					case 10:
+						p.setSalario(cell.toString());
+						break;
+
+					default:
+						break;
+					}
+        			  
+        			   System.out.println("Dados Numero: "+i+" "+" - "+ cell.toString());
+            	   }
+            	   if(p != null){
+            		   prestadores.add(p);   
+            	   }
+            	   
+            	   System.out.println("Linha "+"|-|"+ linha);
+               }
+           }
+		
+		
+		return prestadores;
+	}
+	
+	/**
+	 * converte a data do xlsx no padrao 99/99/9999.
+	 * @return String
+	 * @throws Exception
+	 */
+	private String formatData(String data) throws Exception{
+		String dia = null;
+		String mes = null;
+		String newMes = null;
+		String ano = null;
+		String newDt = "";
+		
+		if(!"".equals(data)){
+			String strDt = data.replace("-", "");
+			
+			 dia = strDt.substring(0, 2);
+		
+			 mes = strDt.substring(2, 5);
+			 
+			 if("Jan".equals(mes)){
+				 newMes = "01";
+			 }else if("Fev".equals(mes)){
+				 newMes = "02";
+			 }else if("Mar".equals(mes)){
+				 newMes = "03";
+			 }else if("Abr".equals(mes)){
+				 newMes = "04";
+			 }else if("Mai".equals(mes)){
+				 newMes = "05";
+			 }else if("Jun".equals(mes)){
+				 newMes = "06";
+			 }else if("Jul".equals(mes)){
+				 newMes = "07";
+			 }else if("Ago".equals(mes)){
+				 newMes = "08";
+			 }else if("Set".equals(mes)){
+				 newMes = "09";
+			 }else if("Out".equals(mes)){
+				 newMes = "10";
+			 }else if("Nov".equals(mes)){
+				 newMes = "11";
+			 }else if("Dez".equals(mes)){
+				 newMes = "12";
+			 }
+			
+			 ano = strDt.substring(5, 9);
+			 
+			 newDt = dia+"/"+newMes+"/"+ano;
+		}
+		
+		return newDt;
+	}
+	
+	/**
+	 * metodo cadastra o prestador 
+	 * @param prestador
+	 * @throws Exception
+	 */
+	public void cadastrarPrestador(Prestador prestador) throws Exception{
+		
+		this.prestadorDAO.cadastrarPrestador(prestador);
+	}
+
+	public ContratadaDAO getContratadaDAO() {
+		return contratadaDAO;
+	}
+
+	public void setContratadaDAO(ContratadaDAO contratadaDAO) {
+		this.contratadaDAO = contratadaDAO;
+	}
+	
+	
+	
+
+}

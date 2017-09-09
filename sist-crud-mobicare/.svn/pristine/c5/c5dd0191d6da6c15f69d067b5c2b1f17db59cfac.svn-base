@@ -1,0 +1,107 @@
+package br.com.emape.service;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.view.JasperViewer;
+
+import org.springframework.stereotype.Component;
+
+@Component("relatorioService")
+public class RelatorioService {
+
+	public void gerarPdf(String path,List collection,String file) throws JRException, IOException {
+		
+		HashMap param = new HashMap();
+		String emape = FacesContext.getCurrentInstance().getExternalContext().getRealPath("imagens/emape.jpg");
+		String sa = FacesContext.getCurrentInstance().getExternalContext().getRealPath("imagens/sa.jpg");
+		param.put("logoA", emape);
+		param.put("logoB", sa);
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(collection);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(path,param, beanCollectionDataSource);
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		httpServletResponse.addHeader("Content-disposition","attachment; filename="+file+".pdf");
+		ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint,servletOutputStream);
+		FacesContext.getCurrentInstance().responseComplete();
+		
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void gerarHTML(String path, List collection, String file)
+			throws JRException, IOException {
+
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+				collection);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(path,
+				new HashMap<String, Object>(), beanCollectionDataSource);
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		httpServletResponse.addHeader("Content-disposition",
+				"attachment; filename=" + file + ".html");
+		JasperExportManager.exportReportToHtmlFile(jasperPrint, "teste.html");
+		JasperViewer.viewReport(jasperPrint, false);
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void XLSX(String path, List<Object> collection, String file)
+			throws JRException, IOException {
+
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+				collection);
+		String reportPath = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath(path);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
+				new HashMap<String, Object>(), beanCollectionDataSource);
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		httpServletResponse.addHeader("Content-disposition",
+				"attachment; filename=" + file + ".xlsx");
+		ServletOutputStream servletOutputStream = httpServletResponse
+				.getOutputStream();
+		JRXlsxExporter docxExporter = new JRXlsxExporter();
+		docxExporter
+				.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+		docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
+				servletOutputStream);
+		docxExporter.exportReport();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	public void DOCX(String path, List<Object> collection, String file)
+			throws JRException, IOException {
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+				collection);
+		String reportPath = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath(path);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
+				new HashMap<String, Object>(), beanCollectionDataSource);
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		httpServletResponse.addHeader("Content-disposition",
+				"attachment; filename=" + file + ".docx");
+		ServletOutputStream servletOutputStream = httpServletResponse
+				.getOutputStream();
+		JRDocxExporter docxExporter = new JRDocxExporter();
+		docxExporter
+				.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+		docxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
+				servletOutputStream);
+		docxExporter.exportReport();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+}

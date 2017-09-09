@@ -1,0 +1,232 @@
+package br.com.emape.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Dados;
+import br.com.emape.model.Endereco;
+import br.com.emape.model.Prestador;
+
+@Component("prestadorDAO")
+public class PrestadorDAO{
+			
+			@PersistenceContext
+	private EntityManager entityManager;
+			
+			
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public void cadastrarPrestador(Prestador p) throws Exception{
+				
+				Prestador prestador = new Prestador();
+				
+				prestador.setNome(p.getNome());
+				prestador.setCpf(p.getCpf());
+				prestador.setContratante(p.getContratante());
+				prestador.setLocTarbalho(p.getLocTarbalho());
+				prestador.setPis(p.getPis());
+				prestador.setSalario(p.getSalario());
+				prestador.setAlocacao(p.getAlocacao());
+				prestador.setDesalocacao(p.getDesalocacao());
+				prestador.setContratada(p.getContratada());
+				prestador.setFuncao(p.getFuncao());
+				
+				this.entityManager.persist(prestador);
+				entityManager.flush();
+				entityManager.clear();
+				
+				
+				
+			}
+			
+			
+			//lista todod os prestadores ordenados por id
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public List<Prestador> findAll() throws Exception{
+				
+			Query query = 	this.entityManager.createQuery(" FROM Prestador p order by p.id ");
+				
+				return query.getResultList();
+			}
+			
+			/**
+			 * metodo verifica se ja existe um prestador cadastrado para aquela contratada
+			 * @return
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public boolean findPrestadorByContratada(String pis) throws Exception{
+				Prestador p = null;
+				boolean status = true;
+				
+				Query query = this.entityManager.createQuery(" SELECT p FROM Prestador p WHERE p.pis=:pis ");
+				
+				query.setParameter("pis", pis);
+				
+				
+				try {
+					
+					 p = (Prestador) query.getSingleResult();
+					 
+					 if(p != null){
+						 status = false;
+					 }
+					
+				} catch (NoResultException e) {
+					return true;
+				}
+				
+				return status;
+			}
+			
+			/**
+			 * metodo verifica se ja existe um prestador cadastrado para aquela contratada
+			 * @return
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public boolean findCpfByContratada(String cpf) throws Exception{
+				Prestador p = null;
+				boolean status = true;
+				
+				Query query = this.entityManager.createQuery(" SELECT p FROM Prestador p WHERE p.cpf=:cpf ");
+				
+				query.setParameter("cpf", cpf);
+				
+				try {
+					
+					 p = (Prestador) query.getSingleResult();
+					 
+					 if(p != null){
+						 status = false;
+					 }
+					
+				} catch (NoResultException e) {
+					return true;
+				}
+				
+				return status;
+			}
+			
+			
+			/**
+			 * retorna um objeto contratada
+			 * @param id
+			 * @return Contratada
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public Prestador findById(Long id){
+				
+				return this.entityManager.find(Prestador.class, id);
+			}
+			
+			
+			/**
+			 * metodo executa pesquisa de Prestador
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public List<Prestador> Find(Prestador prestador) throws Exception{
+				
+				 Query query = null;
+				
+				
+				if(!"".equals(prestador.getPis())){
+				
+					query =	entityManager.createQuery(" from Prestador where pis like '%"+ prestador.getPis() +"%' ");
+					 
+				}	
+				
+				return query.getResultList();
+			}
+			
+			/**
+			 * deletar prestador
+			 * @param c
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public boolean deletePrestador(Prestador p)throws Exception{
+				
+				boolean ok = false;
+				
+				Prestador prestador = this.entityManager.find(Prestador.class, p.getId());
+				
+				if(prestador != null){
+					
+					this.entityManager.remove(prestador);
+					
+					this.entityManager.flush();
+					
+					this.entityManager.clear();
+					
+					ok = true;
+					
+				}
+				
+				return ok;
+				
+			}
+			
+			
+			/**
+			 * atualiza o objeto prestador
+			 * @param p
+			 * @throws Exception
+			 */
+			@Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+			public void updateContratada(Prestador p)throws Exception{
+				
+				Prestador prestador = this.entityManager.find(Prestador.class, p.getId());
+				
+				prestador.setNome(p.getNome());
+				prestador.setCpf(p.getCpf());
+				prestador.setContratante(p.getContratante());
+				prestador.setLocTarbalho(p.getLocTarbalho());
+				prestador.setPis(p.getPis());
+				prestador.setSalario(p.getSalario());
+				prestador.setAlocacao(p.getAlocacao());
+				prestador.setDesalocacao(p.getDesalocacao());
+				prestador.setContratada(p.getContratada());
+				prestador.setFuncao(p.getFuncao());
+				
+				this.entityManager.merge(prestador);
+				this.entityManager.flush();
+				this.entityManager.clear();
+				
+			}
+			
+			/**
+			 * seleciona o funcionario com a contratante e a contratada
+			 * @param idCont
+			 * @param idContrat
+			 * @return Prestador
+			 */
+			public List<Object> findByOrderContratante() throws Exception{
+				
+				StringBuffer sql = new StringBuffer();
+				
+				sql.append(" SELECT ce.id,ce.razaoSocial,ce.cnpj,  ")
+				.append(" ca.id,ca.razaoSocial,ca.cnpj, ")
+				.append(" p.id,p.nome,p.pis ")
+				.append(" FROM Prestador p,Contratante ce,Contratada ca ")
+				.append(" WHERE p.contratada.id=ca.id AND ")
+				.append(" p.contratante.id=ce.id ")
+				.append(" ORDER BY ca.razaoSocial,p.nome,ce.razaoSocial ");
+				Query query = this.entityManager.createQuery(sql.toString());
+				
+				return query.getResultList();
+			}
+
+}

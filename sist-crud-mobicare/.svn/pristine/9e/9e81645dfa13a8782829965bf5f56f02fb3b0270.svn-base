@@ -1,0 +1,132 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+public class RelatorioAdmin implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String cnpjContratante;
+	
+	private String razaoSocialContratante;
+	
+	private String cnpjContratada;
+	
+	private String razaoSocialContratada;
+	
+	private String pisFuncionario;
+	
+	private String nomeFuncionario;
+	
+	private String numContratante;
+	
+	private String numContratada;
+	
+	private String numFuncionario;
+	
+	private String qtdContratante;
+	
+	private String qtdContratada;
+	
+	private String qtdFuncionario;
+
+	public String getCnpjContratante() {
+		return cnpjContratante;
+	}
+
+	public void setCnpjContratante(String cnpjContratante) {
+		this.cnpjContratante = cnpjContratante;
+	}
+
+	public String getRazaoSocialContratante() {
+		return razaoSocialContratante;
+	}
+
+	public void setRazaoSocialContratante(String razaoSocialContratante) {
+		this.razaoSocialContratante = razaoSocialContratante;
+	}
+
+	public String getCnpjContratada() {
+		return cnpjContratada;
+	}
+
+	public void setCnpjContratada(String cnpjContratada) {
+		this.cnpjContratada = cnpjContratada;
+	}
+
+	public String getRazaoSocialContratada() {
+		return razaoSocialContratada;
+	}
+
+	public void setRazaoSocialContratada(String razaoSocialContratada) {
+		this.razaoSocialContratada = razaoSocialContratada;
+	}
+
+	public String getPisFuncionario() {
+		return pisFuncionario;
+	}
+
+	public void setPisFuncionario(String pisFuncionario) {
+		this.pisFuncionario = pisFuncionario;
+	}
+
+	public String getNomeFuncionario() {
+		return nomeFuncionario;
+	}
+
+	public void setNomeFuncionario(String nomeFuncionario) {
+		this.nomeFuncionario = nomeFuncionario;
+	}
+
+	public String getNumContratante() {
+		return numContratante;
+	}
+
+	public void setNumContratante(String numContratante) {
+		this.numContratante = numContratante;
+	}
+
+	public String getQtdContratante() {
+		return qtdContratante;
+	}
+
+	public void setQtdContratante(String qtdContratante) {
+		this.qtdContratante = qtdContratante;
+	}
+
+	public String getNumContratada() {
+		return numContratada;
+	}
+
+	public void setNumContratada(String numContratada) {
+		this.numContratada = numContratada;
+	}
+
+	public String getQtdContratada() {
+		return qtdContratada;
+	}
+
+	public void setQtdContratada(String qtdContratada) {
+		this.qtdContratada = qtdContratada;
+	}
+
+	public String getNumFuncionario() {
+		return numFuncionario;
+	}
+
+	public void setNumFuncionario(String numFuncionario) {
+		this.numFuncionario = numFuncionario;
+	}
+
+	public String getQtdFuncionario() {
+		return qtdFuncionario;
+	}
+
+	public void setQtdFuncionario(String qtdFuncionario) {
+		this.qtdFuncionario = qtdFuncionario;
+	}
+
+}

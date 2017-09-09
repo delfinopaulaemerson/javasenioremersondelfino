@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+<ui:include src="/template/head.xhtml"/>
+<body>
+<h:form acceptcharset="ISO-8859-1">
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<div  id="emape" style="margin-left: 630px;">
+						<h1>EMAPE</h1><br />	
+					</div>
+					<div  id="gestao" style="margin-left: 489px;">
+						<h1>Sistema de Validação e Gestão Documental</h1>
+					</div>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratanteBean.doSair()}" value="SAIR" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+              <h2>&raquo; <h:commandLink value="Voltar" action="#{relatorioAdminBean.doVoltarRelatorioAdmin()}" /> &raquo; <label style="color:blue;">Gerenciamento de Relatórios</label></h2>
+				 <div id="mensagem" style="margin-top: 20px;">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>	
+		</div>
+		<br/>
+		<br/>
+			<fieldset class="fieldset">
+					<legend>Administrador</legend>
+					<p:accordionPanel>  
+					    <p:tab title="Contratantes">  
+					        <h:panelGrid columns="10" cellpadding="20">  
+									<label for="mae" class="form-lbl">Relatório de Contratantes</label>
+									<h:commandLink action="#{relatorioAdminBean.doVisualisaRelContratante()}" ajax="false"  style="border: none;">
+				            			<img title="Clique p/ Visualizar" style="padding-left: 20px;" src="#{facesContext.externalContext.request.contextPath}/imagens/lupa.png" />
+				            		</h:commandLink>
+				            		<h:commandLink action="#{relatorioAdminBean.gerarRelatorioContratante()}" ajax="false" style="border: none;">
+				            			<img title="Clique p/ Imprimir" style="padding-left: 20px;"  src="#{facesContext.externalContext.request.contextPath}/imagens/printer.png" />
+				            		</h:commandLink>
+				            		<h:commandLink action="#{relatorioAdminBean.gerarRelatorioContratante()}" ajax="false" style="border: none;">
+				            			<img title="Clique p/ Imprimir" style="padding-left: 20px;"  src="#{facesContext.externalContext.request.contextPath}/imagens/printer.png" />
+				            		</h:commandLink>
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Contratadas">  
+					        <h:panelGrid columns="10" cellpadding="20"> 
+					            <label for="mae" class="form-lbl">Relatório de Contratada</label>
+									<h:commandLink action="#{relatorioAdminBean.doVisualisaRelContratada()}" ajax="false"  style="border: none;">
+				            			<img title="Clique p/ Visualizar" style="padding-left: 20px;" src="#{facesContext.externalContext.request.contextPath}/imagens/lupa.png" />
+				            		</h:commandLink>
+				            		<h:commandLink action="#{relatorioAdminBean.gerarRelatorioContratada()}" ajax="false" style="border: none;">
+				            			<img title="Clique p/ Imprimir" style="padding-left: 20px;"  src="#{facesContext.externalContext.request.contextPath}/imagens/printer.png" />
+				            		</h:commandLink>
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Consolidados">  
+					        <h:panelGrid columns="10" cellpadding="20"> 
+					           <label for="mae" class="form-lbl">Relatório de Consolidado</label>
+									<h:commandLink action="#{relatorioAdminBean.doVisualisarFuncionario()}"  ajax="false"  style="border: none;">
+				            			<img title="Clique p/ Visualizar" style="padding-left: 20px;" src="#{facesContext.externalContext.request.contextPath}/imagens/lupa.png" />
+				            		</h:commandLink>
+				            		<h:commandLink action="#{relatorioAdminBean.gerarRelatorioConsolidado()}" ajax="false" style="border: none;">
+				            			<img title="Clique p/ Imprimir" style="padding-left: 20px;"  src="#{facesContext.externalContext.request.contextPath}/imagens/printer.png" />
+				            		</h:commandLink> 
+					        </h:panelGrid>  
+					    </p:tab>  
+			</p:accordionPanel>  		
+			</fieldset>	
+		<div id="rodape">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+	</div>
+	</div>
+</h:form>			
+</body>
+</html>

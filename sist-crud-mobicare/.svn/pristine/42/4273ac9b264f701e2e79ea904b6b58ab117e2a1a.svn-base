@@ -1,0 +1,350 @@
+package br.com.emape.service;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lowagie.text.pdf.PRStream;
+
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Contratante_Contratada;
+import br.com.emape.model.Prestador;
+import br.com.emape.model.RelatorioAdmin;
+import br.com.emape.util.ContratadaComparator;
+
+@Component("relatorioAdminService")
+public class RelatorioAdminService {
+	
+	@Autowired
+	private ContratanteService contratanteService;
+	
+	@Autowired
+	private ContratadaService contratadaService;
+	
+	@Autowired
+	private PrestadorService prestadorService;
+	
+	//lista todas as contratantes
+	public List<RelatorioAdmin> findAllContratantes() throws Exception{
+		
+		List<RelatorioAdmin> adminContratantes = new ArrayList<RelatorioAdmin>();
+		List<Contratante> contratantes = new ArrayList<Contratante>();
+		contratantes = this.contratanteService.find();
+		Integer i  = 0;
+		for(Contratante c : contratantes){
+			
+			RelatorioAdmin adminContratante = new RelatorioAdmin();
+			
+			
+			adminContratante.setCnpjContratante(c.getCnpj());
+			adminContratante.setRazaoSocialContratante(c.getRazaoSocial());
+			adminContratantes.add(adminContratante);
+			i++;
+			adminContratante.setNumContratante(i.toString());
+			
+		}
+		
+		
+		
+		return adminContratantes;
+	}
+	
+	
+	//lista todas as contratadas
+	public List<RelatorioAdmin> findAllContratadas() throws Exception{
+		
+		List<RelatorioAdmin> adminContratadas =  new ArrayList<RelatorioAdmin>();
+		List<Contratada> contratadas = new ArrayList<Contratada>();
+		
+		contratadas = this.contratadaService.getListaCadastrada();
+		
+		for(Contratada c : contratadas){
+			
+			RelatorioAdmin adminContratada = new RelatorioAdmin();
+			
+			adminContratada.setCnpjContratada(c.getCnpj());
+			adminContratada.setRazaoSocialContratada(c.getRazaoSocial());
+			
+			adminContratadas.add(adminContratada);
+			
+		}
+		
+		return adminContratadas;
+	}
+	
+	
+	//lista de todos os funcionarios
+	public List<RelatorioAdmin> findAllFuncionario() throws Exception{
+		
+		List<RelatorioAdmin> adminFuncionarios = new ArrayList<RelatorioAdmin>();
+		
+		List<Prestador> funcionarios = new ArrayList<Prestador>();
+		
+		funcionarios = this.prestadorService.findAll();
+		
+		for(Prestador p :funcionarios){
+			
+			RelatorioAdmin adminFuncionario = new RelatorioAdmin();
+			
+			adminFuncionario.setPisFuncionario(p.getPis());
+			adminFuncionario.setNomeFuncionario(p.getNome());
+			adminFuncionarios.add(adminFuncionario);
+		}
+		
+		
+		return adminFuncionarios;
+	}
+	
+	
+	
+	/**
+	 * lista uma relacao de contratantes e suas contratadas
+	 * @return
+	 * @throws Exception
+	 */
+	public List<RelatorioAdmin> getContsContrats() throws Exception{
+		
+		List<Contratante_Contratada> ccs = new ArrayList<Contratante_Contratada>();
+		
+		List<RelatorioAdmin> relAdminContContrat = new ArrayList<RelatorioAdmin>();
+		
+		List<Contratante> contratantes = new ArrayList<Contratante>();
+		
+		List<Contratada> contratadas = new ArrayList<Contratada>();
+		
+		List<Contratada> c = new ArrayList<Contratada>();
+		
+		
+		
+		ccs = this.contratadaService.findAllContContrat();
+		
+		Integer i = 0;
+		Integer j = 0;
+		Integer l = 0;
+		for(Contratante_Contratada cc : ccs){
+			l++;
+			
+			Contratante cont = this.contratanteService.findById(cc.getContratante_id());
+			
+			Contratada contrat = this.contratadaService.findById(cc.getContratadas_id());
+			
+			
+			if((!contratantes.contains(cont)) && (!c.isEmpty())){
+				
+				Collections.sort(c, new ContratadaComparator());
+				
+				for(Contratada contratada : c){
+					j++;
+					RelatorioAdmin b = new RelatorioAdmin();
+					b.setNumContratada(j.toString());
+					b.setCnpjContratada(contratada.getCnpj());
+					b.setRazaoSocialContratada(contratada.getRazaoSocial());
+					relAdminContContrat.add(b);
+					Integer num = c.size();
+					if(j == num){
+						RelatorioAdmin tot = new RelatorioAdmin();
+						tot.setQtdContratada("Total Contratadas: "+String.valueOf(num));
+						relAdminContContrat.add(tot);
+					}
+				
+				}
+				
+				c.removeAll(c);
+			}
+			
+	
+			if(!contratantes.contains(cont)){
+				i++;
+				j = 0;
+				RelatorioAdmin a = new RelatorioAdmin();
+				a.setNumContratante(i.toString());
+				a.setCnpjContratante(cont.getCnpj());
+				a.setRazaoSocialContratante(cont.getRazaoSocial());
+				relAdminContContrat.add(a);
+			}
+			
+			if(l == ccs.size()){
+				Collections.sort(c, new ContratadaComparator());
+				
+				for(Contratada contratada : c){
+					j++;
+					RelatorioAdmin b = new RelatorioAdmin();
+					b.setNumContratada(j.toString());
+					b.setCnpjContratada(contratada.getCnpj());
+					b.setRazaoSocialContratada(contratada.getRazaoSocial());
+					relAdminContContrat.add(b);
+					Integer num = c.size();
+					if(j == num){
+						RelatorioAdmin tot = new RelatorioAdmin();
+						tot.setQtdContratada("Total Contratadas: "+String.valueOf(num));
+						relAdminContContrat.add(tot);
+					}
+				
+				}
+				
+				Integer num = contratadas.size();
+				if(num != 0 ){
+					RelatorioAdmin tot = new RelatorioAdmin();
+					tot.setQtdContratada("Total Contratadas: " + String.valueOf(num));
+					relAdminContContrat.add(tot);
+					RelatorioAdmin totContratante = new RelatorioAdmin();
+					totContratante.setQtdContratante("Total de Contratante: "+ String.valueOf(i));
+					relAdminContContrat.add(totContratante);
+				}
+				
+				c.removeAll(c);
+			}
+			
+			contratantes.add(cont);
+			contratadas.add(contrat);
+			c.add(contrat);
+		}
+		return relAdminContContrat;
+	}
+	
+	/**
+	 * retorna uma lista com os funcionarios 
+	 * @return List
+	 */
+	public List<RelatorioAdmin> getFuncionarios() throws Exception{
+		
+		
+		List<RelatorioAdmin> relAdminContContrat = new ArrayList<RelatorioAdmin>();
+		
+		List<Long> contratantes = new ArrayList<Long>();
+		
+		List<Long> contratadas = new ArrayList<Long>();
+		
+		List<Prestador> funcionarios = new ArrayList<Prestador>();
+		
+		List<Object> prestadores = this.prestadorService.findByOrderContratante();
+		
+		Object[] item = prestadores.toArray(); 
+		int i=0;
+		int j=0;
+		int m=0;
+		int n=0;
+		for(Object obj : item){
+			
+			n++;
+			Object[] x = (Object[]) obj;
+			
+			Long contratanteId = Long.valueOf(x[0].toString()) ;
+			String contratanteRs = (String) x[1];
+			String contratanteCnpj = (String) x[2];
+			Long ContratadaId = Long.valueOf(x[3].toString()) ;
+			String contratadaRs = (String) x[4];
+			String contratadaCnpj = (String) x[5];
+			Long funcionarioId = Long.valueOf(x[6].toString()) ;
+			Prestador pres = new Prestador();
+			pres.setId(funcionarioId);
+			String funcionarioNome = (String) x[7];
+			String funcionarioPis = (String) x[8];
+			
+			
+			if(!contratantes.contains(contratanteId)){
+				if(m!=0){
+					RelatorioAdmin qtd = new RelatorioAdmin();
+					qtd.setQtdContratante("Qtd. de Funcionário: "+ String.valueOf(m));
+					relAdminContContrat.add(qtd);
+				}
+				i++;
+				RelatorioAdmin ce = new RelatorioAdmin();
+				ce.setNumContratante(String.valueOf(i));
+				ce.setRazaoSocialContratante(contratanteRs);
+				ce.setCnpjContratante(contratanteCnpj);
+				relAdminContContrat.add(ce);
+				m=0;
+			}
+			
+			if(!contratadas.contains(ContratadaId)){
+				j++;
+				RelatorioAdmin ca = new RelatorioAdmin();
+				ca.setNumContratada(String.valueOf(j));
+				ca.setRazaoSocialContratada(contratadaRs);
+				ca.setCnpjContratada(contratadaCnpj);
+				relAdminContContrat.add(ca);
+				
+			}
+			
+			m++;
+			RelatorioAdmin f = new RelatorioAdmin();
+			f.setNumFuncionario(String.valueOf(m));
+			f.setNomeFuncionario(funcionarioNome);
+			f.setPisFuncionario(funcionarioPis);
+			relAdminContContrat.add(f);
+			
+			contratantes.add(contratanteId);
+			contratadas.add(ContratadaId);
+			funcionarios.add(pres);
+			
+			if(n == item.length){
+				RelatorioAdmin TotCe = new RelatorioAdmin();
+				TotCe.setQtdContratante("Total de Contratante: "+ String.valueOf(i));
+				relAdminContContrat.add(TotCe);
+				RelatorioAdmin TotCa = new RelatorioAdmin();
+				TotCa.setQtdContratante("Total de Contratada: "+ String.valueOf(j));
+				relAdminContContrat.add(TotCa);
+				RelatorioAdmin TotFuc = new RelatorioAdmin();
+				TotFuc.setQtdContratante("Total de Funcionário: "+ String.valueOf(funcionarios.size()));
+				relAdminContContrat.add(TotFuc);
+			}
+			
+		}
+		return relAdminContContrat;
+		
+	}
+	
+	
+	
+	/**
+	 * metodo retorna data e hora formatada
+	 * @return
+	 * @throws Exception
+	 */
+	public String getTime() throws Exception{
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		String strDt = format.format(calendar.getTime());
+		
+		return strDt;
+	}
+	
+	
+	
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+	public ContratadaService getContratadaService() {
+		return contratadaService;
+	}
+
+	public void setContratadaService(ContratadaService contratadaService) {
+		this.contratadaService = contratadaService;
+	}
+
+	public PrestadorService getPrestadorService() {
+		return prestadorService;
+	}
+
+	public void setPrestadorService(PrestadorService prestadorService) {
+		this.prestadorService = prestadorService;
+	}
+
+
+}

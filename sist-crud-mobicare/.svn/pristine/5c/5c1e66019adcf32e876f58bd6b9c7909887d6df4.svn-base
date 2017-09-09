@@ -1,0 +1,304 @@
+package br.com.emape.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.dao.ContratadaDAO;
+import br.com.emape.dao.ContratanteDao;
+import br.com.emape.dao.GestaoDAO;
+import br.com.emape.model.Ano;
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.FolhaPagamento;
+import br.com.emape.model.Gestao;
+import br.com.emape.model.JornadaTrabalho;
+import br.com.emape.model.Mes;
+import br.com.emape.model.ParteFiscal;
+import br.com.emape.model.RotinaAdmissao;
+import br.com.emape.model.RotinaDesligamento;
+import br.com.emape.model.SegurancaMedicinaTrabalho;
+
+@Component("gestaoService")
+public class GestaoService {
+
+	@Autowired
+	private ContratadaDAO contratadaDAO;
+	@Autowired
+	private ContratanteDao contratanteDao;
+	@Autowired
+	private GestaoDAO gestaoDAO;
+	
+	
+	
+	
+	
+	/**
+	 * metodo retorna o objeto gestao
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public Gestao findById(Long id) throws Exception{
+		
+		return this.gestaoDAO.findById(id);
+	}
+	
+	/**
+	 * deleta o escopo de gestao.
+	 * @param id
+	 * @throws Exception
+	 */
+	public void deleteGestao(Long id) throws Exception{
+		
+		this.gestaoDAO.deleteGestao(id);
+	}
+	
+	
+	/**
+	 * retorna uma lista de todas as gestoes
+	 * @return List
+	 * @throws Exception
+	 */
+	public List<Gestao> findAll() throws Exception{
+		return this.gestaoDAO.findAll();
+	}
+	
+	/**
+	 * retorna uma lista de gestao da contratada
+	 * @param idContratada
+	 * @return List<Gestao>
+	 * @throws Exception
+	 */
+	public List<Gestao> findGestaoByContratada(Long idContratada)throws Exception{
+		
+		return this.gestaoDAO.findGestaoByContratada(idContratada);
+	}
+		
+		
+	/**
+	 * retorna uma lista de gestoes
+	 * @param idContrante
+	 * @param idContratada
+	 * @param mes
+	 * @param ano
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Gestao> findAllGestao(Long idContrante,Long idContratada,String mes,String ano) throws Exception{
+		
+		return this.gestaoDAO.findAllGestao(idContrante, idContratada, mes, ano);
+	}
+	
+	
+	/**
+	 * retorna todos os escopos da contratante
+	 * @param idContrante
+	 * @param idContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Gestao> findAllGestaoByContratante(Long idContrante, Long idContratada) throws Exception {
+		return this.gestaoDAO.findAllGestaoByContratante(idContrante, idContratada);
+	}
+	
+	
+	
+	
+	/**
+	 * salva o escopo de seguranca e medicina do trabalho
+	 * @param s
+	 * @param gestao
+	 * @throws Exception
+	 */
+	public void saveMedSegTrabalho(SegurancaMedicinaTrabalho s,Gestao gestao)throws Exception{
+		
+		this.gestaoDAO.saveMedSegTrabalho(s, gestao);
+		
+	}
+	/**
+	 * salva o escopo de jornada do trabalho
+	 * @param j
+	 * @param gestao
+	 * @throws Exception
+	 */
+	public void saveJornadaTrabalho(JornadaTrabalho j,Gestao gestao)throws Exception{
+		
+		this.gestaoDAO.saveJornadaTrabalho(j, gestao);
+	}
+	
+	/**
+	 * salva o escopo de desligamento
+	 * @param d
+	 * @param gestao
+	 * @throws Exception
+	 */
+	public void salvarRotinaDesligamento(RotinaDesligamento d,Gestao gestao) throws Exception{
+		
+		this.gestaoDAO.salvarRotinaDesligamento(d, gestao);
+	}
+	/**
+	 * save o escopo de parte fiscal
+	 * @param parteFiscal
+	 * @throws Exception
+	 */
+	public void saveParteFiscal(ParteFiscal parteFiscal, Gestao gestao)throws Exception{
+		
+		this.gestaoDAO.saveParteFiscal(parteFiscal,gestao);
+	}
+	
+	/**
+	 * save escopo de folha de pagamento
+	 * @param folhaPagamento
+	 * @param gestao
+	 * @throws Exception
+	 */
+	public void saveFolhaPagamento(FolhaPagamento folhaPagamento, Gestao gestao)throws Exception{
+		
+		this.gestaoDAO.saveFolhaPagamento(folhaPagamento, gestao);
+	}
+	
+	/**
+	 * salva o escopo de rotina de admissao
+	 * @param rot
+	 * @param gestao
+	 * @throws Exception
+	 */
+	public void saveRotinaAdmissao(RotinaAdmissao rot,Gestao gestao) throws Exception{
+		
+		this.gestaoDAO.saveRotinaAdmissao(rot, gestao);
+	}
+	
+	/**
+	 * save o modulo de gestao
+	 * @param gestao
+	 * @throws Exception
+	 */
+	public void saveGestao(Gestao gestao)throws Exception{
+		
+		this.gestaoDAO.saveGestao(gestao);
+		
+	}
+
+	/**
+	 * retorna uma lista de contratadas
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratada> listaContratadas() throws Exception {
+
+		return this.contratadaDAO.getListaCadastrada();
+	}
+	
+	
+	/**
+	 * retorna uma lista de contratante
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> listaContratante() throws Exception {
+		return this.contratanteDao.getListaContratante();
+	}
+
+	/**
+	 * retorna o objeto contratante
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Contratante findByIdContratante(Long id) throws Exception {
+
+		return this.contratanteDao.findById(id);
+	}
+
+
+	
+
+	/**
+	 * retorna o objeto contratada
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public Contratada findByIdContratada(Long id) throws Exception {
+
+		return this.contratadaDAO.findById(id);
+	}
+	
+	
+	/**
+	 * metodo retorna uma lista de objetos contratada
+	 * 
+	 * @param CnpjContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratada> findByCnpjContratada(String CnpjContratada)
+			throws Exception {
+		return this.gestaoDAO.findByCnpjContratada(CnpjContratada);
+	}
+
+	/**
+	 * metodo retorna uma lista de objetos contratante
+	 * 
+	 * @param CnpjContratada
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> findByCnpjContratante(String cnpjContratante)
+			throws Exception {
+
+		return this.gestaoDAO.findByCnpjContratante(cnpjContratante);
+	}
+
+	
+
+	/**
+	 * monta uma lista de meses
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Mes> listaMes() throws Exception {
+
+		return this.gestaoDAO.getListaMes();
+	}
+	
+
+
+	/**
+	 * lista os anos para a combo
+	 */
+	public List<Ano> listaAno() throws Exception {
+
+		return this.gestaoDAO.getListaAno();
+	}
+
+	public ContratadaDAO getContratadaDAO() {
+		return contratadaDAO;
+	}
+
+	public void setContratadaDAO(ContratadaDAO contratadaDAO) {
+		this.contratadaDAO = contratadaDAO;
+	}
+
+	public ContratanteDao getContratanteDao() {
+		return contratanteDao;
+	}
+
+	public void setContratanteDao(ContratanteDao contratanteDao) {
+		this.contratanteDao = contratanteDao;
+	}
+
+	public GestaoDAO getGestaoDAO() {
+		return gestaoDAO;
+	}
+
+	public void setGestaoDAO(GestaoDAO gestaoDAO) {
+		this.gestaoDAO = gestaoDAO;
+	}
+
+}

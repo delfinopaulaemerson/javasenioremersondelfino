@@ -1,0 +1,150 @@
+@CHARSET "ISO-8859-1";
+
+body{
+	background-color: #85B2cB;
+	font-size: 73%;
+	font-family: sans-serif;
+}
+
+#content{
+	background-color: #FFF;
+	padding: 70px 30px 30px 30px;
+	margin-top: -38px;
+	border-radius:2px 2px 5px 5px;
+	border: 1px solid #DDD;
+	box-shadow: 0px 3px 5px #124F70;
+}
+
+#bottom{
+	color: rgba(255, 255, 255, 0.7);
+	text-shadow: 0 1px 2px #124F70;
+	padding:20px;
+	text-align: center;
+}
+
+#ajaxLoading{
+	position: absolute;
+	top:15px;
+	left:0;
+	right:0;
+	z-index:99999;
+	text-align: center;
+}
+#ajaxLoading .message{
+	background-color:#FD0;
+	color:#4D4200;
+	font-weight:bold;
+	padding:5px;
+	margin:5px;
+	border-radius:3px;
+	border:1px solid #DEC000;
+}
+
+#messages{
+	position:absolute;
+	z-index:99999;
+	left: 0px;
+	right: 0px;
+	bottom:0px;
+}
+
+#messages-antigo{
+	position:absolute;
+	margin: -20px 0 10px 0;
+	z-index:99999;
+}
+
+.wijmo-wijmenu-list .ui-widget-content {
+	border-radius:2px 2px 5px 5px;
+	border: 1px solid #DDD;
+	box-shadow: 0px 3px 5px #DDD;
+}
+
+.ui-widget {
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	font-size: 12px;
+}
+
+.modalPanelButtons{
+	position:absolute;
+	right:0;
+	bottom:0;
+	width:100%;
+	text-align: center;
+	display: block;
+	background-color: #FAFAFA;
+	border: none;
+}
+
+.actionCollum{
+	width: 32px;
+	text-align: center;
+}
+
+.ui-datatable .ui-datatable-data td, .ui-datatable .ui-datatable-data-empty td {
+    border-color: #DDD;
+    border-style: solid;
+    border-width: 1px;
+    padding: 4px 10px;
+}
+
+.panelCentralized{
+	text-align: center;
+	display: block;
+	padding: 5px;
+	background-color: #FAFAFA;
+	border: 1px solid #DDD;
+}
+.panelForm{
+	box-shadow: 0px 2px 3px #DDD;
+	border:1px #D9EBFF solid;
+	background:#F0F7FF;
+}
+
+.imagemUser{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/user.png)     !important;
+} 
+
+.imagemGroupKey{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/group_key.png)     !important;
+} 
+
+.imagemKey{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/key.gif)     !important;
+} 
+
+.imagemReport{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/report.png)     !important;
+}
+
+.imagemSecurity{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/security.gif)     !important;
+}
+
+.imagemQuit{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/quit.png)     !important;
+}
+
+.imagemTipo{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/tipo.gif)     !important;
+}
+
+.imagemAtividade{ 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(../img/atividade.png)     !important;
+}

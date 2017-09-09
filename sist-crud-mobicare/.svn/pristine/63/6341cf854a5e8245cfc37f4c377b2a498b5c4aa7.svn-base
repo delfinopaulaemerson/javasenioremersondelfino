@@ -1,0 +1,14 @@
+package br.com.emape.util;
+
+import java.util.Comparator;
+
+import br.com.emape.model.Contratante;
+
+public class ContratanteComparator implements Comparator<Contratante> {
+
+	@Override
+	public int compare(Contratante arg0, Contratante arg1) {
+		return arg0.getRazaoSocial().compareTo(arg1.getRazaoSocial());
+	}
+
+}

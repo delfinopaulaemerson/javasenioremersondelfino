@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.prime.com.tr/ui">
+	  
+	  <script type="text/javascript">
+
+	  jQuery(document).ready(function($) {
+		  jQuery("#obs_contratoSocial").hide();
+		  jQuery("#obs_cartaoCnpj").hide();
+		  jQuery("#obs_cndPrevidencia").hide();
+		  jQuery("#obs_cndTributaria").hide();
+		  jQuery("#obs_crfFgts").hide();
+		  jQuery("#obs_cndDebitostrabalhista").hide();
+		  jQuery("#obs_folhaPagamento").hide();
+		  jQuery("#obs_cndDebitostrabalhista").hide();
+		  jQuery("#obs_folhaPagamento").hide();
+		  jQuery("#obs_plaFuncAlocContratante").hide();
+		  jQuery("#obs_guiaRecFgts").hide();
+		  jQuery("#obs_guiaPrevSoc").hide();
+		  jQuery("#obs_protConecSocial").hide();
+		  jQuery("#obs_sefipGfip").hide();
+		  jQuery("#obs_protConecSocial").hide();
+		  jQuery("#obs_notaFiscRetencaoInss").hide();
+		  jQuery("#obs_darf").hide();
+		  jQuery("#obs_notaFiscRetencaoInss").hide();
+		  jQuery("#obs_declRais").hide();
+		});
+
+		
+		function habilitarInput(obj,input){
+	
+			var valor = obj.value;
+			var id = input;
+			if(valor == "Insatisfatorio"){
+				
+				jQuery(id).show();
+				
+				}
+			if(valor == "Satisfatorio"){
+				jQuery(id).hide();
+				}
+			
+			}
+
+	  </script>	
+<div id="body">
+			<div class="grid-3-12">
+					<label for="mae" class="form-lbl">Norma Coletiva da Categoria<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio id="contratoSocial" value="#{gestaoBean.opcContSocial}" onclick="habilitarInput(this,'#obs_contratoSocial');" class="form-txt form-large" required="true" requiredMessage="Norma Coletiva da Categoria é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório"/>
+					</h:selectOneRadio>	
+			</div>
+			
+				<div class="grid-3-12" id="obs_contratoSocial">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_normColCat}"  class="form-txt form-large" /> 
+				</div>
+			<div class="grid-3-12" id="fgts">
+					<label for="rg" class="form-lbl">Acordo de Prorrogação de Horas<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCartCnpj}" onclick="habilitarInput(this,'#obs_cartaoCnpj');"    class="form-txt form-large" required="true" requiredMessage="Acordo de Prorrogação de Horas é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-3-12" id="obs_cartaoCnpj">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_acordProrrHoras}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-3-12">
+					<label for="mae" class="form-lbl">Autorização do MTE para Prorrogação em Atividades Insalubre<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndPrevi}" onclick="habilitarInput(this,'#obs_cndPrevidencia');" class="form-txt form-large" required="true" requiredMessage="Autorização do MTE para Prorrogação em Atividades Insalubre é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-3-12" id="obs_cndPrevidencia">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_autMte}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-3-12" id="gfip">
+					<label for="nome" class="form-lbl">Acordo de Compensação de Horas<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndTrib}" onclick="habilitarInput(this,'#obs_cndTributaria');"  class="form-txt form-large" required="true" requiredMessage="Acordo de Compensação de Horas é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-3-12" id="obs_cndTributaria">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_acordCompHoras}"  class="form-txt form-large" /> 
+				</div>
+		
+			<div class="grid-3-12">
+					<label for="mae" class="form-lbl">Banco de Horas<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opCrf}" onclick="habilitarInput(this,'#obs_crfFgts');"   class="form-txt form-large" required="true" requiredMessage="Banco de Horas é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+				
+			</div>
+			
+				<div class="grid-3-12" id="obs_crfFgts">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_bancHoras}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-3-12" id="folhapagamento">
+					<label for="mae" class="form-lbl">Folha de Ponto<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcCndtTrab}" onclick="habilitarInput(this,'#obs_cndDebitostrabalhista');"  class="form-txt form-large" required="true" requiredMessage="Folha de Ponto é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-3-12" id="obs_cndDebitostrabalhista">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_folPonto}" class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-3-12">
+					<label for="mae" class="form-lbl">Certificado do Relógio de Ponto<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcFolPag}" onclick="habilitarInput(this,'#obs_folhaPagamento');" class="form-txt form-large" required="true" requiredMessage="Certificado do Relógio de Ponto é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-3-12" id="obs_folhaPagamento">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_certRelPonto}"  class="form-txt form-large" /> 
+				</div>
+			
+			<div class="grid-3-12" id="inss">
+					<label for="dtnasc" class="form-lbl" id="guiarecolhimento">Escala de Revezamento<em class="form-req" title="Obrigatório">*</em></label>
+					<h:selectOneRadio value="#{gestaoBean.opcPlanFuncAloc}" onclick="habilitarInput(this,'#obs_plaFuncAlocContratante');"  class="form-txt form-large" required="true" requiredMessage="Escala de Revezamento é obrigatório">
+									<f:selectItem itemValue="Satisfatorio" itemLabel="Satisfatório" />
+									<f:selectItem itemValue="Insatisfatorio" itemLabel="Insatisfatório" />
+					</h:selectOneRadio>
+			</div>
+			
+				<div class="grid-3-12" id="obs_plaFuncAlocContratante">
+					<h:inputTextarea value="#{gestaoBean.jornadaTrabalho.obs_escRevez}"  class="form-txt form-large" /> 
+				</div>
+
+</div>
+</html>

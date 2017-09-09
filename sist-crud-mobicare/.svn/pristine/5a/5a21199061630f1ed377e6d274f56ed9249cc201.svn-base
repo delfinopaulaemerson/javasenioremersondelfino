@@ -1,0 +1,205 @@
+package br.com.emape.service;
+
+import java.util.GregorianCalendar;
+
+import org.springframework.stereotype.Component;
+
+@Component("validacoesService")
+public class ValidacoesService {
+
+	/**
+	 * metodo verifica se o cpf e valido
+	 * 
+	 * @param strCpf
+	 * @return
+	 */
+	public boolean isCpf(String strCpf) throws Exception {
+
+		int cpf[] = new int[11], dv1 = 0, dv2 = 0;
+
+		strCpf = strCpf.replace(".", "");
+		strCpf = strCpf.replace("-", "");
+
+		if (strCpf.length() != 11)
+			return false;
+
+		for (int i = 0; i < 11; i++)
+			cpf[i] = Integer.parseInt(strCpf.substring(i, i + 1));
+		for (int i = 0; i < 9; i++)
+			dv1 += cpf[i] * (i + 1);
+		cpf[9] = dv1 = dv1 % 11;
+		for (int i = 0; i < 10; i++)
+			dv2 += cpf[i] * i;
+		cpf[10] = dv2 = dv2 % 11;
+		if (dv1 > 9)
+			cpf[9] = 0;
+		if (dv2 > 9)
+			cpf[10] = 0;
+
+		if (Integer.parseInt(strCpf.substring(9, 10)) != cpf[9]
+				|| Integer.parseInt(strCpf.substring(10, 11)) != cpf[10])
+			return false;
+		else
+			return true;
+
+	}
+
+	/*
+	 * metodo verifica se o cnpj e valido
+	 * 
+	 * @param cnpj
+	 * 
+	 * @return
+	 */
+	public boolean isCnpj(String cnpj) throws Exception {
+		if (!cnpj.substring(0, 1).equals("")) {
+			try {
+				cnpj = cnpj.replace('.', ' ');// onde há ponto coloca espaço
+				cnpj = cnpj.replace('/', ' ');// onde há barra coloca espaço
+				cnpj = cnpj.replace('-', ' ');// onde há traço coloca espaço
+				cnpj = cnpj.replaceAll(" ", "");// retira espaço
+				int soma = 0, dig;
+				String cnpj_calc = cnpj.substring(0, 12);
+
+				if (cnpj.length() != 14) {
+					return false;
+				}
+				char[] chr_cnpj = cnpj.toCharArray();
+				/* Primeira parte */
+				for (int i = 0; i < 4; i++) {
+					if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9) {
+						soma += (chr_cnpj[i] - 48) * (6 - (i + 1));
+					}
+				}
+				for (int i = 0; i < 8; i++) {
+					if (chr_cnpj[i + 4] - 48 >= 0 && chr_cnpj[i + 4] - 48 <= 9) {
+						soma += (chr_cnpj[i + 4] - 48) * (10 - (i + 1));
+					}
+				}
+				dig = 11 - (soma % 11);
+				cnpj_calc += (dig == 10 || dig == 11) ? "0" : Integer
+						.toString(dig);
+				/* Segunda parte */
+				soma = 0;
+				for (int i = 0; i < 5; i++) {
+					if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9) {
+						soma += (chr_cnpj[i] - 48) * (7 - (i + 1));
+					}
+				}
+				for (int i = 0; i < 8; i++) {
+					if (chr_cnpj[i + 5] - 48 >= 0 && chr_cnpj[i + 5] - 48 <= 9) {
+						soma += (chr_cnpj[i + 5] - 48) * (10 - (i + 1));
+					}
+				}
+				dig = 11 - (soma % 11);
+				cnpj_calc += (dig == 10 || dig == 11) ? "0" : Integer
+						.toString(dig);
+				return cnpj.equals(cnpj_calc);
+			} catch (Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * metodo verifica se o pis e valido
+	 * 
+	 * @param strPIS
+	 * @return
+	 */
+	public boolean isPIS(String strPIS) throws Exception {
+		int liTamanho = 0;
+		StringBuffer lsAux = null;
+		StringBuffer lsMultiplicador = new StringBuffer("3298765432");
+		int liTotalizador = 0;
+		int liResto = 0;
+		int liMultiplicando = 0;
+		int liMultiplicador = 0;
+		boolean lbRetorno = true;
+		int liDigito = 99;
+
+		String pis = strPIS.replace(".", "").replace("-", "");
+
+		lsAux = new StringBuffer().append(pis);
+		liTamanho = lsAux.length();
+
+		if (liTamanho != 11) {
+			lbRetorno = false;
+		}
+
+		if (lbRetorno) {
+			for (int i = 0; i < 10; i++) {
+
+				liMultiplicando = Integer.parseInt(lsAux.substring(i, i + 1));
+				liMultiplicador = Integer.parseInt(lsMultiplicador.substring(i,
+						i + 1));
+				liTotalizador += liMultiplicando * liMultiplicador;
+			}
+
+			liResto = 11 - liTotalizador % 11;
+			liResto = liResto == 10 || liResto == 11 ? 0 : liResto;
+
+			liDigito = Integer.parseInt("" + lsAux.charAt(10));
+			lbRetorno = liResto == liDigito;
+		}
+
+		return lbRetorno;
+	}
+
+	/**
+	 * verifica se a data está valida
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public boolean isValidaData(String data) throws Exception {
+		GregorianCalendar calendar =  new GregorianCalendar();       
+        int dia = 0,mes = 0,ano = 0;     
+  
+        String diaStr = data.substring(0,2);     
+        String mesStr = data.substring(3,5);     
+        String anoStr = data.substring(6,10);     
+  
+        try {     
+            dia = Integer.parseInt(diaStr);     
+            mes = Integer.parseInt(mesStr);     
+            ano = Integer.parseInt(anoStr);     
+        } catch (Exception e) {     
+            return false;     
+        }     
+        if (dia < 1 || mes < 1 || ano < 1)     
+            return false;     
+        else     
+            if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12)     
+                if (dia <= 31)     
+                    return true;     
+                else     
+                    return false;     
+            else     
+                if (mes == 4 || mes == 6 || mes == 9 || mes == 11)     
+                    if (dia <= 30)     
+                        return true;     
+                    else     
+                        return false;     
+                else     
+                    if (mes == 2)     
+                        if (calendar.isLeapYear(ano))     
+                            if (dia <= 29)     
+                                return true;     
+                            else     
+                                return false;     
+                        else     
+                            if (dia <= 28)     
+                                return true;     
+                            else     
+                                return false;     
+                    else     
+                        if (mes > 12)     
+                            return false;     
+        return true;    
+	}
+
+
+}

@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+/*
+MENSAGENS DE ERRO
+Tipos: msg-info, msg-info, msg-warn, msg-error.
+*/
+
+#msg-warn, #msg-error, #msg-info {padding:16px;margin:0 auto 18px auto;position:relative;}
+#msg-warn p, #msg-error p, #msg-info p{font-size:17px;padding:0 0 0 56px;line-height:20px;text-align:center;}
+#msg-warn .icone, #msg-error .icone, #msg-info .icone{position:absolute;top:50%;margin-top:-25px;width:40px;}
+
+#msg-warn{}
+#msg-warn p{color:#be872e;}
+#msg-warn .icone{background:url(../imagens/msg_warn_icon.png) no-repeat;height:48px;}
+#msg-error{}
+#msg-error p{color:#bd432c;}
+#msg-error .icone{background:url(../imagens/msg_error_icon.png) no-repeat;height:43px;}
+#msg-info{}
+#msg-info p{color:#00992b;}
+#msg-info .icone{background:url(../imagens/msg_ok_icon.png) no-repeat;height:43px;}
+
+.msg-question{padding:0 16px 10px 16px;width:480px;margin:0 auto 18px auto;
+background:#DFF4F2 url(../imagens/msg_info_topbg.jpg) repeat-x top;border:1px solid #88CAB7;}
+.msg-question .qtexto{padding:3px 0 0 0;}
+.msg-question .qtexto p{background:url(../imagens/msg_question_icon.jpg) no-repeat left 65%;
+color:#5A3A73;font-size:17px;padding:14px 0 16px 56px;line-height:18px;text-align:center;}
+.msg-question .qbotoes{border-top:1px solid #3EA480;padding:10px 0 0 0;}
+.msg-question .qbotoes input.btn{margin:0 6px 0 0;border:1px solid #202F60;background:#A3B1E0 url(../imagens/btnquestion_bg.gif) repeat-x;}
+.msg-question .qbotoes input.btn:hover{border:1px solid #202F60;background:#A3B1E0 url(../imagens/btnquestion_bg_h.gif) repeat-x;}
+
+#msg-errorquestion{padding:0 16px 10px 16px;width:480px;margin:0 auto 18px auto;
+background:#E2EAE7 url(../imagens/msg_error_topbg.jpg) repeat-x top;border:1px solid #E29592;}
+#msg-errorquestion .qtexto{padding:3px 0 0 0;}
+#msg-errorquestion .qtexto p{background:url(../imagens/msg_error_icon.jpg) no-repeat left 65%;
+color:#5A3A73;font-size:17px;padding:14px 0 16px 56px;line-height:18px;text-align:center;color:#FF0000;}
+#msg-errorquestion .qbotoes{border-top:1px solid #E29592;padding:10px 0 0 0;}
+#msg-errorquestion .qbotoes input.btn{margin:0 6px 0 0;border:1px solid #640000;background:#FF9B9B url(../imagens/btnerrorquestion_bg.gif) repeat-x;}
+#msg-errorquestion .qbotoes input.btn:hover{border:1px solid #480000;background:#FF9B9B url(../imagens/btnerrorquestion_bg_h.gif) repeat-x;}
+
+.msg-loginbox{border:1px dotted #38AD9C;padding:8px 10px 8px 30px;margin:0 15px 18px 15px;
+background:url(../imagens/msg_info_icon_menor.png) no-repeat 8px center;}
+.msg-loginbox p{font-size:11px;}
+
+.msg-esquecisenhabox{border:1px dotted #38AD9C;padding:8px 10px 8px 44px;margin:0 29px 18px 29px;
+background:url(../imagens/msg_info_icon_menor.png) no-repeat 14px center;}
+.msg-esquecisenhabox p{font-size:11px;}

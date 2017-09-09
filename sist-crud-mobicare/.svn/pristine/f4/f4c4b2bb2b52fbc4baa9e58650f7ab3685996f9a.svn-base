@@ -1,0 +1,183 @@
+package br.com.emape.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+@Entity
+@Table(name="gestao")
+public class Gestao implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USER")
+	@SequenceGenerator(name="SEQ_USER", sequenceName="id", allocationSize=1)
+	private Long id;
+	
+	@OneToOne
+	@JoinColumn(name = "contratada_fk")
+	private Contratada contratada;
+	
+	@OneToOne
+	@JoinColumn(name = "contratante_fk")
+	private Contratante contratante;
+	
+	@OneToOne
+	@JoinColumn(name = "parteFiscal_fk")
+	private ParteFiscal parteFiscal;
+	
+	@OneToOne
+	@JoinColumn(name = "folhaPagamento_fk")
+	private FolhaPagamento folhaPagamento;
+	
+	@OneToOne
+	@JoinColumn(name = "rotinaAdmissao_fk")
+	private RotinaAdmissao rotinaAdmissao;
+	
+	@OneToOne
+	@JoinColumn(name = "rotinaDesligamento_fk")
+	private RotinaDesligamento rotinaDesligamento;
+	
+	@OneToOne
+	@JoinColumn(name = "jornadaTrabalho_fk")
+	private JornadaTrabalho jornadaTrabalho;
+	
+	@OneToOne
+	@JoinColumn(name = "segurancaMedicinaTrabalho_fk")
+	private SegurancaMedicinaTrabalho segurancaMedicinaTrabalho;
+	
+	@Column(name="mes")
+	private String mes;
+	
+	@Column(name="ano")
+	private String ano;
+	
+	@Column(name="descricao")
+	private String descricao;
+	
+	@Column(name="situacao")
+	private String situacao;
+	
+	
+	public Gestao(){
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Contratada getContratada() {
+		return contratada;
+	}
+
+	public void setContratada(Contratada contratada) {
+		this.contratada = contratada;
+	}
+
+	public Contratante getContratante() {
+		return contratante;
+	}
+
+	public void setContratante(Contratante contratante) {
+		this.contratante = contratante;
+	}
+
+	public ParteFiscal getParteFiscal() {
+		return parteFiscal;
+	}
+
+	public void setParteFiscal(ParteFiscal parteFiscal) {
+		this.parteFiscal = parteFiscal;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
+	public String getAno() {
+		return ano;
+	}
+
+	public void setAno(String ano) {
+		this.ano = ano;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public FolhaPagamento getFolhaPagamento() {
+		return folhaPagamento;
+	}
+
+	public void setFolhaPagamento(FolhaPagamento folhaPagamento) {
+		this.folhaPagamento = folhaPagamento;
+	}
+
+	public RotinaAdmissao getRotinaAdmissao() {
+		return rotinaAdmissao;
+	}
+
+	public void setRotinaAdmissao(RotinaAdmissao rotinaAdmissao) {
+		this.rotinaAdmissao = rotinaAdmissao;
+	}
+
+	public RotinaDesligamento getRotinaDesligamento() {
+		return rotinaDesligamento;
+	}
+
+	public void setRotinaDesligamento(RotinaDesligamento rotinaDesligamento) {
+		this.rotinaDesligamento = rotinaDesligamento;
+	}
+
+	public JornadaTrabalho getJornadaTrabalho() {
+		return jornadaTrabalho;
+	}
+
+	public void setJornadaTrabalho(JornadaTrabalho jornadaTrabalho) {
+		this.jornadaTrabalho = jornadaTrabalho;
+	}
+
+	public SegurancaMedicinaTrabalho getSegurancaMedicinaTrabalho() {
+		return segurancaMedicinaTrabalho;
+	}
+
+	public void setSegurancaMedicinaTrabalho(
+			SegurancaMedicinaTrabalho segurancaMedicinaTrabalho) {
+		this.segurancaMedicinaTrabalho = segurancaMedicinaTrabalho;
+	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
+	}
+	
+
+}

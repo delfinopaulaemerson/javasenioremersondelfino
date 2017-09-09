@@ -1,0 +1,45 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="/template/head.xhtml"/>
+<body>
+ <h:form>
+    <div id="wrapper" class="hasLayout">
+		<div id="header">
+			<div id="headerinterna">
+				<div  id="emape" style="margin-left: 630px;">
+					<h1>MOBICARE</h1><br />	
+				</div>
+				<div  id="gestao" style="margin-left: 86px;">
+					<h1 style="margin-left: 493px;">Sistema CRUD Básico</h1>
+				</div>
+				<div id="infologin">
+					<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{departamentoBean.sair()}" value="SAIR" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div class="continterna">
+			<div id="form_box" class="form_index">
+				<h2></h2><br/>
+				 <div id="mensagem">
+   	            	<ul>
+   	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+   	            	</ul>
+   	            </div>
+			</div>
+		</div>
+		<ui:include src="/template/footer.xhtml"/>
+		<!-- fim #rodape -->
+	</div>
+</h:form>	
+</body>
+</html>

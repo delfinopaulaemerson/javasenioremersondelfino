@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+             
+<ui:include src="/template/head.xhtml"/>
+<body>
+<h:form id="escopo" acceptcharset="ISO-8859-1" >
+	 <div id="wrapper" class="hasLayout">
+			<div id="header">
+				<div id="headerinterna">
+					<div  id="emape" style="margin-left: 630px;">
+						<h1>EMAPE</h1><br />	
+					</div>
+					<div  id="gestao" style="margin-left: 489px;">
+						<h1>Sistema de Validação e Gestão Documental</h1>
+					</div>
+					<div id="infologin">
+						<div id="infologininterna" style="margin-top: 25px;">
+							Usu&aacute;rio: <label id="user">#{loginBean.usuarioLogado}</label>&nbsp;
+							<h:commandLink action="#{contratadaBean.doSair()}" value="SAIR" immediate="true" />
+							<br />
+							<span>Vers&atilde;o 1.0.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<ui:include src="/template/menu.xhtml"/>
+		<div id="cabecalho" style="border-left-width: 100px;margin-top: 50px;margin-left: 700px;">
+             <h2>&raquo; <h:commandLink value="Voltar" action="#{gestaoBean.doVoltarCadastroEscopo()}" immediate="true" /> &raquo; <label style="color:blue;"> Validação &raquo; Cadastro</label></h2>
+			 <div id="mensagem" style="margin-top: 20px;">
+  	            	<ul>
+  	            			<h2><li><h:messages  showDetail="true" showSummary="false" infoStyle="color:blue;" warnStyle="color: yellow;" errorStyle="color: red;" warnClass="erro"/></li></h2>
+  	            	</ul>
+  	          </div>	
+		</div>
+		<br/>
+		<br/>
+		<div id="fildset">
+			<fieldset class="fieldset">
+					<legend>Cadastro do Escopo</legend>
+						<fieldset class="fieldset">
+							<legend>Competência</legend>
+							<div class="grid-3-12">
+									<label for="id" class="form-lbl">Contratante<em class="form-req" title="Obrigatório">*</em></label>
+										<h:selectOneMenu value="#{gestaoBean.opcContratante}"  class="form-txt form-large" required="true" requiredMessage="Contratante é obrigatório.">
+											<f:selectItem itemLabel="Selecione o Contratante" />
+		   									<f:selectItems value="#{gestaoBean.contratantes}" var="c" itemLabel="#{c.razaoSocial}" itemValue="#{c.id}" />
+		   									<f:ajax event="change" render="@form" listener="#{gestaoBean.comboContratada()}" />
+		   								</h:selectOneMenu>
+							</div>
+							<div class="grid-3-12">
+								<label for="id" class="form-lbl">Contratada<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{gestaoBean.opcContratada}"  class="form-txt form-large" required="true" requiredMessage="Contratada é obrigatório." >
+										<f:selectItem itemLabel="Selecione a Contratada" />
+	   									<f:selectItems value="#{gestaoBean.contratadas}" var="d" itemLabel="#{d.razaoSocial}"	 itemValue="#{d.id}" />
+	   								</h:selectOneMenu>
+							</div>
+							<div class="grid-3-12">
+								<label for="id" class="form-lbl">Mês<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{gestaoBean.opcMes}"  class="form-txt form-large" required="true" requiredMessage="Mês é obrigatório.">
+										<f:selectItem itemLabel="Selecione o Mês" />
+										<f:selectItems value="#{gestaoBean.meses}" var="m" itemLabel="#{m.descricao}" itemValue="#{m.descricao}"/>
+	   								</h:selectOneMenu>
+							</div>
+							<div class="grid-3-12">
+								<label for="id" class="form-lbl">Ano<em class="form-req" title="Obrigatório">*</em></label>
+									<h:selectOneMenu value="#{gestaoBean.opcAno}"  class="form-txt form-large" required="true" requiredMessage="Ano é obrigatório.">
+										<f:selectItem itemLabel="Selecione o Ano" />
+	   									<f:selectItems value="#{gestaoBean.anos}" var="a" itemLabel="#{a.descricao}" itemValue="#{a.descricao}" />
+	   								</h:selectOneMenu>
+							</div>
+						</fieldset>
+						<fieldset class="fieldset">
+							<legend>Parte Fiscal</legend>
+							<ui:include src="/escopo/escopo_partefiscaledit.xhtml"/>
+						</fieldset>
+				</fieldset>
+				<p class="form-req">* Campos obrigatórios </p>		
+		</div>	
+			<div class="botoes" style="margin-top: 25px;margin-bottom: 25px;">
+				<h:commandButton action="#{gestaoBean.saveParteFiscal()}" type="submit" class="form-button dir btnPesquisar"  accesskey="p" title="Salvar" value="Salvar" />
+				<h:inputHidden value="#{gestaoBean.gestao.id}" />
+			</div>
+	<div id="rodape">
+			<p class="nome_sistema">Est. Mar. Miguel Salazar Mendes de Morais, 128, Sala 304, Taquara, RJ, cep 22770-331</p>
+	</div>
+</div>
+</h:form>			
+</body> 
+</html>

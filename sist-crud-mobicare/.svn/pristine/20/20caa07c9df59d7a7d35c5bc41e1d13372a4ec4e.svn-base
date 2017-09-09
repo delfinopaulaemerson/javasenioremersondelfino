@@ -1,0 +1,885 @@
+package br.com.emape.bean;
+
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Dados;
+import br.com.emape.model.Endereco;
+import br.com.emape.service.ContratadaService;
+import br.com.emape.service.ContratanteService;
+import br.com.emape.service.DadoService;
+import br.com.emape.service.EnderecoService;
+import br.com.emape.service.ValidacoesService;
+
+/**
+ * 
+ * @author emerson
+ * 
+ */
+@Component("contratadaBean")
+@ManagedBean(name = "contratadaBean")
+@ViewScoped
+public class ContratadaBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(ContratadaBean.class);
+
+	@Autowired
+	private ContratadaService contratadaService;
+	@Autowired
+	private EnderecoService enderecoService;
+	@Autowired
+	private DadoService dadoService;
+	@Autowired
+	private ValidacoesService validacoesService;
+	@Autowired
+	private ContratanteService contratanteService;
+
+	private Contratada contratada;
+
+	private Endereco endereco;
+
+	private Dados dados;
+	
+	private Long opcContratante;
+
+	private String opt;
+	
+	private String optStatus;
+
+	private List<Contratada> contratadas = new ArrayList<Contratada>();
+	
+	private List<Contratante> contratantes = new ArrayList<Contratante>();
+	
+	private DataModel<Contratada> datamodel;
+	
+	private String maskdtVigencia;
+	
+	private String maskcnpj;
+
+	public ContratadaBean() {
+
+		contratada = new Contratada();
+
+		endereco = new Endereco();
+
+		dados = new Dados();
+	}
+	
+
+	public String doVoltarCadastro() {
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * redireciona para a interface de pesquisa de contratada
+	 * 
+	 * @return
+	 */
+	public String doPesquisa() {
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			limpaComponente(contratada, endereco, dados);
+			
+			this.contratadas.addAll(this.contratadaService.getListaCadastrada());
+
+		} catch (Exception e) {
+			logger.error("Erro  Pesquisar o Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/edicao/contratada";
+		}
+
+		return "/edicao/contratada";
+
+	}
+	
+	
+
+	/**
+	 * retorna da tela de pesquisa
+	 * 
+	 * @return
+	 */
+	public String doVoltarPesquisa() {
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * metodo responsavel pela pesquisa da contratada
+	 * 
+	 * @return
+	 */
+	public String pesquisarContratada() {
+
+		boolean ok;
+
+		if (this.contratada == null) {
+			this.setContratada(new Contratada());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			ok = limpaDadosPesquisa(contratada);
+
+			if (!ok) {
+				return "/edicao/contratada";
+			}
+
+			// remove a lista da interface
+			this.contratadas.removeAll(this.contratadas);
+
+			this.contratadas.addAll(this.contratadaService
+					.Find(this.contratada));
+
+			if (this.contratadas.isEmpty()) {
+
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Contratada inexistente.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				return "/edicao/contratada";
+			}
+
+			limpaComponente(this.contratada, this.endereco, this.dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao Pesquisar o Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratada";
+		}
+
+		return "/edicao/contratada";
+	}
+
+	/**
+	 * preenche a interface com os dados do banco
+	 * 
+	 * @param contratada
+	 * @return
+	 */
+	public String editar(Contratada contratada) {
+
+		if (this.contratada == null) {
+			this.setContratada(new Contratada());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+
+		}
+
+		try {
+
+			this.contratada = this.contratadaService.findById(contratada
+					.getId());
+			
+			this.contratantes.addAll(getComboContratante());
+			
+			BigInteger id = this.contratadaService.getContratanteVinculado(this.contratada.getId());
+			
+			this.setOpcContratante(id.longValue());
+			
+
+			if (this.contratada == null) {
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"Contratanda inexistente");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+				return "/edicao/contratada";
+
+			}
+			this.setOpt(this.contratada.getOptSimpNacional());
+			this.setOptStatus(this.contratada.getStatusContratada());
+			this.setEndereco(this.enderecoService
+					.findContratada(this.contratada.getId()));
+			this.setMaskcnpj(this.contratada.getCnpj());
+			this.setMaskdtVigencia(this.contratada.getDtVigenciaCont());
+			this.setDados(this.dadoService.findDadosContratada(this.contratada
+					.getId()));
+			
+
+		} catch (Exception e) {
+			logger.error("Erro ao Editar a Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratada";
+		}
+
+		return "/edicao/contratadaeditar";
+	}
+	
+	public String doVoltarEditar(){
+		
+		if (this.contratada == null) {
+			this.setContratada(new Contratada());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+
+		}
+		
+		try {
+			
+			limpaComponente(contratada, endereco, dados);
+			
+		} catch (Exception e) {
+			logger.error("Erro ao doVoltarEditar a Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+		}
+		
+		
+		return "/edicao/contratada";
+	}
+
+	/**
+	 * deleta o objeto contratada
+	 * 
+	 * @param contratada
+	 * @return
+	 */
+	public String deletarContratada(Contratada contratada) {
+
+		if (this.contratada == null) {
+			this.setContratada(new Contratada());
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+			this.setDados(new Dados());
+		}
+
+		try {
+
+			// deleta
+			this.contratadaService.deleteContratada(contratada);
+
+			// remove a lista da interface
+			this.contratadas.remove(contratada);
+
+			// limpa os componentes
+			limpaComponente(this.contratada, this.endereco, this.dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao Deletar a Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratada";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"A Contratada foi excluida com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	/**
+	 * valida os dados da pesquisa
+	 * 
+	 * @param contratada2
+	 * @return
+	 */
+	private boolean limpaDadosPesquisa(Contratada contratada) {
+
+		boolean status = true;
+
+		if (("".equals(contratada.getCnpj()))
+				&& ("".equals(contratada.getRazaoSocial()))) {
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"E necessário um item para pesquisa!");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			status = false;
+
+		}
+
+		return status;
+	}
+
+	/**
+	 * atualiza os dados da contratada
+	 * 
+	 * @return
+	 */
+	public String atualizaContratada() {
+		
+		boolean ok = true;
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		if (this.endereco == null) {
+
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+		
+		this.contratada.setCnpj(this.getMaskcnpj());
+
+		this.contratada.setDtVigenciaCont(this.maskdtVigencia);
+		
+		this.contratada.setOptSimpNacional(getOpt());
+			
+		this.contratada.setStatusContratada(getOptStatus());
+		
+
+		try {
+			
+			if(!this.validacoesService.isValidaData(contratada.getDtVigenciaCont())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"O Campo Data de Vigência inválida.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				ok = false;
+				
+			}
+			
+			if(!this.validacoesService.isCnpj(this.contratada.getCnpj())){
+				FacesMessage sucesso = new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, "",
+						"CNPJ inválido.");
+				FacesContext.getCurrentInstance().addMessage(null, sucesso);
+				ok = false;
+				
+			}
+			
+			if (!ok) {
+				return "/edicao/contratadaeditar";
+			}
+
+			this.contratadaService
+					.updateContratada(contratada, endereco, dados, getOpcContratante());
+
+			this.limpaComponente(contratada, endereco, dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao atualizar a Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/edicao/contratadaeditar";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"A Contratada foi atualizada com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+	
+	/**
+	 * redireciona para a tela de Contratada
+	 * 
+	 * @return
+	 */
+	public String doCadastroContratada() {
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		if (this.endereco == null) {
+
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+		
+		try {
+			
+			limpaComponente(this.contratada, this.endereco, this.dados);
+			
+			this.contratantes.addAll(this.getComboContratante());
+			
+		} catch (Exception e) {
+			logger.error("Erro ao atualizar a doCadastroContratada()" + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			
+			return "/cadastro/contratada";
+		}
+		
+		
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+		}
+
+		return "/cadastro/contratada";
+	}
+
+	/**
+	 * cadastra a contratada
+	 * 
+	 * @return
+	 */
+	public String cadastrarContrarada() {
+
+		boolean ok = true;
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+
+		}
+
+		if (this.endereco == null) {
+
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+
+		try {
+				
+				this.contratada.setOptSimpNacional(getOpt());
+		
+				this.contratada.setCnpj(this.maskcnpj);
+			
+				this.contratada.setDtVigenciaCont(this.maskdtVigencia);
+				
+				if(!this.validacoesService.isValidaData(contratada.getDtVigenciaCont())){
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"O Campo Data de Vigência inválida.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					ok = false;
+					
+				}
+				
+				if(!this.validacoesService.isCnpj(this.contratada.getCnpj())){
+					FacesMessage sucesso = new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, "",
+							"CNPJ inválido.");
+					FacesContext.getCurrentInstance().addMessage(null, sucesso);
+					ok = false;
+					
+				}	
+				
+				this.contratada.setStatusContratada(getOptStatus());
+		
+
+			if (!ok) {
+
+				return "/cadastro/contratada";
+			}
+
+			this.contratadaService.cadastrarContratada(contratada, endereco,
+					dados,this.opcContratante);
+
+			limpaComponente(this.contratada, this.endereco, this.dados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao Cadastrar a Contratada " + e.getMessage());
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"Favor contactar o administrador");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+			return "/begin/begin";
+		}
+
+		FacesMessage sucesso = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+				"Contratada foi cadastrada com sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, sucesso);
+
+		return "/begin/begin";
+	}
+
+	private void limpaComponente(Contratada c, Endereco e, Dados d)
+			throws Exception {
+
+		c.setCnae("");
+		c.setCnpj("");
+		c.setCodigoSap("");
+		c.setFpas("");
+		c.setOptSimpNacional("");
+		c.setOutrasunidades("");
+		c.setRat("");
+		c.setRazaoSocial("");
+		c.setValorContrato("");
+		c.setDscatividade("");
+		
+		this.setOpt("");
+		this.setOptStatus("");
+		
+		this.getContratantes().removeAll(getContratantes());
+		
+		this.getContratadas().removeAll(getContratadas());
+		
+		this.setMaskcnpj("");
+		this.setMaskdtVigencia("");
+		
+		this.setOpcContratante(null);
+
+		e.setBairro("");
+		e.setCep("");
+		e.setCidade("");
+		e.setComplemento("");
+		e.setEstado("");
+		e.setNumero("");
+		e.setRua("");
+
+		d.setEmail("");
+		d.setNome("");
+		d.setTelefone("");
+	}
+
+	private boolean validaFormContratada(Contratada contratada,
+			Endereco endereco, Dados dados) throws Exception{
+
+		boolean status = true;
+		
+		
+		
+		
+		
+		
+		if(!this.validacoesService.isValidaData(contratada.getDtVigenciaCont())){
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"O Campo Data de Vigência inválida.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			status = false;
+			
+		}
+		
+		
+		if(!this.validacoesService.isCnpj(this.contratada.getCnpj())){
+			FacesMessage sucesso = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "",
+					"CNPJ inválido.");
+			FacesContext.getCurrentInstance().addMessage(null, sucesso);
+			status = false;
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		return status;
+	}
+	
+	/**
+	 * retorna uma lista de contratantes
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Contratante> getComboContratante() throws Exception{
+		
+		return this.contratanteService.Find();
+	}
+	
+	/**
+	 * sair da aplicacao
+	 * 
+	 * @return
+	 */
+	public String doSair() {
+
+		if (this.contratada == null) {
+
+			this.setContratada(new Contratada());
+
+		}
+
+		if (this.endereco == null) {
+			this.setEndereco(new Endereco());
+		}
+
+		if (this.dados == null) {
+
+			this.setDados(new Dados());
+		}
+
+		return "/index.xhtml";
+
+	}
+
+	public Contratada getContratada() {
+		return contratada;
+	}
+
+	public void setContratada(Contratada contratada) {
+		this.contratada = contratada;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Dados getDados() {
+		return dados;
+	}
+
+	public void setDados(Dados dados) {
+		this.dados = dados;
+	}
+
+	public ContratadaService getContratadaService() {
+		return contratadaService;
+	}
+
+	public void setContratadaService(ContratadaService contratadaService) {
+		this.contratadaService = contratadaService;
+	}
+
+	public List<Contratada> getContratadas() {
+		return contratadas;
+	}
+
+	public void setContratadas(List<Contratada> contratadas) {
+		this.contratadas = contratadas;
+	}
+
+	public EnderecoService getEnderecoService() {
+		return enderecoService;
+	}
+
+	public void setEnderecoService(EnderecoService enderecoService) {
+		this.enderecoService = enderecoService;
+	}
+
+	public DadoService getDadoService() {
+		return dadoService;
+	}
+
+	public void setDadoService(DadoService dadoService) {
+		this.dadoService = dadoService;
+	}
+
+
+	public String getMaskcnpj() {
+		return maskcnpj;
+	}
+
+
+	public void setMaskcnpj(String maskcnpj) {
+		this.maskcnpj = maskcnpj;
+	}
+
+
+	public ValidacoesService getValidacoesService() {
+		return validacoesService;
+	}
+
+
+	public void setValidacoesService(ValidacoesService validacoesService) {
+		this.validacoesService = validacoesService;
+	}
+
+
+	public Long getOpcContratante() {
+		return opcContratante;
+	}
+
+
+	public void setOpcContratante(Long opcContratante) {
+		this.opcContratante = opcContratante;
+	}
+
+
+	public ContratanteService getContratanteService() {
+		return contratanteService;
+	}
+
+
+	public void setContratanteService(ContratanteService contratanteService) {
+		this.contratanteService = contratanteService;
+	}
+
+
+	public List<Contratante> getContratantes() {
+		return contratantes;
+	}
+
+
+	public void setContratantes(List<Contratante> contratantes) {
+		this.contratantes = contratantes;
+	}
+
+
+	public DataModel<Contratada> getDatamodel() throws Exception {
+		
+		this.datamodel = new ListDataModel<Contratada>(this.contratadaService.getListaCadastrada());
+		
+		return datamodel;
+	}
+
+
+	public void setDatamodel(DataModel<Contratada> datamodel) {
+		this.datamodel = datamodel;
+	}
+
+
+	
+
+	public String getMaskdtVigencia() {
+		return maskdtVigencia;
+	}
+
+
+	public void setMaskdtVigencia(String maskdtVigencia) {
+		this.maskdtVigencia = maskdtVigencia;
+	}
+
+
+	public String getOpt() {
+		return opt;
+	}
+
+
+	public void setOpt(String opt) {
+		this.opt = opt;
+	}
+
+
+	public String getOptStatus() {
+		return optStatus;
+	}
+
+
+	public void setOptStatus(String optStatus) {
+		this.optStatus = optStatus;
+	}
+	
+	
+	
+
+}

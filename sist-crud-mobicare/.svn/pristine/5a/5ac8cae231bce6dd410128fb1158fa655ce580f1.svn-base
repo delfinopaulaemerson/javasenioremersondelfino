@@ -1,0 +1,357 @@
+package br.com.emape.service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.model.Contratada;
+import br.com.emape.model.Contratante;
+import br.com.emape.model.Gestao;
+import br.com.emape.model.RelatorioGerencial;
+import br.com.emape.util.DataComparator;
+
+@Component("relatorioGerencialService")
+public class RelatorioGerencialService {
+	
+	@Autowired
+	private GestaoService gestaoService;
+	
+	
+	/**
+	 * retorna uma lista com      todas as gestoes da contratante
+	 * @param idContratante
+	 * @return
+	 * @throws Exception
+	 */
+	public List<RelatorioGerencial> findAllGestaoByContratante(Long idContratante,Long idContratada) throws Exception{
+	
+		List<Gestao> gestoes = new ArrayList<Gestao>();
+		List<Contratante> contratantes = new ArrayList<Contratante>();
+		List<Contratada> contratadas = new ArrayList<Contratada>();
+		
+		List<RelatorioGerencial> collection = new ArrayList<RelatorioGerencial>();
+		List<RelatorioGerencial> aux = new ArrayList<RelatorioGerencial>();
+		
+		gestoes.addAll(this.gestaoService.findAllGestaoByContratante(idContratante,idContratada));
+		int i=0;
+		int j=1;
+		int a;
+		int b;
+		
+		for(Gestao g : gestoes){
+			
+			
+			i++;
+			RelatorioGerencial rg = new RelatorioGerencial();
+			
+			if(!contratantes.contains(g.getContratante())){
+				rg.setRazaoSocialContratante(g.getContratante().getRazaoSocial());
+				contratantes.add(g.getContratante());
+			}
+			
+			if(!contratadas.contains(g.getContratada())){
+				rg.setRazaoSocialContratada(g.getContratada().getRazaoSocial());
+				contratadas.add(g.getContratada());
+				j++;
+			}
+			
+			rg.setTipoEscopo(g.getDescricao());
+			rg.setMes(g.getMes());
+			
+			if (rg.getMes().equals("JANEIRO")) {
+				a = 1;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("FEVEREIRO")) {
+				a = 2;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("MARCO")) {
+
+				a = 3;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("ABRIL")) {
+				a = 4;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("MAIO")) {
+				a = 5;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("JUNHO")) {
+				a = 6;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("JULHO")) {
+				a = 7;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("AGOSTO")) {
+				a = 8;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("SETEMBRO")) {
+				a = 9;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("OUTUBRO")) {
+				a = 10;
+				rg.setVide(a);
+			}
+			if (rg.getMes().equals("NOVEMBRO")) {
+				a = 11;
+			}
+			if (rg.getMes().equals("DEZEMBRO")) {
+				a = 12;
+				rg.setVide(a);
+			}
+			rg.setAno(g.getAno());
+			rg.setStatus(g.getSituacao());
+			
+			
+			rg.setContratoSocial(g.getParteFiscal().getContratoSocial());
+			if(g.getParteFiscal().getObs_contratoSocial().equals("")){
+				rg.setObs_contratoSocial("Satisfatorio");
+			}else{
+				rg.setObs_contratoSocial(g.getParteFiscal().getObs_contratoSocial());
+			}
+			
+			rg.setGuiaRecFgts(g.getParteFiscal().getGuiaRecFgts());
+			
+			if(g.getParteFiscal().getObs_guiaRecFgts().equals("")){
+				rg.setObs_guiaRecFgts("Satisfatorio");
+			}else{
+				rg.setObs_guiaRecFgts(g.getParteFiscal().getObs_guiaRecFgts());
+			}
+			
+			rg.setCartaoCnpj(g.getParteFiscal().getCartaoCnpj());
+			
+			if(g.getParteFiscal().getObs_cartaoCnpj().equals("")){
+				rg.setObs_cartaoCnpj("Satisfatorio");
+			}else{
+				rg.setObs_cartaoCnpj(g.getParteFiscal().getObs_cartaoCnpj());
+			}
+			
+			rg.setCndPrevidencia(g.getParteFiscal().getCndPrevidencia());
+			
+			if(g.getParteFiscal().getObs_cndPrevidencia().equals("")){
+				rg.setObs_cndPrevidencia("Satisfatorio");
+			}else{
+				rg.setObs_cndPrevidencia(g.getParteFiscal().getObs_cndPrevidencia());
+			}
+		
+			rg.setCndTributaria(g.getParteFiscal().getCndTributaria());
+			
+			if(g.getParteFiscal().getObs_cndTributaria().equals("")){
+				rg.setObs_cndTributaria("Satisfatorio");
+			}else{
+				rg.setObs_cndTributaria(g.getParteFiscal().getObs_cndTributaria());
+			}
+			
+			rg.setCrfFgts(g.getParteFiscal().getCrfFgts());
+			
+			if(g.getParteFiscal().getObs_crfFgts().equals("")){
+				rg.setObs_crfFgts("Satisfatorio");
+			}else{
+				rg.setObs_crfFgts(g.getParteFiscal().getObs_crfFgts());
+			}
+			
+			rg.setCndDebitostrabalhista(g.getParteFiscal().getCndDebitostrabalhista());
+			
+			if(g.getParteFiscal().getObs_cndDebitostrabalhista().equals("")){
+				rg.setObs_cndDebitostrabalhista("Satisfatorio");
+			}else{
+				rg.setObs_cndDebitostrabalhista(g.getParteFiscal().getObs_cndDebitostrabalhista());
+			}
+			
+			rg.setFolhaPagamento(g.getParteFiscal().getFolhaPagamento());
+			
+			if(g.getParteFiscal().getObs_folhaPagamento().equals("")){
+				rg.setObs_folhaPagamento("Satisfatorio");
+			}else{
+				rg.setObs_folhaPagamento(g.getParteFiscal().getObs_folhaPagamento());
+			}
+			
+			rg.setPlaFuncAlocContratante(g.getParteFiscal().getPlaFuncAlocContratante());
+			
+			if(g.getParteFiscal().getObs_plaFuncAlocContratante().equals("")){
+				rg.setObs_plaFuncAlocContratante("Satisfatorio");
+			}else{
+				rg.setObs_plaFuncAlocContratante(g.getParteFiscal().getObs_plaFuncAlocContratante());
+			}
+			
+			
+			rg.setGuiaPrevSoc(g.getParteFiscal().getGuiaPrevSoc());
+			
+			if(g.getParteFiscal().getObs_guiaPrevSoc().equals("")){
+				rg.setObs_guiaPrevSoc("Satisfatorio");
+			}else{
+				rg.setObs_guiaPrevSoc(g.getParteFiscal().getObs_guiaPrevSoc());
+			}
+			
+			rg.setDarf(g.getParteFiscal().getDarf());
+			
+			if(g.getParteFiscal().getObs_darf().equals("")){
+				rg.setObs_darf("Satisfatorio");
+			}else{
+				rg.setObs_darf(g.getParteFiscal().getObs_darf());
+			}
+		
+			rg.setSefipGfip(g.getParteFiscal().getSefipGfip());
+			
+			if(g.getParteFiscal().getObs_sefipGfip().equals("")){
+				rg.setObs_sefipGfip("Satisfatorio");
+			}else{
+				rg.setObs_sefipGfip(g.getParteFiscal().getObs_sefipGfip());
+			}
+			
+			rg.setProtConecSocial(g.getParteFiscal().getProtConecSocial());
+			
+			if(g.getParteFiscal().getObs_protConecSocial().equals("")){
+				rg.setObs_protConecSocial("Satisfatorio");
+			}else{
+				rg.setObs_protConecSocial(g.getParteFiscal().getObs_protConecSocial());
+			}
+			
+			rg.setNotaFiscRetencaoInss(g.getParteFiscal().getNotaFiscRetencaoInss());
+			
+			if(g.getParteFiscal().getObs_notaFiscRetencaoInss().equals("")){
+				rg.setObs_notaFiscRetencaoInss("Satisfatorio");
+			}else{
+				rg.setObs_notaFiscRetencaoInss(g.getParteFiscal().getObs_notaFiscRetencaoInss());
+			}
+		
+			rg.setDeclRais(g.getParteFiscal().getDeclRais());
+			
+			if(g.getParteFiscal().getObs_declRais().equals("")){
+				rg.setObs_declRais("Satisfatorio");
+			}else{
+				rg.setObs_declRais(g.getParteFiscal().getObs_declRais());
+			}
+			
+			collection.add(rg);
+			
+			Collections.sort(collection, new DataComparator());
+		}
+		
+		return collection;
+	}
+	
+	/**
+	 * retorna uma lista de gestoes da contratada
+	 * @return List<RelatorioGerencial>
+	 */
+	public List<RelatorioGerencial> findAllGestaoByContratada(Long idContratada) throws Exception{
+		
+		List<Gestao> gestoes = new ArrayList<Gestao>();
+		List<Contratante> contratantes = new ArrayList<Contratante>();
+		List<Contratada> contratadas = new ArrayList<Contratada>();
+		
+		List<RelatorioGerencial> collection = new ArrayList<RelatorioGerencial>();
+		
+		gestoes.addAll(this.gestaoService.findGestaoByContratada(idContratada));
+		
+		int i=0;
+		int j=1;
+		
+		for(Gestao g : gestoes){
+			
+			i++;
+			RelatorioGerencial rg = new RelatorioGerencial();
+			
+			if(!contratantes.contains(g.getContratante())){
+				rg.setRazaoSocialContratante(g.getContratante().getRazaoSocial());
+				contratantes.add(g.getContratante());
+			}
+			
+			if(!contratadas.contains(g.getContratada())){
+				rg.setRazaoSocialContratada(g.getContratada().getRazaoSocial());
+				contratadas.add(g.getContratada());
+				j++;
+			}
+			
+			rg.setTipoEscopo(g.getDescricao());
+			rg.setMes(g.getMes());
+			rg.setAno(g.getAno());
+			rg.setStatus(g.getSituacao());
+			
+			collection.add(rg);
+			
+			if(i == gestoes.size()){
+				RelatorioGerencial tot = new RelatorioGerencial();
+				tot.setTotContratante("Total de Contratantes: "+ String.valueOf(contratantes.size()));
+				collection.add(tot);
+			}
+			
+		}
+		
+		return collection;
+	}
+	
+	/**
+	 *  retorna uma lista de todas as gestoes
+	 * @return List
+	 */
+	public List<RelatorioGerencial> findAll() throws Exception{
+		
+		List<Gestao> gestoes = new ArrayList<Gestao>();
+		List<Contratante> contratantes = new ArrayList<Contratante>();
+		List<Contratada> contratadas = new ArrayList<Contratada>();
+		
+		List<RelatorioGerencial> collection = new ArrayList<RelatorioGerencial>();
+		
+		gestoes.addAll(this.gestaoService.findAll());
+		
+		int i=0;
+		int j=1;
+		
+		for(Gestao g : gestoes){
+			
+			i++;
+			RelatorioGerencial rg = new RelatorioGerencial();
+			
+			if(!contratantes.contains(g.getContratante())){
+				rg.setRazaoSocialContratante(g.getContratante().getRazaoSocial());
+				contratantes.add(g.getContratante());
+			}
+			
+			if(!contratadas.contains(g.getContratada())){
+				rg.setRazaoSocialContratada(g.getContratada().getRazaoSocial());
+				contratadas.add(g.getContratada());
+				j++;
+			}
+			
+			rg.setTipoEscopo(g.getDescricao());
+			rg.setMes(g.getMes());
+			rg.setAno(g.getAno());
+			rg.setStatus(g.getSituacao());
+			
+			collection.add(rg);
+			
+			if(i == gestoes.size()){
+				RelatorioGerencial tot = new RelatorioGerencial();
+				tot.setTotContratada("Total de Contratadas: "+ String.valueOf(contratadas.size()));
+				collection.add(tot);
+			}
+			
+		}
+		
+		return collection;
+	}
+	
+	
+	
+
+	public GestaoService getGestaoService() {
+		return gestaoService;
+	}
+
+	public void setGestaoService(GestaoService gestaoService) {
+		this.gestaoService = gestaoService;
+	}
+
+}

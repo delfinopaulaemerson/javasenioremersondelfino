@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:" SHAPE="48,88,53,74" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="login::#index.xhtml" NAME="output"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="sucessoLogin::#begin#begin.xhtml"
+    NAME="output2" PATH="/begin/begin.xhtml"
+    TARGET="rules:#begin#begin.xhtml" TITLE="sucessoLogin" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cadastroEmpregado::#empregado#cadastro.xhtml" NAME="output1"
+    PATH="/empregado/cadastro.xhtml"
+    TARGET="rules:#empregado#cadastro.xhtml" TITLE="cadastroEmpregado" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="edicaoEmpregado::#empregado#edicao.xhtml"
+    NAME="output3" PATH="/empregado/edicao.xhtml"
+    TARGET="rules:#empregado#edicao.xhtml" TITLE="edicaoEmpregado" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cadastroDepartamento::#departamento#cadastro.xhtml"
+    NAME="output5" PATH="/departamento/cadastro.xhtml"
+    TARGET="rules:#departamento#cadastro.xhtml"
+    TITLE="cadastroDepartamento" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="edicaoDepartamento::#departamento#edicao.xhtml" NAME="output6"
+    PATH="/departamento/edicao.xhtml"
+    TARGET="rules:#departamento#edicao.xhtml" TITLE="edicaoDepartamento" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="208,40,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#pages#menu.xhtml" PATH="/pages/menu.xhtml"
+  SHAPE="272,152,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#home.xhtml" PATH="/home.xhtml"
+  SHAPE="280,216,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
+  SHAPE="272,433,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#begin#begin.xhtml" PATH="/begin/begin.xhtml"
+  SHAPE="272,545,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#empregado#edicao.xhtml"
+  PATH="/empregado/edicao.xhtml" SHAPE="272,648,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#departamento#cadastro.xhtml"
+  PATH="/departamento/cadastro.xhtml" SHAPE="280,704,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#departamento#edicao.xhtml"
+  PATH="/departamento/edicao.xhtml" SHAPE="280,760,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#empregado#cadastro.xhtml"
+  PATH="/empregado/cadastro.xhtml" SHAPE="272,600,50,25" model-entity="JSFProcessGroup"/>
+</PROCESS>

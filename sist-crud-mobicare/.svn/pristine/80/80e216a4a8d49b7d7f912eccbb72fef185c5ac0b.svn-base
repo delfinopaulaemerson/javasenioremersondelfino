@@ -1,0 +1,48 @@
+package br.com.emape.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.emape.dao.EnderecoDAO;
+import br.com.emape.model.Endereco;
+@Component("enderecoService")
+public class EnderecoService {
+
+	
+			@Autowired
+	private EnderecoDAO enderecoDAO;
+			
+			/**
+			 * retorna um objeto endereco associado ao contratante
+			 * @param id
+			 * @return Endereco
+			 */
+			public List<Endereco> findContratante(Long id)throws Exception{
+				
+				return this.enderecoDAO.findContratante(id);
+			}
+			
+			/**
+			 * retorna o objeto endereco associado a contratada
+			 * @param id
+			 * @return
+			 */
+			public Endereco findContratada(Long id){
+				
+				return this.enderecoDAO.findContratada(id);
+			}
+
+			public EnderecoDAO getEnderecoDAO() {
+				return enderecoDAO;
+			}
+
+			public void setEnderecoDAO(EnderecoDAO enderecoDAO) {
+				this.enderecoDAO = enderecoDAO;
+			}
+			
+			
+			
+
+}
